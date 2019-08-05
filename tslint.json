@@ -1,0 +1,23 @@
+{
+	"defaultSeverity": "warning",
+	"extends": ["tslint:recommended", "tslint-config-airbnb"],
+	"linterOptions": {
+		"exclude": ["node_modules/**"]
+	},
+	"rules": {
+		"quotemark": [true, "single"],
+		"indent": [true, "spaces", 2],
+		"interface-name": true,
+		"ordered-imports": false,
+		"object-literal-sort-keys": false,
+		"no-consecutive-blank-lines": true,
+		"variable-name": {
+			"options": [
+				"check-format",
+				"allow-leading-underscore",
+				"allow-pascal-case",
+				"ban-keywords"
+			]
+		}
+	}
+}
