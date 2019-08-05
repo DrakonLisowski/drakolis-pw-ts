@@ -7,7 +7,8 @@ module.exports = {
     args: 'start',
     instances: 1,
     autorestart: true,
-    watch: false,
+    watch: true,
+    ignore_watch: ['[\/\\]\./', 'node_modules', 'logs'],
     max_memory_restart: '1G',
     env: {
       NODE_ENV: 'development'
