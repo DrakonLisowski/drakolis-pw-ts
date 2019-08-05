@@ -14,7 +14,8 @@ module.exports = {
     },
     env_production: {
       NODE_ENV: 'production'
-    }
+    },
+    kill_timeout : 3000
   }],
 /*
   deploy : {
