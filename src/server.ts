@@ -1,5 +1,5 @@
 import errorHandler from 'errorhandler';
-
+import logg
 import app from './app';
 
 /**
@@ -10,7 +10,7 @@ app.use(errorHandler());
 /**
  * Start Express server.
  */
-const server = app.listen(app.get('port'), '127.0.0.1', () => {
+const server = app.listen(app.get('port'), 'localhost', () => {
     console.log(
         '  App is running at http://localhost:%d in %s mode',
         app.get('port'),
