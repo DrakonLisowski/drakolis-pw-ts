@@ -1,4 +1,4 @@
-import logger from './logger';
+import Logger from './logger';
 import dotenv from 'dotenv';
 import fs from 'fs';
 
