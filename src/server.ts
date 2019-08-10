@@ -1,22 +1,19 @@
-import errorHandler from 'errorhandler';
-import logg
+import clsHooked from 'cls-hooked';
+import errorhandler from 'errorhandler';
 import app from './app';
+import { ServiceRegistry } from './services/ServiceRegistry';
 
-/**
- * Error Handler. Provides full stack - remove for production
- */
-app.use(errorHandler());
+/*
+app.use(errorhandler());
 
-/**
- * Start Express server.
- */
 const server = app.listen(app.get('port'), 'localhost', () => {
     console.log(
-        '  App is running at http://localhost:%d in %s mode',
-        app.get('port'),
-        app.get('env'),
+        `Drakolis.PW started at localhost:${app.get('port')} (env: ${app.get('env')})`,
     );
-    console.log('  Press CTRL-C to stop\n');
+
 });
 
 export default server;
+*/
+
+new ServiceRegistry().startServices();
