@@ -30,7 +30,7 @@ export class DependancyGraph {
 
   public removeVertex(name: string) {
     this.structure = this.structure.filter(v => v[0] !== name);
-    this.structure = this.structure.map(v => [v[0], v[1].filter(c => c !== name)]);
+    this.structure = this.structure.map(v => [v[0], v[1].filter(c => c !== name)] as GraphVertex);
   }
 
   public getRoots(): string[] {

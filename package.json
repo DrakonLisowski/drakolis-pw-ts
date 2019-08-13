@@ -9,7 +9,8 @@
 		"start:watch": "nodemon",
 		"build": "tsc",
 		"lint": "tsc --noEmit && tslint --project ./tsconfig.json --quiet --fix",
-		"namespaces": "barrelsby -c barrelsby.config.json"
+    "namespaces": "barrelsby -c barrelsby.config.json",
+    "migration:generate": "ts-node ./node_modules/typeorm migration:generate"
 	},
 	"dependencies": {
 		"@types/cls-hooked": "^4.3.0",

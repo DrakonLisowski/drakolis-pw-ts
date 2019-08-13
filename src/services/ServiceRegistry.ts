@@ -1,10 +1,12 @@
 import logger from '../util/logger';
 import { readdirSync, lstatSync } from 'fs';
+import { fork } from 'child_process';
 import path from 'path';
 import bluebird from 'bluebird';
 import { IService } from './IService';
 import { DependancyGraph } from './DependancyGraph';
 import config from '../config';
+
 
 type ImportedServicesEntry = [string, any];
 export type ServiceRegistryEntry = [string, IService];
@@ -82,7 +84,7 @@ export class ServiceRegistry {
         try {
           return [
             ...reg,
-            [srv[0], new srv[1]() as IService],
+            [srv[0], new srv[1]() as IService] as ServiceRegistryEntry,
           ];
         } catch (e) {
           throw new Error(`Unable to create service instance: ${srv[0]}, ${e.message}`);
