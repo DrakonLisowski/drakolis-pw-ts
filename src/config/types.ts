@@ -1,6 +1,6 @@
 
 // tslint:disable: max-classes-per-file
-export type EnvironmentConfig = 'prod'|'dev';
+export type EnvironmentConfig = 'production'|'development';
 export type LogLevel = 'error'|'warn'|'info'|'verbose'|'debug'|'silly';
 export class LogConfig {
   public console: boolean;

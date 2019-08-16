@@ -7,13 +7,13 @@ import {
   ExpressConfig,
 } from '.';
 
-export class ProductionConfig implements IConfig {
-  public environment: EnvironmentConfig = 'production';
+export class DevelopmentConfig implements IConfig {
+  public environment: EnvironmentConfig = 'development';
   public logging: LogConfig = {
     console: true,
     file: true,
     fileName: 'drakolis-pw',
-    level: 'info',
+    level: 'silly',
   };
 
   public postgress: PostgressConfig = {
@@ -21,12 +21,12 @@ export class ProductionConfig implements IConfig {
     port: 5432,
     username: 'postgres',
     password: 'postgres',
-    database: 'drakolis-pw',
+    database: 'drakolis_dev',
     schema: 'public',
   };
 
   public express: ExpressConfig = {
-    host: 'api.drakolis.pw',
+    host: '0.0.0.0',
     port: 8080,
   };
 
