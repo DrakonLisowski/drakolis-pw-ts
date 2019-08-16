@@ -26,7 +26,7 @@ export class ProductionConfig implements IConfig {
   };
 
   public express: ExpressConfig = {
-    host: 'api.drakolis.pw',
+    host: '0.0.0.0',
     port: 8080,
   };
 
