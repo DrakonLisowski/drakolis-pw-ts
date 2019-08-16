@@ -6,6 +6,8 @@ import logger from '../../util/logger';
 
 export default class PostgressService extends Connection implements IService {
 
+  private serviceLogger = logger('ExpressAPI');
+
   constructor() {
     super({
       ...config.postgress,
@@ -19,14 +21,14 @@ export default class PostgressService extends Connection implements IService {
     });
   }
   public getDependencies(): string[] {
-    return ['test'];
+    return [];
   }
 
   public async startService(registry: any): Promise<boolean> {
-    logger('Postgress Service').info('Loading service');
+    this.serviceLogger.info('Starting service');
     return !!(
       await this.connect().then(() => {
-        logger('Postgress Service').info('Loading service');
+        this.serviceLogger.info('Service started!');
         return true;
       })
     );

@@ -2,17 +2,19 @@ import { IService } from '../IService';
 import logger from '../../util/logger';
 
 export default class TestTimeoutService implements IService {
+
+  private serviceLogger = logger('Billing');
   private isConnected: boolean = false;
   public getDependencies(): string[] {
     return ['postgress'];
   }
   public async startService(registry: any): Promise<boolean> {
-    logger('Billing Service').info('Loading service');
+    this.serviceLogger.info('Starting service');
     return new Promise(res => setTimeout(
       () => {
         this.isConnected = true;
         res(true);
-        logger('Test Service').info('Service loaded!');
+        this.serviceLogger.info('Service started!');
       },
       5000,
     ));
