@@ -16,4 +16,8 @@ const server = app.listen(app.get('port'), 'localhost', () => {
 export default server;
 */
 
-new ServiceRegistry().startServices();
+const run = async () => {
+  new ServiceRegistry().startServices();
+};
+
+run();

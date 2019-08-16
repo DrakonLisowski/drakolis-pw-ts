@@ -4,6 +4,7 @@ import {
   LogConfig,
   PostgressConfig,
   ServiceRegistryConfig,
+  ExpressConfig,
 } from '.';
 
 export class ProductionConfig implements IConfig {
@@ -22,6 +23,11 @@ export class ProductionConfig implements IConfig {
     password: 'postgres',
     database: 'drakolis_dev',
     schema: 'public',
+  };
+
+  public express: ExpressConfig = {
+    host: '0.0.0.0',
+    port: 8080,
   };
 
   public serviceRegistry: ServiceRegistryConfig = {

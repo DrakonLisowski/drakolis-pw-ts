@@ -1,7 +1,5 @@
-import express from 'express';
-import compression from 'compression';  // compresses requests
+  // compresses requests
 import session from 'express-session';
-import bodyParser from 'body-parser';
 
 // Create Express server
 const app = express();
@@ -21,9 +19,6 @@ mongoose.connect(mongoUrl, { useNewUrlParser: true} ).then(
 
 // Express configuration
 app.set('port', process.env.PORT || 8080);
-app.use(compression());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 // app.use(session({
 //   resave: true,
 //   saveUninitialized: true,

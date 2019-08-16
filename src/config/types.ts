@@ -19,3 +19,8 @@ export class PostgressConfig {
   public database: string;
   public schema: string;
 }
+
+export class ExpressConfig {
+  public host: string;
+  public port: number;
+}

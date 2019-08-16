@@ -3,6 +3,7 @@ import {
   LogConfig,
   PostgressConfig,
   ServiceRegistryConfig,
+  ExpressConfig,
 } from '.';
 
 export interface IConfig {
@@ -10,4 +11,5 @@ export interface IConfig {
   logging: LogConfig;
   postgress: PostgressConfig;
   serviceRegistry: ServiceRegistryConfig;
+  express: ExpressConfig;
 }

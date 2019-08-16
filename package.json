@@ -10,7 +10,7 @@
 		"build": "tsc",
 		"lint": "tsc --noEmit && tslint --project ./tsconfig.json --quiet --fix",
     "namespaces": "barrelsby -c barrelsby.config.json",
-    "migration:generate": "ts-node ./node_modules/typeorm migration:generate"
+    "typeorm:cli": "ts-node ./node_modules/typeorm/cli -f ./ormconfig.json"
 	},
 	"dependencies": {
 		"@types/cls-hooked": "^4.3.0",
