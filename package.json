@@ -5,8 +5,7 @@
 	"author": "Mika Drakolis",
 	"license": "GNU",
 	"scripts": {
-		"start": "node --inspect=5858 -r ts-node/register ./src/server.ts",
-		"start:watch": "nodemon",
+		"start": "ts-node ./src/server.ts",
 		"build": "tsc",
 		"lint": "tsc --noEmit && tslint --project ./tsconfig.json --quiet --fix",
     "namespaces": "barrelsby -c barrelsby.config.json",
