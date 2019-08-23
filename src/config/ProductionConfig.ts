@@ -12,7 +12,8 @@ export class ProductionConfig implements IConfig {
   public logging: LogConfig = {
     console: true,
     file: true,
-    fileName: 'drakolis-pw',
+    fileNamePrefix: 'live',
+    fileNamePostfix: 'drakolis-pw',
     level: 'info',
   };
 

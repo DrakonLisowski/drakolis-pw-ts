@@ -4,6 +4,11 @@ import { createLogger, LoggerOptions, transports } from 'winston';
 import winstonDailyRotateFile from 'winston-daily-rotate-file';
 import config from '../config';
 
+interface IDrakolisLogger extends wins.Logger {
+  exception(description: string, err: any): void;
+  addLabel(label: string): IDrakolisLogger;
+}
+
 const {
   combine, timestamp, printf, colorize, label, json,
 } = wins.format;
@@ -14,7 +19,7 @@ const myFormat = printf(({
   level, message, label, timestamp,
 }) => `${timestamp} [${label}] <${level}> ${message}`);
 
-export default (labels: string) => {
+const loggerConstructor = (labels: string | string[], fileNameOverride: string = null) => {
   const labelsLog = Array.isArray(labels) ? labels : [labels].join(' ');
   const transportz = [];
 
@@ -34,10 +39,12 @@ export default (labels: string) => {
   }
 
   if (config.logging.file) {
+    const fileNamePrefix = fileNameOverride || config.logging.fileNamePrefix;
+    const fileName = `${fileNamePrefix}@${config.logging.fileNamePostfix}`;
     transportz.push(
       new winstonDailyRotateFile({
         level: config.logging.level || 'info',
-        filename: `${config.logging.fileName}-%DATE%.log`,
+        filename: `${fileName}-%DATE%.log`,
         dirname: './logs',
         datePattern: 'YYYY-MM-DD',
         zippedArchive: true,
@@ -55,5 +62,19 @@ export default (labels: string) => {
     ),
     transports: transportz,
   };
-  return createLogger(options);
+  const logger = createLogger(options) as IDrakolisLogger;
+
+  logger.error = (err: any) =>
+    logger.log('error', err.stack || err.message || err || 'We are doomed...');
+
+  logger.exception = (description: string, err: any) => {
+    logger.error(description);
+    logger.error(err);
+  };
+
+  logger.addLabel = (lab: string) => loggerConstructor([...labelsLog, lab]);
+
+  return logger;
 };
+
+export default loggerConstructor;

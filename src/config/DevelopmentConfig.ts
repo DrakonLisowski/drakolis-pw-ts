@@ -12,7 +12,8 @@ export class DevelopmentConfig implements IConfig {
   public logging: LogConfig = {
     console: true,
     file: true,
-    fileName: 'drakolis-pw',
+    fileNamePrefix: 'dev',
+    fileNamePostfix: 'drakolis-pw',
     level: 'silly',
   };
 

@@ -5,7 +5,8 @@ export type LogLevel = 'error'|'warn'|'info'|'verbose'|'debug'|'silly';
 export class LogConfig {
   public console: boolean;
   public file: boolean;
-  public fileName: string;
+  public fileNamePrefix: string;
+  public fileNamePostfix: string;
   public level: LogLevel;
 }
 export class ServiceRegistryConfig {
