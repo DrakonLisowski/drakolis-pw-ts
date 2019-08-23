@@ -1,15 +1,16 @@
 {
 	"name": "drakolis-ru-ts",
-	"version": "0.1.0",
+	"version": "1.0.0",
 	"description": "Drakolis RU/PW TypeScript Edition",
 	"author": "Mika Drakolis",
+	"private": false,
 	"license": "GNU",
 	"scripts": {
 		"start": "ts-node ./src/server.ts",
 		"build": "tsc",
 		"lint": "tsc --noEmit && tslint --project ./tsconfig.json --quiet --fix",
-    "namespaces": "barrelsby -c barrelsby.config.json",
-    "typeorm:cli": "ts-node ./node_modules/typeorm/cli -f ./ormconfig.json"
+		"namespaces": "barrelsby -c barrelsby.config.json",
+		"typeorm:cli": "ts-node ./node_modules/typeorm/cli -f ./ormconfig.json"
 	},
 	"dependencies": {
 		"@types/cls-hooked": "^4.3.0",
