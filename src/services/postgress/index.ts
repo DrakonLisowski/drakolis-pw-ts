@@ -1,24 +1,17 @@
 import 'reflect-metadata';
 import { IService } from '../IService';
 import { Connection } from 'typeorm';
-import config from '../../config';
-import logger from '../../util/logger';
+import logger, { IDrakolisLogger } from '../../util/logger';
+import dbSettingsBuilder from '../../util/dbSettingsBuilder';
 
 export default class PostgressService extends Connection implements IService {
 
-  private serviceLogger = logger('ExpressAPI');
+  private serviceLogger: IDrakolisLogger;
 
   constructor() {
-    super({
-      ...config.postgress,
-      type: 'postgres',
-      name: 'postgres',
-      entities: ['src/entity/**/*.ts'],
-      migrations: ['src/migration/**/*.ts'],
-      subscribers: ['src/subscriber/**/*.ts'],
-      logging: true,
-      logger: 'advanced-console',
-    });
+    const log = logger('Postgress');
+    super(dbSettingsBuilder(log));
+    this.serviceLogger = log;
   }
   public getDependencies(): string[] {
     return [];

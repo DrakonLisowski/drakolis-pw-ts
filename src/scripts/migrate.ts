@@ -1,38 +1,20 @@
 import 'reflect-metadata';
 import { Connection } from 'typeorm';
-import bluebird from 'bluebird';
-import config from '../config';
 import logger from '../util/logger';
+import dbSettingsBuilder from '../util/dbSettingsBuilder';
 
 const log = logger('Migrations', 'migrations');
 
-const direction = 'down';
-
-const typeorm = new Connection({
-  ...config.postgress,
-  type: 'postgres',
-  name: 'postgres',
-  entities: ['src/entity/**/*.ts'],
-  migrations: ['src/migration/**/*.ts'],
-  subscribers: ['src/subscriber/**/*.ts'],
-  logging: true,
-  logger: 'advanced-console',
-});
+const typeorm = new Connection(dbSettingsBuilder(log));
 const runScript = async() => {
+  log.info('Connecting to DB...');
   try {
     await typeorm.connect();
     log.info('DB connected!');
-    log.debug(`Migrations: ${typeorm.migrations}`);
-    return bluebird.map(
-      typeorm.migrations,
-      async (migration) => {
-        log.info(`Running: ${typeof migration}`);
-        const runner = typeorm.createQueryRunner('master');
-        await migration[direction](runner);
-      },
-    );
+    await typeorm.undoLastMigration();
+    await typeorm.runMigrations();
   } catch (e) {
-    typeorm.close();
+    await typeorm.close();
     throw e;
   }
 };

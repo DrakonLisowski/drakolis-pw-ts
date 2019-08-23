@@ -7,7 +7,7 @@ import config from '../../config';
 
 export default class ExpressAPIService implements IService {
 
-  private serviceLogger = logger('ExpressAPI');
+  private serviceLogger = logger('Express');
   private express = express();
   private isConnected: boolean = false;
 

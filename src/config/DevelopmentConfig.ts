@@ -20,9 +20,9 @@ export class DevelopmentConfig implements IConfig {
   public postgress: PostgressConfig = {
     host: 'localhost',
     port: 5432,
-    username: 'postgres',
-    password: 'postgres',
-    database: 'drakolis_dev',
+    username: 'drakolis',
+    password: 'dr@k0l1s',
+    database: 'drakolis-dev',
     schema: 'public',
   };
 
