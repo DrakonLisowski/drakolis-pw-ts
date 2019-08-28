@@ -20,9 +20,9 @@ export default class SocketService implements IService {
   public async startService(registry: any): Promise<boolean> {
     this.serviceLogger.info('Starting service...');
 
-    this.express.use(compression());
-    this.express.use(bodyParser.json());
-    this.express.use(bodyParser.urlencoded({ extended: true }));
+    this.express.get('/*', (req: any, res: any) => {
+      return res.status(418).send();
+    });
 
     return new Promise((res, rej) => {
       this.express.listen(
