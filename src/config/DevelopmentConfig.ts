@@ -4,8 +4,7 @@ import {
   LogConfig,
   PostgressConfig,
   ServiceRegistryConfig,
-  ExpressConfig,
-  SocketConfig,
+  HostConfig,
 } from '.';
 
 export class DevelopmentConfig implements IConfig {
@@ -31,12 +30,12 @@ export class DevelopmentConfig implements IConfig {
     schema: 'public',
   };
 
-  public express: ExpressConfig = {
+  public apiHost: HostConfig = {
     host: '127.0.0.1',
     port: 8080,
   };
 
-  public socket: SocketConfig = {
+  public wsHost: HostConfig = {
     host: '127.0.0.1',
     port: 8000,
   };

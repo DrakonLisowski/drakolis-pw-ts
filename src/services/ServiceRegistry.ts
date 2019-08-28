@@ -98,7 +98,7 @@ export class ServiceRegistry {
     );
   }
 
-  private async registryAsObject() {
+  private registryAsObject() {
     return this.serviceRegistry.reduce(
       (obj: any, ent) => {
         obj[ent[0]] = ent[1];

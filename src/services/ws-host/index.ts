@@ -1,33 +1,36 @@
+import { Server } from 'http';
 import express from 'express';
-import bodyParser from 'body-parser';
-import compression from 'compression';
 import { IService } from '../IService';
 import logger from '../../util/logger';
 import config from '../../config';
+// tslint:disable-next-line: import-name
+import WSService from '../socket';
 
-export default class ExpressService implements IService {
+export default class WSHostService implements IService {
 
-  private serviceLogger = logger('Express');
+  private serviceLogger = logger('WS');
   private express = express();
   private isConnected: boolean = false;
 
   public getDependencies(): string[] {
-    return ['postgress'];
+    return ['postgress', 'socket'];
   }
   public async startService(registry: any): Promise<boolean> {
     this.serviceLogger.info('Starting service...');
 
-    this.express.use(compression());
-    this.express.use(bodyParser.json());
-    this.express.use(bodyParser.urlencoded({ extended: true }));
+    this.express.get('/*', (req: any, res: any) => {
+      return res.status(418).send();
+    });
 
     return new Promise((res, rej) => {
       this.express.listen(
-        config.express.port,
-        config.express.host,
+        config.wsHost.port,
+        config.wsHost.host,
         () => {
+          const socketTransport = registry.socket as WSService;
+          socketTransport.init(this.express);
           this.serviceLogger
-            .info(`Service started @ ${config.express.host}:${config.express.port}!`);
+            .info(`Service started @ ${config.wsHost.host}:${config.wsHost.port}!`);
           res(true);
         },
       );
