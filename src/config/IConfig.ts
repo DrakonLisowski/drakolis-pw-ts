@@ -10,8 +10,8 @@ import { SocketConfig } from './types';
 export interface IConfig {
   environment: EnvironmentConfig;
   logging: LogConfig;
-  postgress: PostgressConfig;
   serviceRegistry: ServiceRegistryConfig;
+  postgress: PostgressConfig;
   express: ExpressConfig;
   socket: SocketConfig;
 }

@@ -18,6 +18,10 @@ export class ProductionConfig implements IConfig {
     level: 'info',
   };
 
+  public serviceRegistry: ServiceRegistryConfig = {
+    startingConcurrency: 10,
+  };
+
   public postgress: PostgressConfig = {
     host: 'localhost',
     port: 5432,
@@ -30,10 +34,6 @@ export class ProductionConfig implements IConfig {
   public express: ExpressConfig = {
     host: '127.0.0.1',
     port: 8080,
-  };
-
-  public serviceRegistry: ServiceRegistryConfig = {
-    startingConcurrency: 10,
   };
 
   public socket: SocketConfig = {
