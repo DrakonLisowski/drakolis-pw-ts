@@ -57,7 +57,7 @@ const loggerConstructor = (labels: string | string[], fileNameOverride: string =
       new transports.Console({
         level: config.logging.level || 'info',
         format: combine(
-          label({ label: labelsLog }),
+          label({ label: labelsLog.join(' ') }),
           colorize(),
           timestamp(),
           json(),
@@ -78,7 +78,7 @@ const loggerConstructor = (labels: string | string[], fileNameOverride: string =
         datePattern: 'YYYY-MM-DD',
         zippedArchive: true,
         format: combine(
-          label({ label: labelsLog }),
+          label({ label: labelsLog.join(' ') }),
           timestamp(),
           json(),
           myFormatNoColor,
