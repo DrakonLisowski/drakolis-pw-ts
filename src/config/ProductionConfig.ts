@@ -20,8 +20,8 @@ export class ProductionConfig implements IConfig {
   public postgress: PostgressConfig = {
     host: 'localhost',
     port: 5432,
-    username: 'postgres',
-    password: 'postgres',
+    username: 'drakolis',
+    password: 'drakolis',
     database: 'drakolis-pw',
     schema: 'public',
   };
