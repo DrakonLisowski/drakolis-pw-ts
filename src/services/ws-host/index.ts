@@ -8,7 +8,7 @@ import WSService from '../socket';
 
 export default class WSHostService implements IService {
 
-  private serviceLogger = logger('WS');
+  private serviceLogger = logger('HOST:WS');
   private express = express();
   private isConnected: boolean = false;
 

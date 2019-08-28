@@ -7,7 +7,7 @@ import config from '../../config';
 
 export default class APIHostService implements IService {
 
-  private serviceLogger = logger('API');
+  private serviceLogger = logger('HOST:API');
   private express = express();
   private isConnected: boolean = false;
 
