@@ -5,6 +5,7 @@ import {
   PostgressConfig,
   ServiceRegistryConfig,
   ExpressConfig,
+  SocketConfig,
 } from '.';
 
 export class DevelopmentConfig implements IConfig {
@@ -27,11 +28,16 @@ export class DevelopmentConfig implements IConfig {
   };
 
   public express: ExpressConfig = {
-    host: '0.0.0.0',
+    host: '127.0.0.1',
     port: 8080,
   };
 
   public serviceRegistry: ServiceRegistryConfig = {
     startingConcurrency: 10,
+  };
+
+  public socket: SocketConfig = {
+    host: '127.0.0.1',
+    port: 8000,
   };
 }

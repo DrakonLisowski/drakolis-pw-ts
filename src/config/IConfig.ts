@@ -5,6 +5,7 @@ import {
   ServiceRegistryConfig,
   ExpressConfig,
 } from '.';
+import { SocketConfig } from './types';
 
 export interface IConfig {
   environment: EnvironmentConfig;
@@ -12,4 +13,5 @@ export interface IConfig {
   postgress: PostgressConfig;
   serviceRegistry: ServiceRegistryConfig;
   express: ExpressConfig;
+  socket: SocketConfig;
 }

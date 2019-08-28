@@ -25,3 +25,8 @@ export class ExpressConfig {
   public host: string;
   public port: number;
 }
+
+export class SocketConfig {
+  public host: string;
+  public port: number;
+}
