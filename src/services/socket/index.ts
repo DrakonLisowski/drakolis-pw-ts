@@ -1,14 +1,17 @@
+import { Server } from 'http';
 import express from 'express';
 import bodyParser from 'body-parser';
 import compression from 'compression';
+import socketIo from 'socket.io';
 import { IService } from '../IService';
 import logger from '../../util/logger';
 import config from '../../config';
 
-export default class ExpressService implements IService {
+export default class SocketService implements IService {
 
-  private serviceLogger = logger('Express');
+  private serviceLogger = logger('Socket');
   private express = express();
+  private socket: any = null;
   private isConnected: boolean = false;
 
   public getDependencies(): string[] {
@@ -23,11 +26,12 @@ export default class ExpressService implements IService {
 
     return new Promise((res, rej) => {
       this.express.listen(
-        config.express.port,
-        config.express.host,
+        config.socket.port,
+        config.socket.host,
         () => {
+          this.socket = socketIo(new Server(this.express));
           this.serviceLogger
-            .info(`Service started @ ${config.express.host}:${config.express.port}!`);
+            .info(`Service started @ ${config.socket.host}:${config.socket.port}!`);
           res(true);
         },
       );

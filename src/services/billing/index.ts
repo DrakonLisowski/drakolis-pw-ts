@@ -9,7 +9,7 @@ export default class TestTimeoutService implements IService {
     return ['postgress'];
   }
   public async startService(registry: any): Promise<boolean> {
-    this.serviceLogger.info('Starting service');
+    this.serviceLogger.info('Starting service...');
     return new Promise(res => setTimeout(
       () => {
         this.isConnected = true;

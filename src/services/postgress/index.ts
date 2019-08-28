@@ -18,7 +18,7 @@ export default class PostgressService extends Connection implements IService {
   }
 
   public async startService(registry: any): Promise<boolean> {
-    this.serviceLogger.info('Starting service');
+    this.serviceLogger.info('Starting service...');
     return !!(
       await this.connect().then(() => {
         this.serviceLogger.info('Service started!');
