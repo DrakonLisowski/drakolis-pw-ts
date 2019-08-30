@@ -3,8 +3,7 @@ import express from 'express';
 import { IService } from '../IService';
 import logger from '../../util/logger';
 import config from '../../config';
-// tslint:disable-next-line: import-name
-import WSService from '../socket';
+import SocketTransport from '../socket/SocketTransport';
 
 export default class WSHostService implements IService {
 
@@ -27,7 +26,7 @@ export default class WSHostService implements IService {
         config.wsHost.port,
         config.wsHost.host,
         () => {
-          const socketTransport = registry.socket as WSService;
+          const socketTransport = registry.socket as SocketTransport;
           socketTransport.init(this.express);
           this.serviceLogger
             .info(`Service started @ ${config.wsHost.host}:${config.wsHost.port}!`);

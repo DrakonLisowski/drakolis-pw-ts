@@ -1,14 +1,12 @@
-import http from 'http';
-import socketIo, { Server, ServerOptions } from 'socket.io';
-import { Express } from 'express';
+import socketIo from 'socket.io';
 import { IService } from '../IService';
+import SocketTransport from './SocketTransport';
 import logger from '../../util/logger';
 import config from '../../config';
 
-export default class WSService implements IService {
+export default class WSService extends SocketTransport implements IService {
 
   private serviceLogger = logger('Socket');
-  private socket: Server = null;
   private isConnected: boolean = false;
 
   public getDependencies(): string[] {
@@ -20,11 +18,6 @@ export default class WSService implements IService {
     this.isConnected = true;
     this.serviceLogger.info('Service started, awaiting initialization');
     return true;
-  }
-
-  public init(expressInstance: Express) {
-    this.socket = socketIo(new http.Server(expressInstance));
-    this.serviceLogger.info('Service initiated');
   }
 
   public isRunning() {
