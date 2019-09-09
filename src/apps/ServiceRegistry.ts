@@ -6,6 +6,7 @@ import bluebird from 'bluebird';
 import { IService } from './IService';
 import { DependancyGraph } from './DependancyGraph';
 import config from '../config';
+import RejectPromiseTimeout from '../util/RejectPromiseTimeout';
 
 type ImportedServicesEntry = [string, any];
 export type ServiceRegistryEntry = [string, IService];
@@ -49,7 +50,13 @@ export class ServiceRegistry {
           roots,
           async (root) => {
             const serv = this.serviceRegistry.find(e => e[0] === root)[1];
-            await serv.startService(this.registryAsObject());
+            await Promise.race([
+              serv.startService(this.registryAsObject()),
+              RejectPromiseTimeout(
+                config.serviceRegistry.startingTimeout,
+                `Loading timeout for ${root}`,
+              ),
+            ]);
             dependecyGraph.removeVertex(root);
           },
           {
@@ -59,7 +66,9 @@ export class ServiceRegistry {
       } while (roots.length !== 0);
       logger('Service Registry').info('Loading finished!');
     } catch (e) {
-      logger('Service Registry').error(e.stack);
+      logger('Service Registry').error(e);
+      this.stopServices();
+      throw e; // This will kill the app
     }
   }
 

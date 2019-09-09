@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { IService } from '../IService';
+import { IService } from '../../services/IService';
 import { Connection } from 'typeorm';
 import logger, { IDrakolisLogger } from '../../util/logger';
 import dbSettingsBuilder from '../../util/dbSettingsBuilder';

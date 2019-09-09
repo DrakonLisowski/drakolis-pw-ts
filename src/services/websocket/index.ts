@@ -1,5 +1,5 @@
 import socketIo from 'socket.io';
-import { IService } from '../IService';
+import { IService } from '../../services/IService';
 import SocketTransport from './SocketTransport';
 import logger from '../../util/logger';
 import config from '../../config';

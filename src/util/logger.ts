@@ -6,7 +6,7 @@ import { createLogger, LoggerOptions, transports } from 'winston';
 import winstonDailyRotateFile from 'winston-daily-rotate-file';
 import config, { LogLevel } from '../config';
 
-type SupportedSyntaxes = 'sql'|'javascript'|'typescript'|'js';
+type SupportedSyntaxes = 'sql'|'javascript'|'typescript'|'js'|'json';
 
 class SyntaxEntryExtra {
   public prefix?: string;
@@ -105,33 +105,57 @@ const loggerConstructor = (labels: string | string[], fileNameOverride: string =
     level: LogLevel,
     language: SupportedSyntaxes,
     message: string,
-    extra: SyntaxEntryExtra,
+    extra: SyntaxEntryExtra = {},
   ) => {
     const messageHighlighted = highlight(message, { language, ignoreIllegals: true });
     logger.log(level, `${extra.prefix || ''} ${messageHighlighted} ${extra.postfix || ''}`.trim());
   };
 
-  logger.errorSyntax = (syntax: SupportedSyntaxes, message: string, extra: SyntaxEntryExtra) => {
+  logger.errorSyntax = (
+    syntax: SupportedSyntaxes,
+    message: string,
+    extra: SyntaxEntryExtra = {},
+  ) => {
     logger.syntax('error', syntax, message, extra);
   };
 
-  logger.warnSyntax = (syntax: SupportedSyntaxes, message: string, extra: SyntaxEntryExtra) => {
+  logger.warnSyntax = (
+    syntax: SupportedSyntaxes,
+    message: string,
+    extra: SyntaxEntryExtra = {},
+  ) => {
     logger.syntax('warn', syntax, message, extra);
   };
 
-  logger.infoSyntax = (syntax: SupportedSyntaxes, message: string, extra: SyntaxEntryExtra) => {
+  logger.infoSyntax = (
+    syntax: SupportedSyntaxes,
+    message: string,
+    extra: SyntaxEntryExtra = {},
+  ) => {
     logger.syntax('info', syntax, message, extra);
   };
 
-  logger.verboseSyntax = (syntax: SupportedSyntaxes, message: string, extra: SyntaxEntryExtra) => {
+  logger.verboseSyntax = (
+    syntax: SupportedSyntaxes,
+    message: string,
+    extra: SyntaxEntryExtra = {},
+  ) => {
     logger.syntax('verbose', syntax, message, extra);
   };
 
-  logger.debugSyntax = (syntax: SupportedSyntaxes, message: string, extra: SyntaxEntryExtra) => {
+  logger.debugSyntax = (
+    syntax: SupportedSyntaxes,
+    message: string,
+    extra: SyntaxEntryExtra = {},
+  ) => {
     logger.syntax('debug', syntax, message, extra);
   };
 
-  logger.sillySyntax = (syntax: SupportedSyntaxes, message: string, extra: SyntaxEntryExtra) => {
+  logger.sillySyntax = (
+    syntax: SupportedSyntaxes,
+    message: string,
+    extra: SyntaxEntryExtra = {},
+  ) => {
     logger.syntax('silly', syntax, message, extra);
   };
 

@@ -1,20 +1,21 @@
 import { Server } from 'http';
 import express from 'express';
 import { IService } from '../IService';
-import logger from '../../util/logger';
+import { IDrakolisLogger } from '../../util/logger';
 import config from '../../config';
-import SocketTransport from '../socket/SocketTransport';
+import SocketTransport from '../websocket/SocketTransport';
 
 export default class WSHostService implements IService {
 
-  private serviceLogger = logger('HOST:WS');
+  private serviceLogger: IDrakolisLogger;
   private express = express();
   private isConnected: boolean = false;
 
   public getDependencies(): string[] {
     return ['postgress', 'socket'];
   }
-  public async startService(registry: any): Promise<boolean> {
+  public async startService(logger: IDrakolisLogger, registry: any): Promise<boolean> {
+    this.serviceLogger = logger;
     this.serviceLogger.info('Starting service...');
 
     this.express.get('/*', (req: any, res: any) => {

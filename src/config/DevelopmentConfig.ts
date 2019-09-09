@@ -5,6 +5,7 @@ import {
   PostgressConfig,
   ServiceRegistryConfig,
   HostConfig,
+  RedisConfig,
 } from '.';
 
 export class DevelopmentConfig implements IConfig {
@@ -19,6 +20,7 @@ export class DevelopmentConfig implements IConfig {
 
   public serviceRegistry: ServiceRegistryConfig = {
     startingConcurrency: 10,
+    startingTimeout: 5 * 1000,
   };
 
   public postgress: PostgressConfig = {
@@ -28,6 +30,11 @@ export class DevelopmentConfig implements IConfig {
     password: 'dr@k0l1s',
     database: 'drakolis-dev',
     schema: 'public',
+  };
+
+  public redis: RedisConfig = {
+    host: '127.0.0.1',
+    port: 6379,
   };
 
   public apiHost: HostConfig = {

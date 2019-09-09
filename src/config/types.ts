@@ -11,6 +11,7 @@ export class LogConfig {
 }
 export class ServiceRegistryConfig {
   public startingConcurrency: number;
+  public startingTimeout: number;
 }
 export class PostgressConfig {
   public host: string;
@@ -19,6 +20,11 @@ export class PostgressConfig {
   public password: string;
   public database: string;
   public schema: string;
+}
+
+export class RedisConfig {
+  public host: string;
+  public port: number;
 }
 
 export class HostConfig {
