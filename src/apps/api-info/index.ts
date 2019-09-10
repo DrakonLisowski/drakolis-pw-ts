@@ -6,6 +6,7 @@ import { BaseApplication } from '../BaseApplication';
 import { Service } from '../../services/eService';
 // tslint:disable-next-line: import-name
 import LoggerService from '../../services/logger';
+import routes from './routes/justlol';
 import { reset } from 'cls-hooked';
 
 class InfoAPIApplication extends BaseApplication {
@@ -31,6 +32,8 @@ class InfoAPIApplication extends BaseApplication {
       this.appLogger.info('i did it');
       next();
     });
+
+    routes(this.expressApp);
 
     this.expressApp.get('/*', (req: any, res: any) => {
       return res.status(418).send();
