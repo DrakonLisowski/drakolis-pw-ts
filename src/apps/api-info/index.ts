@@ -28,10 +28,6 @@ class InfoAPIApplication extends BaseApplication {
     this.expressApp.use(compression());
     this.expressApp.use(bodyParser.json());
     this.expressApp.use(bodyParser.urlencoded({ extended: true }));
-    this.expressApp.use((_rq, _rs, next) => {
-      this.appLogger.info('i did it');
-      next();
-    });
 
     routes(this.expressApp);
 
