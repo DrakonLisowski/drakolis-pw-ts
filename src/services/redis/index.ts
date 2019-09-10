@@ -1,10 +1,12 @@
 import { IService } from '../../services/IService';
 import { RedisClient } from 'redis';
-import logger, { IDrakolisLogger } from '../logger/logger';
+import { Service } from '../eService';
+// tslint:disable-next-line: import-name
+import LoggerService from '../logger';
 
 export default class RedisService extends RedisClient implements IService {
 
-  private serviceLogger: IDrakolisLogger = logger('Redis');
+  private serviceLogger: LoggerService;
 
   constructor() {
     super({
@@ -13,10 +15,10 @@ export default class RedisService extends RedisClient implements IService {
     });
   }
 
-  public getDependencies(): string[] {
+  public getDependencies(): Service[] {
     return [];
   }
-  public async startService(registry: any): Promise<boolean> {
+  public async start(registry: any): Promise<boolean> {
     this.serviceLogger.silly('Starting service...');
     // Well...
     this.serviceLogger.info('Service started!');
@@ -25,7 +27,7 @@ export default class RedisService extends RedisClient implements IService {
   public isRunning(): boolean {
     return true;
   }
-  public async stopService(): Promise<boolean> {
+  public async stop(): Promise<boolean> {
     return true;
   }
 
