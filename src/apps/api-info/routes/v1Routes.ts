@@ -1,4 +1,7 @@
 import express from 'express';
+
+const router = express.Router();
+
 const penis =
 `
 ……………………………………….¸„„„„</br>
@@ -19,10 +22,8 @@ const penis =
 "-„_::::_„-*__„„~"﻿</br>
 `;
 
-const routes = (app: express.Express) => {
-  app.get('/penis', (req, res) => {
-    res.send(penis);
-  });
-};
+router.get('/penis', (req, res) => {
+  res.send(penis);
+});
 
-export default routes;
+export default router;

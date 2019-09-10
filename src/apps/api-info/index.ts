@@ -6,7 +6,7 @@ import { BaseApplication } from '../BaseApplication';
 import { Service } from '../../services/eService';
 // tslint:disable-next-line: import-name
 import LoggerService from '../../services/logger';
-import routes from './routes/justlol';
+import v1Routes from './routes/v1Routes';
 import { reset } from 'cls-hooked';
 
 class InfoAPIApplication extends BaseApplication {
@@ -29,7 +29,7 @@ class InfoAPIApplication extends BaseApplication {
     this.expressApp.use(bodyParser.json());
     this.expressApp.use(bodyParser.urlencoded({ extended: true }));
 
-    routes(this.expressApp);
+    this.expressApp.use('/api/v1', v1Routes);
 
     this.expressApp.get('/*', (req: any, res: any) => {
       return res.status(418).send();
