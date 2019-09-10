@@ -11,7 +11,7 @@ import { reset } from 'cls-hooked';
 class InfoAPIApplication extends BaseApplication {
 
   private appLogger: LoggerService;
-  private expressApp: express.Application = express();
+  private expressApp = express();
 
   public getName(): string {
     return 'InfoAPI';

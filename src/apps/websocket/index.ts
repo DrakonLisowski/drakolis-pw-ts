@@ -1,35 +1,40 @@
 import { Server } from 'http';
 import express from 'express';
-import { IService } from '../IService';
-import { IDrakolisLogger } from '../../services/logger/logger';
 import config from '../../config';
-import SocketTransport from '../websocket/SocketTransport';
+import { BaseApplication } from '../BaseApplication';
+import { Service } from '../../services/eService';
+// tslint:disable-next-line: import-name
+import LoggerService from '../../services/logger';
 
-export default class WSHostService implements IService {
+export default class WSHostService extends BaseApplication {
 
-  private serviceLogger: IDrakolisLogger;
-  private express = express();
+  private appLogger: LoggerService;
+  private expressApp = express();
   private isConnected: boolean = false;
 
-  public getDependencies(): string[] {
-    return ['postgress', 'socket'];
+  public getName(): string {
+    return 'SocketAPI';
   }
-  public async startService(logger: IDrakolisLogger, registry: any): Promise<boolean> {
-    this.serviceLogger = logger;
-    this.serviceLogger.info('Starting service...');
 
-    this.express.get('/*', (req: any, res: any) => {
+  public getRequiredServices(): Service[] {
+    return [Service.Logger, Service.Postgress, Service.Websocket];
+  }
+  public async startApplication(): Promise<boolean> {
+    this.appLogger = this.getRegistry()[Service.Logger];
+    this.appLogger.info('Starting service...');
+
+    this.expressApp.get('/*', (req: any, res: any) => {
       return res.status(418).send();
     });
 
     return new Promise((res, rej) => {
-      this.express.listen(
+      this.expressApp.listen(
         config.wsHost.port,
         config.wsHost.host,
         () => {
-          const socketTransport = registry.socket as SocketTransport;
-          socketTransport.init(this.express);
-          this.serviceLogger
+          const socketTransport = this.getRegistry()[Service.Websocket];
+          socketTransport.init(this.expressApp);
+          this.appLogger
             .info(`Service started @ ${config.wsHost.host}:${config.wsHost.port}!`);
           res(true);
         },
@@ -41,10 +46,10 @@ export default class WSHostService implements IService {
     return this.isConnected;
   }
 
-  public async stopService(): Promise<boolean> {
-    this.serviceLogger.info('Stopping service');
+  public async stop(): Promise<boolean> {
+    this.appLogger.info('Stopping service');
     return new Promise((res, rej) => {
-      this.serviceLogger.info('Service stopped!');
+      this.appLogger.info('Service stopped!');
       res(true);
     });
   }

@@ -109,6 +109,8 @@ class ServiceRegistry {
         return new (await import('./postgress')).default();
       case Service.Redis:
         break;
+      case Service.Websocket:
+        return new (await import('./websocket')).default();
       default:
         throw new Error(`Unknown service ${service}`);
     }

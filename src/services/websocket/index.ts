@@ -1,30 +1,41 @@
+import http from 'http';
 import socketIo from 'socket.io';
-import { IService } from '../../services/IService';
-import SocketTransport from './SocketTransport';
-import logger from '../logger/logger';
+import express, { Express } from 'express';
+import { IService } from '../IService';
+import { Service } from '../eService';
 import config from '../../config';
+// tslint:disable-next-line:import-name
+import LoggerService from '../logger';
 
-export default class WSService extends SocketTransport implements IService {
+export default class WSService implements IService {
 
-  private serviceLogger = logger('Socket');
+  private socket: socketIo.Server;
+  private serviceLogger: LoggerService;
   private isConnected: boolean = false;
 
-  public getDependencies(): string[] {
-    return [];
+  public getDependencies(): Service[] {
+    return [Service.Logger];
   }
-  public async startService(registry: any): Promise<boolean> {
+  public async start(registry: any): Promise<boolean> {
+    this.serviceLogger = registry[Service.Logger].addLabel('Socket.IO');
+
     this.serviceLogger.silly('Starting service...');
     this.socket = socketIo();
-    this.isConnected = true;
     this.serviceLogger.info('Service started, awaiting initialization');
     return true;
+  }
+
+  public init(expressInstance: Express) {
+    this.socket = socketIo(new http.Server(expressInstance));
+    this.serviceLogger.info('Socket initiated');
+    this.isConnected = true;
   }
 
   public isRunning() {
     return this.isConnected;
   }
 
-  public async stopService(): Promise<boolean> {
+  public async stop(): Promise<boolean> {
     this.serviceLogger.info('Stopping service');
     this.isConnected = false;
 
