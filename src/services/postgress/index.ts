@@ -2,7 +2,6 @@ import 'reflect-metadata';
 import { createConnection, Connection } from 'typeorm';
 import { IService } from '../IService';
 import { Service } from '../eService';
-import { ServiceRegistry } from '../ServiceRegistry';
 import dbSettingsBuilder from '../../util/dbSettingsBuilder';
 // tslint:disable-next-line:import-name
 import LoggerService from '../logger';

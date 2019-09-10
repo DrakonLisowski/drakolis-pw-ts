@@ -1,5 +1,5 @@
 import * as wins from 'winston';
-import { highlight, Theme, plain } from 'cli-highlight';
+import { highlight } from 'cli-highlight';
 import stripAnsi from 'strip-ansi';
 // tslint:disable-next-line: no-duplicate-imports
 import { createLogger, LoggerOptions, transports } from 'winston';

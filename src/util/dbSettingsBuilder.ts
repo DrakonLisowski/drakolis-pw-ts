@@ -1,5 +1,5 @@
 import config from '../config';
-import { Logger, QueryRunner, ConnectionOptions, QueryBuilder } from 'typeorm';
+import { Logger, QueryRunner, ConnectionOptions } from 'typeorm';
 // tslint:disable-next-line:import-name
 import LoggerService from '../services/logger';
 

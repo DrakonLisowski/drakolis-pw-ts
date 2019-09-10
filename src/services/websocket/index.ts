@@ -1,6 +1,6 @@
 import http from 'http';
 import socketIo from 'socket.io';
-import express, { Express } from 'express';
+import express from 'express';
 import { IService } from '../IService';
 import { Service } from '../eService';
 import config from '../../config';
@@ -25,7 +25,7 @@ export default class WSService implements IService {
     return true;
   }
 
-  public init(expressInstance: Express) {
+  public init(expressInstance: express.Express) {
     this.socket = socketIo(new http.Server(expressInstance));
     this.serviceLogger.info('Socket initiated');
     this.isConnected = true;

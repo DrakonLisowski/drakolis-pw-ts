@@ -21,7 +21,7 @@ export default class WSHostService extends BaseApplication {
   }
   public async startApplication(): Promise<boolean> {
     this.appLogger = this.getRegistry()[Service.Logger];
-    this.appLogger.info('Starting service...');
+    this.appLogger.info('Starting application...');
 
     this.expressApp.get('/*', (req: any, res: any) => {
       return res.status(418).send();
@@ -35,7 +35,7 @@ export default class WSHostService extends BaseApplication {
           const socketTransport = this.getRegistry()[Service.Websocket];
           socketTransport.init(this.expressApp);
           this.appLogger
-            .info(`Service started @ ${config.wsHost.host}:${config.wsHost.port}!`);
+            .info(`Application started @ ${config.wsHost.host}:${config.wsHost.port}!`);
           res(true);
         },
       );
@@ -47,9 +47,9 @@ export default class WSHostService extends BaseApplication {
   }
 
   public async stop(): Promise<boolean> {
-    this.appLogger.info('Stopping service');
+    this.appLogger.info('Stopping application');
     return new Promise((res, rej) => {
-      this.appLogger.info('Service stopped!');
+      this.appLogger.info('Application stopped!');
       res(true);
     });
   }
