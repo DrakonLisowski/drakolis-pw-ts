@@ -37,16 +37,13 @@ module.exports = {
   // },
     {
       name: '[Drakolis.PW] InfoAPI',
-      script: 'npm',
-      args: 'start api-info',
+      script: 'ts-node',
+      args: './src/runner api-info',
       instances: 0,
       exec_mode: 'cluster',
       autorestart: true,
-      watch: true,
-      ignore_watch: ['[\/\\]\./', 'node_modules', 'logs'],
-      out_file: "/dev/null",
-      error_file: "/dev/null",
-      max_memory_restart: '1G',
+      watch_delay: 5000,
+      watch: ['/src'],
       env: {
         NODE_ENV: 'development'
       },
