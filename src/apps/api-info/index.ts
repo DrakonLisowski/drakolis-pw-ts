@@ -1,35 +1,62 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import compression from 'compression';
-import logger from '../../util/logger';
 import config from '../../config';
+import { BaseApplication } from '../BaseApplication';
+import { Service } from '../../services/eService';
+// tslint:disable-next-line: import-name
+import LoggerService from '../../services/logger';
+import { reset } from 'cls-hooked';
 
-const appLogger = logger(`InfoAPI:${process.env.pm_id || -1}`);
-const expressApp = express();
+class InfoAPIApplication extends BaseApplication {
 
-const run = () => {
-  appLogger.info('Starting service...');
+  private appLogger: LoggerService;
+  private expressApp: express.Application = express();
 
-  expressApp.use(compression());
-  expressApp.use(bodyParser.json());
-  expressApp.use(bodyParser.urlencoded({ extended: true }));
-  expressApp.use((_rq, _rs, next) => {
-    appLogger.info('i did it');
-    next();
-  });
+  public getName(): string {
+    return 'InfoAPI';
+  }
 
-  expressApp.get('/*', (req: any, res: any) => {
-    return res.status(418).send();
-  });
+  public getRequiredServices(): Service[] {
+    return [Service.Logger, Service.Postgress];
+  }
 
-  expressApp.listen(
-    config.apiHost.port,
-    config.apiHost.host,
-    () => {
-      appLogger
-        .info(`Service started @ ${config.apiHost.host}:${config.apiHost.port}!`);
-    },
-  );
-};
+  public async startApplication(): Promise<boolean> {
+    this.appLogger = this.getRegistry()[Service.Logger];
+    this.appLogger.info('Starting application...');
+    this.expressApp.use(compression());
+    this.expressApp.use(bodyParser.json());
+    this.expressApp.use(bodyParser.urlencoded({ extended: true }));
+    this.expressApp.use((_rq, _rs, next) => {
+      this.appLogger.info('i did it');
+      next();
+    });
 
-export default run;
+    this.expressApp.get('/*', (req: any, res: any) => {
+      return res.status(418).send();
+    });
+
+    return new Promise((res) => {
+      this.expressApp.listen(
+        config.apiHost.port,
+        config.apiHost.host,
+        () => {
+          this.appLogger
+            .info(`Application started @ ${config.apiHost.host}:${config.apiHost.port}!`);
+          res(true);
+        },
+      );
+    });
+  }
+
+  public isRunning(): boolean {
+    return true;
+  }
+
+  public async stop(): Promise<boolean> {
+    return true;
+  }
+
+}
+
+export default InfoAPIApplication;

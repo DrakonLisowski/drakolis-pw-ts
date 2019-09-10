@@ -1,5 +1,5 @@
 import { IService } from '../IService';
-import logger from '../../util/logger';
+import logger from '../../services/logger/logger';
 import config from '../../config';
 import TDLibTransport from './TDLibTransport';
 

@@ -1,7 +1,7 @@
 import { Server } from 'http';
 import express from 'express';
 import { IService } from '../IService';
-import { IDrakolisLogger } from '../../util/logger';
+import { IDrakolisLogger } from '../../services/logger/logger';
 import config from '../../config';
 import SocketTransport from '../websocket/SocketTransport';
 

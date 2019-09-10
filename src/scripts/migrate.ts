@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { Connection } from 'typeorm';
-import logger from '../util/logger';
+import logger from '../services/logger/logger';
 import dbSettingsBuilder from '../util/dbSettingsBuilder';
 
 const log = logger('Migrations', 'migrations');

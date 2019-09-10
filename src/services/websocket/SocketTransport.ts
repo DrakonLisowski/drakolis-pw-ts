@@ -1,7 +1,7 @@
 import http from 'http';
 import socketIo, { Server } from 'socket.io';
 import { Express } from 'express';
-import logger from '../../util/logger';
+import logger from '../logger/logger';
 
 export default class SocketTransport {
 

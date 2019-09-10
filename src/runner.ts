@@ -1,6 +1,5 @@
 import commandLineArgs, { OptionDefinition } from 'command-line-args';
 import { Application, appLoader } from './apps';
-import logger from './util/logger';
 
 const definitions: OptionDefinition[] = [
   {
@@ -12,15 +11,12 @@ const definitions: OptionDefinition[] = [
 ];
 const { application: applicationName } = commandLineArgs(definitions);
 
-const loggerForRunner = logger('Runner');
 const run = async () => {
   if (!applicationName) {
-    loggerForRunner.error('Application parameter was not defined');
-    process.exit(1);
+    throw new Error('Application parameter was not defined');
   }
   if (!Object.values(Application).includes(applicationName)) {
-    loggerForRunner.error(`Application '${applicationName}' was not found`);
-    process.exit(1);
+    throw new Error(`Application '${applicationName}' was not found`);
   }
   const application =
     Object.keys(Application)
@@ -28,14 +24,15 @@ const run = async () => {
         k => Application[k as keyof typeof Application] === applicationName,
       ) as keyof typeof Application;
 
-  const loggerForApplication = logger(application);
-  const app = await appLoader(Application[application]).catch(
-    (e) => {
-      loggerForApplication.exception('Uncaught exception', e);
-      process.exit(1);
-    },
-  );
-  if (app) app();
+  const appClass = await appLoader(Application[application]);
+  if (appClass) {
+    const APP = new appClass();
+    await APP.start().catch(
+      (e) => {
+        throw e;
+      },
+    );
+  }
 };
 
 run().then().catch();

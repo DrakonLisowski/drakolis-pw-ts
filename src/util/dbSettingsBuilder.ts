@@ -1,9 +1,10 @@
 import config from '../config';
 import { Logger, QueryRunner, ConnectionOptions, QueryBuilder } from 'typeorm';
-import { IDrakolisLogger } from './logger';
+// tslint:disable-next-line:import-name
+import LoggerService from '../services/logger';
 
-class DrakolisDBLogger implements Logger {
-  constructor(private logger: IDrakolisLogger) {
+class DBLogger implements Logger {
+  constructor(private logger: LoggerService) {
     this.logger = this.logger.addLabel('SQL');
   }
 
@@ -82,7 +83,7 @@ class DrakolisDBLogger implements Logger {
   }
 }
 
-export default (logger: IDrakolisLogger) => {
+export default (logger: LoggerService) => {
   return {
     ...config.postgress,
     type: 'postgres',
@@ -91,6 +92,6 @@ export default (logger: IDrakolisLogger) => {
     migrations: ['src/migration/**/*.ts'],
     subscribers: ['src/subscriber/**/*.ts'],
     logging: true,
-    logger: new DrakolisDBLogger(logger),
+    logger: new DBLogger(logger),
   } as ConnectionOptions;
 };

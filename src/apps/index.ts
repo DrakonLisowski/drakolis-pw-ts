@@ -8,7 +8,6 @@ async function appLoader(app: Application) {
   switch (app) {
     case Application.WebSocket:
       throw new Error('Unsupported service');
-      // return (await import('./websocket')).default;
     case Application.TelegramManager:
       throw new Error('Unsupported service');
     case Application.InfoAPI:

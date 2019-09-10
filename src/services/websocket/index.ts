@@ -1,7 +1,7 @@
 import socketIo from 'socket.io';
 import { IService } from '../../services/IService';
 import SocketTransport from './SocketTransport';
-import logger from '../../util/logger';
+import logger from '../logger/logger';
 import config from '../../config';
 
 export default class WSService extends SocketTransport implements IService {

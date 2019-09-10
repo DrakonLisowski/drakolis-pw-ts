@@ -1,7 +1,7 @@
-import { IService } from './IService';
 import { ServiceRegistryEntry } from './ServiceRegistry';
+import { Service } from './eService';
 
-type GraphVertex = [string, string[]];
+type GraphVertex = [Service, Service[]];
 
 export class DependancyGraph {
   private structure: GraphVertex[] = [];
@@ -20,20 +20,19 @@ export class DependancyGraph {
     });
   }
 
-  public addVertex(name: string, connections: string[]) {
+  public addVertex(name: Service, connections: Service[]) {
     if (connections.includes(name)) {
-      // CyclicGraphException
       throw new Error(`Service ${name} depends on itself`);
     }
     this.structure = [...this.structure, [name, connections]];
   }
 
-  public removeVertex(name: string) {
+  public removeVertex(name: Service) {
     this.structure = this.structure.filter(v => v[0] !== name);
     this.structure = this.structure.map(v => [v[0], v[1].filter(c => c !== name)] as GraphVertex);
   }
 
-  public getRoots(): string[] {
+  public getRoots(): Service[] {
     const allRoots = this.structure.filter(v => v[1].length === 0);
     if (this.structure.length !== 0 && allRoots.length < 1) {
       // CyclicGraphException

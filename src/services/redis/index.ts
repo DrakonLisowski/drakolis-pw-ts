@@ -1,6 +1,6 @@
 import { IService } from '../../services/IService';
 import { RedisClient } from 'redis';
-import logger, { IDrakolisLogger } from '../../util/logger';
+import logger, { IDrakolisLogger } from '../logger/logger';
 
 export default class RedisService extends RedisClient implements IService {
 
