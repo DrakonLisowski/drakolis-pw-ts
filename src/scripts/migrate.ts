@@ -1,9 +1,10 @@
 import 'reflect-metadata';
 import { Connection } from 'typeorm';
-import logger from '../services/logger/logger';
+// tslint:disable-next-line: import-name
+import LoggerService from '../services/logger';
 import dbSettingsBuilder from '../util/dbSettingsBuilder';
 
-const log = logger('Migrations', 'migrations');
+const log = new LoggerService('Migrations');
 
 const typeorm = new Connection(dbSettingsBuilder(log));
 const runScript = async() => {
@@ -11,7 +12,6 @@ const runScript = async() => {
   try {
     await typeorm.connect();
     log.info('DB connected!');
-    await typeorm.undoLastMigration();
     await typeorm.runMigrations();
   } catch (e) {
     await typeorm.close();
