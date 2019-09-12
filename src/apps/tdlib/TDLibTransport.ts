@@ -10,7 +10,7 @@ export default class TDLibTransport {
   protected async init() {
     this.tdlib = new Client({
       apiId: 402920,
-      apiHash: '33851a17de4a4038084636c09fcbfb51',
+      apiHash: '',
 
       appDir: './tdlib/application',
       binaryPath: './tdlib/lib/libtdjson.1.4.0.dylib',
