@@ -1,17 +1,15 @@
-import express from 'express';
-import bodyParser from 'body-parser';
+import jayson from 'jayson';
 import config from '../../config';
 import { BaseApplication } from '../BaseApplication';
 import { Service } from '../../services/eService';
 // tslint:disable-next-line: import-name
 import LoggerService from '../../services/logger';
-import v1Routes from './routes/v1Routes';
-import { reset } from 'cls-hooked';
+import methods from './methods';
 
 class InfoAPIApplication extends BaseApplication {
 
   private appLogger: LoggerService;
-  private expressApp = express();
+  private server: jayson.Server;
 
   public getName(): string {
     return 'InfoAPI';
@@ -24,17 +22,10 @@ class InfoAPIApplication extends BaseApplication {
   public async startApplication(): Promise<boolean> {
     this.appLogger = this.getRegistry()[Service.Logger];
     this.appLogger.info('Starting application...');
-    this.expressApp.use(bodyParser.json());
-    this.expressApp.use(bodyParser.urlencoded({ extended: true }));
-
-    this.expressApp.use('/api/v1', v1Routes);
-
-    this.expressApp.get('/*', (req: any, res: any) => {
-      return res.status(418).send();
-    });
+    this.server = new jayson.Server(methods());
 
     return new Promise((res) => {
-      this.expressApp.listen(
+      this.server.http().listen(
         config.apiHost.port,
         config.apiHost.host,
         () => {
@@ -47,13 +38,33 @@ class InfoAPIApplication extends BaseApplication {
   }
 
   public isRunning(): boolean {
-    return true;
+    return this.server.http().listening;
   }
 
   public async stop(): Promise<boolean> {
-    return true;
+    this.appLogger.info('Stopping application');
+    return new Promise((res, rej) => {
+      this.server.http().close();
+      this.appLogger.info('Application stopped!');
+      res(true);
+    });
   }
 
 }
 
 export default InfoAPIApplication;
+
+/*
+'use strict';
+
+const jayson = require('./../..');
+
+// create a server
+const server = jayson.server({
+  add: function(args, callback) {
+    callback(null, args[0] + args[1]);
+  }
+});
+
+server.http().listen(3000);
+*/

@@ -39,7 +39,7 @@ export class DevelopmentConfig implements IConfig {
 
   public apiHost: HostConfig = {
     host: '127.0.0.1',
-    port: 8080,
+    port: 8081,
   };
 
   public wsHost: HostConfig = {

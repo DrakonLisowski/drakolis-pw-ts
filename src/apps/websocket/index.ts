@@ -1,4 +1,4 @@
-import express from 'express';
+import http from 'http';
 import config from '../../config';
 import { BaseApplication } from '../BaseApplication';
 import { Service } from '../../services/eService';
@@ -8,8 +8,7 @@ import LoggerService from '../../services/logger';
 export default class WSHostService extends BaseApplication {
 
   private appLogger: LoggerService;
-  private expressApp = express();
-  private isConnected: boolean = false;
+  private server: http.Server;
 
   public getName(): string {
     return 'SocketAPI';
@@ -22,17 +21,13 @@ export default class WSHostService extends BaseApplication {
     this.appLogger = this.getRegistry()[Service.Logger];
     this.appLogger.info('Starting application...');
 
-    this.expressApp.get('/*', (req: any, res: any) => {
-      return res.status(418).send();
-    });
-
     return new Promise((res, rej) => {
-      this.expressApp.listen(
+      this.server.listen(
         config.wsHost.port,
         config.wsHost.host,
         () => {
           const socketTransport = this.getRegistry()[Service.Websocket];
-          socketTransport.init(this.expressApp);
+          socketTransport.init(this.server);
           this.appLogger
             .info(`Application started @ ${config.wsHost.host}:${config.wsHost.port}!`);
           res(true);
@@ -42,12 +37,13 @@ export default class WSHostService extends BaseApplication {
   }
 
   public isRunning() {
-    return this.isConnected;
+    return this.server.listening;
   }
 
   public async stop(): Promise<boolean> {
     this.appLogger.info('Stopping application');
     return new Promise((res, rej) => {
+      this.server.close();
       this.appLogger.info('Application stopped!');
       res(true);
     });
