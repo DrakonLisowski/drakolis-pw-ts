@@ -6,7 +6,7 @@ import { Service } from '../../services/eService';
 import LoggerService from '../../services/logger';
 import methods from './methods';
 
-class InfoAPIApplication extends BaseApplication {
+export default class InfoAPIApplication extends BaseApplication {
 
   private appLogger: LoggerService;
   private server: jayson.Server;
@@ -51,5 +51,3 @@ class InfoAPIApplication extends BaseApplication {
   }
 
 }
-
-export default InfoAPIApplication;
