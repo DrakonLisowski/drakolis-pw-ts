@@ -6,12 +6,11 @@
 	"license": "GNU",
 	"author": "Mika Drakolis",
 	"scripts": {
-		"build": "tsc",
 		"lint": "tsc --noEmit && tslint --project ./tsconfig.json --quiet --fix",
 		"namespaces": "barrelsby -c barrelsby.config.json",
 		"sort-packages": "sort-package-json ./package.json",
-		"typeorm:cli": "ts-node ./node_modules/typeorm/cli -f ./ormconfig.json",
-		"start": "ts-node ./src/runner"
+		"start": "ts-node ./src/runner",
+		"migrate": "ts-node ./src/scripts/migrate"
 	},
 	"dependencies": {
 		"async": "^3.0.1",
@@ -27,6 +26,7 @@
 		"express-http-context": "^1.2.3",
 		"express-session": "^1.16.2",
 		"express-validator": "^6.0.1",
+		"jayson": "^3.0.2",
 		"lodash": "^4.17.13",
 		"node-uuid": "^1.4.8",
 		"pg": "^7.12.0",
