@@ -8,7 +8,7 @@ module.exports = {
     exec_mode: 'cluster',
     autorestart: true,
     watch_delay: 5000,
-    watch: ['/src'],
+    watch: ['src'],
     env: {
       NODE_ENV: 'development'
     },
@@ -42,7 +42,7 @@ module.exports = {
       exec_mode: 'cluster',
       autorestart: true,
       watch_delay: 5000,
-      watch: ['/src'],
+      watch: ['src'],
       env: {
         NODE_ENV: 'development'
       },
