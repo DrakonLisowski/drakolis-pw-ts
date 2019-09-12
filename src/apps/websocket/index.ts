@@ -41,7 +41,7 @@ export default class WSHostService extends BaseApplication {
   }
 
   public async stop(): Promise<boolean> {
-    this.appLogger.info('Stopping application');
+    this.appLogger.info('Stopping application...');
     return new Promise((res, rej) => {
       this.server.close();
       this.appLogger.info('Application stopped!');

@@ -42,7 +42,7 @@ class InfoAPIApplication extends BaseApplication {
   }
 
   public async stop(): Promise<boolean> {
-    this.appLogger.info('Stopping application');
+    this.appLogger.info('Stopping application...');
     return new Promise((res, rej) => {
       this.server.http().close();
       this.appLogger.info('Application stopped!');
@@ -53,18 +53,3 @@ class InfoAPIApplication extends BaseApplication {
 }
 
 export default InfoAPIApplication;
-
-/*
-'use strict';
-
-const jayson = require('./../..');
-
-// create a server
-const server = jayson.server({
-  add: function(args, callback) {
-    callback(null, args[0] + args[1]);
-  }
-});
-
-server.http().listen(3000);
-*/
