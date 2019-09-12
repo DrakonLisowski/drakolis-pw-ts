@@ -1,6 +1,5 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import compression from 'compression';
 import config from '../../config';
 import { BaseApplication } from '../BaseApplication';
 import { Service } from '../../services/eService';
@@ -25,7 +24,6 @@ class InfoAPIApplication extends BaseApplication {
   public async startApplication(): Promise<boolean> {
     this.appLogger = this.getRegistry()[Service.Logger];
     this.appLogger.info('Starting application...');
-    this.expressApp.use(compression());
     this.expressApp.use(bodyParser.json());
     this.expressApp.use(bodyParser.urlencoded({ extended: true }));
 

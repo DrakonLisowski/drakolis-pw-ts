@@ -1,4 +1,3 @@
-import { Server } from 'http';
 import express from 'express';
 import config from '../../config';
 import { BaseApplication } from '../BaseApplication';
