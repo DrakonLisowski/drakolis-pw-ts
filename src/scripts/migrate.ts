@@ -6,11 +6,11 @@ import dbSettingsBuilder from '../util/dbSettingsBuilder';
 
 const log = new LoggerService('Migrations');
 
-const typeorm = new Connection(dbSettingsBuilder(log));
+let typeorm = new Connection(dbSettingsBuilder(log));
 const runScript = async() => {
   log.info('Connecting to DB...');
   try {
-    await typeorm.connect();
+    typeorm = await typeorm.connect();
     log.info('DB connected!');
     await typeorm.runMigrations();
   } catch (e) {
