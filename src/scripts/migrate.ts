@@ -1,20 +1,22 @@
 import 'reflect-metadata';
-import { Connection } from 'typeorm';
+import { createConnection } from 'typeorm';
 // tslint:disable-next-line: import-name
 import LoggerService from '../services/logger';
 import dbSettingsBuilder from '../util/dbSettingsBuilder';
 
 const log = new LoggerService('Migrations');
 
-let typeorm = new Connection(dbSettingsBuilder(log));
 const runScript = async() => {
   log.info('Connecting to DB...');
+  let typeorm;
   try {
-    typeorm = await typeorm.connect();
+    typeorm = await createConnection(dbSettingsBuilder(log));
     log.info('DB connected!');
     await typeorm.runMigrations();
   } catch (e) {
-    await typeorm.close();
+    if (typeorm) {
+      await typeorm.close();
+    }
     throw e;
   }
 };
