@@ -48,16 +48,17 @@ const commandPost = (bot: TelegramBot) => {
     const data = JSON.parse(q.data);
     if (data.type === 'likeButtonClick') {
       const pwId = data.pwId;
-      let voted = data.voted;
-      if (voted.includes(q.from.id)) {
-        voted = voted.filter((e: number) => e !== q.from.id);
-      } else {
-        voted = [...voted, q.from.id];
-      }
+
       RepostedPhoto.findOne(pwId).then(
         (photoFromDB) => {
           if (!photoFromDB) {
             throw new Error('Wat?');
+          }
+          let voted = photoFromDB.voted;
+          if (voted.includes(q.from.id)) {
+            voted = voted.filter((e: number) => e !== q.from.id);
+          } else {
+            voted = [...voted, q.from.id];
           }
           photoFromDB.likes = voted.length;
           photoFromDB.voted = voted;
