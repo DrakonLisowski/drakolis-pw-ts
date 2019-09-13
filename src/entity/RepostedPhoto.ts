@@ -10,4 +10,6 @@ export class RepostedPhoto extends DrakolisBaseEntity {
   @Column()
   public likes: number;
 
+  @Column('int', { array: true })
+  public voted: number[];
 }

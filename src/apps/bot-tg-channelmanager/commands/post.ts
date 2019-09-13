@@ -21,6 +21,7 @@ const commandPost = (bot: TelegramBot) => {
       const photo = new RepostedPhoto();
       photo.fileId = fileId;
       photo.likes = 0;
+      photo.voted = [];
 
       photo.save().then(savedPhoto => {
         const keyboard: InlineKeyboardButton[][] = [[{
@@ -28,7 +29,7 @@ const commandPost = (bot: TelegramBot) => {
           callback_data: JSON.stringify({
             type: 'likeButtonClick',
             pwId: savedPhoto.id,
-            voted: [], // TODO: It should be moved from here
+            voted: [],
           }),
         }]];
         const markup: InlineKeyboardMarkup = {
@@ -59,6 +60,8 @@ const commandPost = (bot: TelegramBot) => {
             throw new Error('Wat?');
           }
           photoFromDB.likes = voted.length;
+          photoFromDB.voted = voted;
+
           photoFromDB.save().then(() => {
             const newMarkup = {
               inline_keyboard: [[{
