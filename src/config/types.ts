@@ -39,6 +39,7 @@ export class TelegramConfig {
   public tdLibAppPath: string;
 
   public channelManagerToken: string;
+  public channelManagerChannel: number;
 
   public superAdminIds: number[];
 }

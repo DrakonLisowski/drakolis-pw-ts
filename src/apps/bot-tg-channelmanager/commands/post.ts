@@ -2,88 +2,84 @@
 import TelegramBot, { InlineKeyboardButton, InlineKeyboardMarkup } from 'node-telegram-bot-api';
 import lodash from 'lodash';
 import config from '../../../config';
+import { RepostedPhoto } from '../../../entity/RepostedPhoto';
 
+const likeIcon = '❤️';
 const commandPost = (bot: TelegramBot) => {
 
-  // Works like GET arguments for now (should have several steps)
-  // text= - sets the text of message (combine all, linebreaks)
-  // button= - sets the buttons (combine all)
-  // timeout= - sets the message timeout (min, only first works)
-  // attachedImage - sends it
-  // attachedMessage - sends it
   bot.on('photo', (msg) => {
-    if (msg.chat.type === 'private' && config.telegramConfig.superAdminIds.includes(msg.from.id)) {
-      console.log(msg);
+    if (
+      msg.caption &&
+      msg.caption.startsWith('/post') &&
+      msg.chat.type === 'private' &&
+      config.telegramConfig.superAdminIds.includes(msg.from.id)
+    ) {
       // Dragons ass channel id should be moved somehow?
       const bestPhotoSize = Math.max(...msg.photo.map(p => p.file_size));
-      bot.sendPhoto(
-        -1001315453164,
-        msg.photo.find(p => p.file_size === bestPhotoSize).file_id,
-        { },
-      );
+      const fileId = msg.photo.find(p => p.file_size === bestPhotoSize).file_id;
+
+      const photo = new RepostedPhoto();
+      photo.fileId = fileId;
+      photo.likes = 0;
+
+      photo.save().then(savedPhoto => {
+        const keyboard: InlineKeyboardButton[][] = [[{
+          text: `${likeIcon} 0`,
+          callback_data: JSON.stringify({
+            type: 'likeButtonClick',
+            pwId: savedPhoto.id,
+            voted: [], // TODO: It should be moved from here
+          }),
+        }]];
+        const markup: InlineKeyboardMarkup = {
+          inline_keyboard: keyboard,
+        };
+
+        bot.sendPhoto(
+          config.telegramConfig.channelManagerChannel,
+          fileId,
+          { reply_markup: markup },
+        );
+      });
     }
   });
-  // , (msg, match) => {
-
-  //   const requestRaw = match[1];
-  //   const requestArray = requestRaw.split('&');
-  //   const request = {
-  //     text: requestArray
-  //       .filter(p => p.startsWith('text='))
-  //       .map(p => p.replace('text=', ''))
-  //       .join('\n'),
-  //     buttons: lodash.uniq(
-  //       requestArray
-  //         .filter(p => p.startsWith('button='))
-  //         .map(p => p.replace('button=', '')),
-  //     ),
-  //   };
-  //   console.log(msg);
-  //   const chatId = msg.chat.id;
-
-  //   const keyboard: InlineKeyboardButton[][] = [request.buttons.map(s => ({
-  //     text: `${s} 0`,
-  //     callback_data: JSON.stringify({ type: 'addToButton', button: s, voted: [] }),
-  //   }))];
-  //   const markup: InlineKeyboardMarkup = {
-  //     inline_keyboard: keyboard,
-  //   };
-
-  //   // send back the matched "whatever" to the chat
-  //   bot.sendMessage(chatId, request.text, { reply_markup: markup });
-  // });
   bot.on('callback_query', (q) => {
     const data = JSON.parse(q.data);
-    if (data.type === 'addToButton') {
-      const button = data.button;
-      const voted = data.voted;
+    if (data.type === 'likeButtonClick') {
+      const pwId = data.pwId;
+      let voted = data.voted;
       if (voted.includes(q.from.id)) {
-        return;
+        voted = voted.filter((e: number) => e !== q.from.id);
+      } else {
+        voted = [...voted, q.from.id];
       }
-
-      // @ts-ignore
-      const oldMarkup = q.message.reply_markup || null;
-      const newMarkup = {
-        inline_keyboard: [oldMarkup.inline_keyboard[0]
-          .map((b: InlineKeyboardButton) => {
-            if (b.text.startsWith(button)) {
-              return {
-                text: `${button} ${parseInt(b.text.split(' ')[1], 10) + 1}`,
+      RepostedPhoto.findOne(pwId).then(
+        (photoFromDB) => {
+          if (!photoFromDB) {
+            throw new Error('Wat?');
+          }
+          photoFromDB.likes = voted.length;
+          photoFromDB.save().then(() => {
+            const newMarkup = {
+              inline_keyboard: [[{
+                text: `${likeIcon} ${voted.length}`,
                 callback_data: JSON.stringify({
-                  button,
-                  type: data.type,
-                  voted: [...voted, q.from.id],
+                  voted, // TODO: It should be moved from here
+                  type: 'likeButtonClick',
+                  pwId: photoFromDB.id,
                 }),
-              };
-            }
-            return b;
-          },
-          )],
-      };
-      bot.editMessageReplyMarkup(newMarkup, {
-        chat_id: q.message.chat.id,
-        message_id: q.message.message_id,
-      });
+              }]],
+            };
+
+            bot.editMessageReplyMarkup(newMarkup, {
+              chat_id: q.message.chat.id,
+              message_id: q.message.message_id,
+            }).then(() => {
+              bot.answerCallbackQuery(q.id, { text: 'Your vote was processed!' });
+            });
+          });
+        },
+      );
     }
   });
 };

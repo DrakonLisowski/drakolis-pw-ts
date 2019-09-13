@@ -87,7 +87,7 @@ export default (logger: LoggerService) => {
   return {
     ...config.postgress,
     type: 'postgres',
-    name: 'postgres',
+    name: 'default',
     entities: ['src/entity/**/*.ts'],
     migrations: ['src/migration/**/*.ts'],
     subscribers: ['src/subscriber/**/*.ts'],

@@ -2,12 +2,12 @@ import { Entity, Column } from 'typeorm';
 import { DrakolisBaseEntity } from './DrakolisBaseEntity';
 
 @Entity()
-export class Admin extends DrakolisBaseEntity {
+export class RepostedPhoto extends DrakolisBaseEntity {
 
   @Column()
-  public email: string;
+  public fileId: string;
 
   @Column()
-  public passwordHash: string;
+  public likes: number;
 
 }

@@ -14,7 +14,7 @@ export default class BotTGChannelManager extends BaseApplication {
   }
 
   public getRequiredServices(): Service[] {
-    return [Service.Logger];
+    return [Service.Logger, Service.Postgress];
   }
 
   public async startApplication(): Promise<boolean> {

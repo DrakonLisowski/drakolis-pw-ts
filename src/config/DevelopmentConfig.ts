@@ -55,6 +55,7 @@ export class DevelopmentConfig implements IConfig {
     tdLibBinaryPath: '',
 
     channelManagerToken: process.env.TELEGRAM_CHANNEL_MANAGER_TOKEN,
+    channelManagerChannel: -1001138267654,
 
     superAdminIds: [779631744],
   };

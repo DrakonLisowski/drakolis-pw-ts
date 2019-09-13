@@ -2,10 +2,10 @@ import {
   Entity,
   Column,
 } from 'typeorm';
-import { BaseEntity } from './BaseEntity';
+import { DrakolisBaseEntity } from './DrakolisBaseEntity';
 
 @Entity()
-export class Config extends BaseEntity {
+export class Config extends DrakolisBaseEntity {
 
   @Column({ unique: true })
   public key: string;

@@ -1,13 +1,12 @@
 import {
-  Entity,
+  BaseEntity,
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity()
-export abstract class BaseEntity {
+export abstract class DrakolisBaseEntity extends BaseEntity {
 
   @PrimaryGeneratedColumn()
   public id: string;
