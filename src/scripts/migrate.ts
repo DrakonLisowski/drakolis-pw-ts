@@ -10,7 +10,6 @@ const runScript = async() => {
   log.info('Connecting to DB...');
   let typeorm;
   try {
-    log.info(process.env.NODE_ENV);
     typeorm = await createConnection(dbSettingsBuilder(log));
     log.info('DB connected!');
     await typeorm.runMigrations();
