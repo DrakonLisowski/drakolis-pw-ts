@@ -1,6 +1,7 @@
 // tslint:disable-next-line: import-name
 import TelegramBot, { InlineKeyboardButton, InlineKeyboardMarkup } from 'node-telegram-bot-api';
 import lodash from 'lodash';
+import config from '../../../config';
 
 const commandPost = (bot: TelegramBot) => {
 
@@ -11,7 +12,7 @@ const commandPost = (bot: TelegramBot) => {
   // attachedImage - sends it
   // attachedMessage - sends it
   bot.on('photo', (msg) => {
-    if (msg.chat.type === 'private') {
+    if (msg.chat.type === 'private' && config.telegramConfig.superAdminIds.includes(msg.from.id)) {
       console.log(msg);
       // Dragons ass channel id should be moved somehow?
       const bestPhotoSize = Math.max(...msg.photo.map(p => p.file_size));
