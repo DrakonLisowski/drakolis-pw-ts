@@ -11,11 +11,16 @@ const commandPost = (bot: TelegramBot) => {
   // attachedImage - sends it
   // attachedMessage - sends it
   bot.on('photo', (msg) => {
-
-    console.log(msg);
-    // Dragons ass channel id should be moved somehow?
-    const bestPhotoSize = Math.max(...msg.photo.map(p => p.file_size));
-    bot.sendPhoto(-1001315453164, msg.photo.find(p => p.file_size === bestPhotoSize).file_id, { });
+    if (msg.chat.type === 'private') {
+      console.log(msg);
+      // Dragons ass channel id should be moved somehow?
+      const bestPhotoSize = Math.max(...msg.photo.map(p => p.file_size));
+      bot.sendPhoto(
+        -1001315453164,
+        msg.photo.find(p => p.file_size === bestPhotoSize).file_id,
+        { },
+      );
+    }
   });
   // , (msg, match) => {
 
