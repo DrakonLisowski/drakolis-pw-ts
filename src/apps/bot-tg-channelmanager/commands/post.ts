@@ -38,7 +38,7 @@ const commandPost = (bot: TelegramBot) => {
         bot.sendPhoto(
           config.telegramConfig.channelManagerChannel,
           fileId,
-          { reply_markup: markup },
+          { reply_markup: markup, caption: msg.caption.replace('/post', '').trim() },
         );
       });
     }
