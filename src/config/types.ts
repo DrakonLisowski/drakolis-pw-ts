@@ -31,3 +31,14 @@ export class HostConfig {
   public host: string;
   public port: number;
 }
+
+export class TelegramConfig {
+  public appID: number;
+  public appKey: string;
+  public tdLibBinaryPath: string;
+  public tdLibAppPath: string;
+
+  public channelManagerToken: string;
+
+  public superAdminIds: number[];
+}

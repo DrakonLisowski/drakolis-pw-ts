@@ -1,6 +1,9 @@
 import commandLineArgs, { OptionDefinition } from 'command-line-args';
 import { Application, appLoader } from './apps';
 
+import * as dotenv from 'dotenv';
+dotenv.config();
+
 const definitions: OptionDefinition[] = [
   {
     name: 'application',

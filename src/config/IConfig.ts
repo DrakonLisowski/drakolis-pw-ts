@@ -5,6 +5,7 @@ import {
   RedisConfig,
   ServiceRegistryConfig,
   HostConfig,
+  TelegramConfig,
 } from '.';
 
 export interface IConfig {
@@ -17,4 +18,6 @@ export interface IConfig {
 
   apiHost: HostConfig;
   wsHost: HostConfig;
+
+  telegramConfig: TelegramConfig;
 }

@@ -6,6 +6,7 @@ import {
   ServiceRegistryConfig,
   HostConfig,
   RedisConfig,
+  TelegramConfig,
 } from '.';
 
 export class ProductionConfig implements IConfig {
@@ -45,5 +46,16 @@ export class ProductionConfig implements IConfig {
   public wsHost: HostConfig = {
     host: '127.0.0.1',
     port: 8000,
+  };
+
+  public telegramConfig: TelegramConfig = {
+    appID: 0,
+    appKey: '',
+    tdLibAppPath: '',
+    tdLibBinaryPath: '',
+
+    channelManagerToken: process.env.TELEGRAM_CHANNEL_MANAGER_TOKEN,
+
+    superAdminIds: [779631744],
   };
 }
