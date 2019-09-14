@@ -86,6 +86,13 @@ const commandPost = (bot: TelegramBot) => {
       );
     }
   });
+
+  bot.onText(/\/getChat (.+)/, (msg, match) => {
+    const chatId = msg.chat.id;
+    const resp = match[1];
+
+    bot.getChat(resp).then(chat =>  bot.sendMessage(chatId, JSON.stringify(chat)));
+  });
 };
 
 export default commandPost;
