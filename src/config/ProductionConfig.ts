@@ -54,7 +54,7 @@ export class ProductionConfig implements IConfig {
     tdLibAppPath: '',
     tdLibBinaryPath: '',
 
-    channelManagerToken: process.env.TELEGRAM_CHANNEL_MANAGER_TOKEN,
+    telegramBotToken: process.env.TELEGRAM_CHANNEL_MANAGER_TOKEN,
     channelManagerChannel: -1001315453164,
 
     superAdminIds: [779631744],

@@ -111,6 +111,11 @@ class ServiceRegistry {
         break;
       case Service.Websocket:
         return new (await import('./websocket')).default();
+      case Service.TelegramBot:
+        return new (await import('./telegramBot')).default(false);
+      // There should be onlt one botpoller running because of reasons
+      case Service.TelegramPoller:
+        return new (await import('./telegramBot')).default(true);
       default:
         throw new Error(`Unknown service ${service}`);
     }

@@ -21,7 +21,7 @@ export class DevelopmentConfig implements IConfig {
 
   public serviceRegistry: ServiceRegistryConfig = {
     startingConcurrency: 10,
-    startingTimeout: 5 * 1000,
+    startingTimeout: 30 * 1000,
   };
 
   public postgress: PostgressConfig = {
@@ -54,7 +54,7 @@ export class DevelopmentConfig implements IConfig {
     tdLibAppPath: '',
     tdLibBinaryPath: '',
 
-    channelManagerToken: process.env.TELEGRAM_CHANNEL_MANAGER_TOKEN,
+    telegramBotToken: process.env.TELEGRAM_CHANNEL_MANAGER_TOKEN,
     channelManagerChannel: -1001138267654,
 
     superAdminIds: [779631744],

@@ -16,13 +16,14 @@ export default class InfoAPIApplication extends BaseApplication {
   }
 
   public getRequiredServices(): Service[] {
-    return [Service.Logger, Service.Postgress];
+    return [Service.Logger, Service.TelegramBot, Service.Postgress];
   }
 
   public async startApplication(): Promise<boolean> {
-    this.appLogger = this.getRegistry()[Service.Logger];
+    const registry = this.getRegistry();
+    this.appLogger = registry[Service.Logger];
     this.appLogger.info('Starting application...');
-    this.server = new jayson.Server(methods());
+    this.server = new jayson.Server(methods(registry));
 
     return new Promise((res) => {
       this.server.http().listen(
