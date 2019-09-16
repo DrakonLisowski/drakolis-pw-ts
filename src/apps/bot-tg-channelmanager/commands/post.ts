@@ -86,6 +86,20 @@ const commandPost = (bot: TelegramBot) => {
       );
     }
   });
+
+  bot.onText(/\/getChat (.+)/, (msg, match) => {
+    const chatId = msg.chat.id;
+    const resp = match[1];
+
+    bot.getChat(resp).then(chat =>  bot.sendMessage(chatId, JSON.stringify(chat)));
+  });
+
+  bot.onText(/\/getPhoto (.+)/, (msg, match) => {
+    const chatId = msg.chat.id;
+    const resp = match[1];
+
+    bot.sendPhoto(chatId, resp);
+  });
 };
 
 export default commandPost;
