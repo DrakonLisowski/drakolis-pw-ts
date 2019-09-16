@@ -1,4 +1,5 @@
 import { Method, MethodHandler } from 'jayson';
+import authCheck from './wrappers/authCheck';
 
 const penis =
 `
@@ -25,7 +26,8 @@ const drawAPenis: MethodHandler = (args, callback) => {
 };
 
 const methods = () => ({
-  drawAPenis: new Method(drawAPenis),
+  drawAPenis: new Method(authCheck(drawAPenis)),
+  drawAPenisAuth: new Method(authCheck(drawAPenis)),
 });
 
 export default methods;
