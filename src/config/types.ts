@@ -38,7 +38,7 @@ export class TelegramConfig {
   public tdLibBinaryPath: string;
   public tdLibAppPath: string;
 
-  public channelManagerToken: string;
+  public telegramBotToken: string;
   public channelManagerChannel: number;
 
   public superAdminIds: number[];

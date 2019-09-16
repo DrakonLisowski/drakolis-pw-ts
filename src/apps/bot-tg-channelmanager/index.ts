@@ -14,12 +14,12 @@ export default class BotTGChannelManager extends BaseApplication {
   }
 
   public getRequiredServices(): Service[] {
-    return [Service.Logger, Service.Postgress];
+    return [Service.Logger, Service.TelegramPoller];
   }
 
   public async startApplication(): Promise<boolean> {
-    this.bot = new TelegramBot(config.telegramConfig.channelManagerToken, { polling: true });
-    post(this.bot);
+    const bot = this.getRegistry()[Service.TelegramPoller];
+    post(bot);
     return true;
   }
 
