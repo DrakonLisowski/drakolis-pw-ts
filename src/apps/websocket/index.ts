@@ -4,11 +4,12 @@ import { BaseApplication } from '../BaseApplication';
 import { Service } from '../../services/eService';
 // tslint:disable-next-line: import-name
 import LoggerService from '../../services/logger';
+import messages from './messages';
 
 export default class WSHostService extends BaseApplication {
 
   private appLogger: LoggerService;
-  private server: http.Server;
+  private server: http.Server = new http.Server();
 
   public getName(): string {
     return 'SocketAPI';
@@ -28,6 +29,7 @@ export default class WSHostService extends BaseApplication {
         () => {
           const socketTransport = this.getRegistry()[Service.Websocket];
           socketTransport.init(this.server);
+          messages(this.appLogger, socketTransport.getTransport());
           this.appLogger
             .info(`Application started @ ${config.wsHost.host}:${config.wsHost.port}!`);
           res(true);

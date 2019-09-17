@@ -18,6 +18,7 @@
 				"allow-pascal-case",
 				"ban-keywords"
 			]
-		}
+		},
+		"import-name": false
 	}
 }
