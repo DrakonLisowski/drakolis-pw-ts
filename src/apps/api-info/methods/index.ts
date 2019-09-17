@@ -1,7 +1,7 @@
 // tslint:disable-next-line: import-name
 import TelegramBot from 'node-telegram-bot-api';
 import { Method, MethodHandler } from 'jayson';
-import authCheck from './wrappers/authCheck';
+import authCheck from './middlewares/authCheck';
 import { Service } from '../../../services/eService';
 
 const penis = '8===D';

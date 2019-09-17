@@ -7,6 +7,7 @@ export const ERROR = {
     message: Server.errorMessages[Server.errors.INVALID_REQUEST],
   },
   // 10xxx -- Global errors
-  UNATHORIZED: { code: -10403, message: 'Unathorized' },
-  BAD_ARGUMENTS: { code: -10402, message: 'Bad arguments' },
+  BAD_ARGUMENTS: { code: -10400, message: 'Bad arguments' },
+  UNATHORIZED: { code: -10401, message: 'Unathorized' },
+  FORBIDDEN: { code: -10403, message: 'Action Forbidden' },
 };
