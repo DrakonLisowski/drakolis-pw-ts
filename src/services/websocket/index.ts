@@ -25,8 +25,8 @@ export default class WSService implements IService {
     return true;
   }
 
-  public init(expressInstance: express.Express) {
-    this.socket = socketIo(new http.Server(expressInstance));
+  public init(httpServer: http.Server) {
+    this.socket = socketIo(httpServer);
     this.serviceLogger.info('Socket initiated');
     this.isConnected = true;
   }
@@ -47,4 +47,7 @@ export default class WSService implements IService {
     });
   }
 
+  public getTransport() {
+    return this.socket;
+  }
 }
