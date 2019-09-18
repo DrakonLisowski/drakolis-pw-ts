@@ -1,7 +1,7 @@
 import { JSONRPCCallbackTypePlain, RequestParamsLike } from 'jayson';
-import { ERROR } from './error';
+import { ERROR } from '../errors';
 
-const testArguments = (
+const testRequest = (
   test: (args: RequestParamsLike) => object,
   args: RequestParamsLike,
   callback: JSONRPCCallbackTypePlain,
@@ -12,4 +12,4 @@ const testArguments = (
   }
 };
 
-export default testArguments;
+export default testRequest;

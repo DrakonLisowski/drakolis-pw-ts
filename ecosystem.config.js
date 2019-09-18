@@ -35,9 +35,9 @@ module.exports = {
   //   kill_timeout : 3000
   // },
     {
-      name: '[Drakolis.PW] InfoAPI',
+      name: '[Drakolis.PW] HTTP API',
       script: 'ts-node',
-      args: './src/runner api-info',
+      args: './src/runner http-api',
       instances: 0,
       exec_mode: 'cluster',
       autorestart: true,

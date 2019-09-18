@@ -4,9 +4,9 @@ import { BaseApplication } from '../BaseApplication';
 import { Service } from '../../services/eService';
 // tslint:disable-next-line: import-name
 import LoggerService from '../../services/logger';
-import methods from './methods';
+import commandLoader from './commandLoader';
 
-export default class InfoAPIApplication extends BaseApplication {
+export default class HttpAPIApplication extends BaseApplication {
 
   private appLogger: LoggerService;
   private server: jayson.Server;
@@ -23,7 +23,7 @@ export default class InfoAPIApplication extends BaseApplication {
     const registry = this.getRegistry();
     this.appLogger = registry[Service.Logger];
     this.appLogger.info('Starting application...');
-    this.server = new jayson.Server(methods(registry));
+    this.server = new jayson.Server(commandLoader());
 
     return new Promise((res) => {
       this.server.http().listen(
