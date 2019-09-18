@@ -18,6 +18,12 @@ export class InvalidRequestError extends ThrowableError {
   }
 }
 
+export class MethodNotFoundError extends ThrowableError {
+  constructor() {
+    super(Server.errors.METHOD_NOT_FOUND, Server.errorMessages[Server.errors.METHOD_NOT_FOUND]);
+  }
+}
+
 export class BadRequestError extends ThrowableError {
   constructor(public data: any) {
     super(-10400, 'Bad arguments');

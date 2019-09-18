@@ -3,8 +3,9 @@ import { Utils } from 'jayson';
 // tslint:disable-next-line: import-name
 import LoggerService from '../../services/logger';
 import drawAPenis from '../../commands/test/DrawAPenis';
+import alwaysFail from '../../commands/test/AlwaysFail';
 import commandWrapper from './commandWrapper';
-import { InvalidRequestError } from '../../errors';
+import { InvalidRequestError, MethodNotFoundError } from '../../errors';
 
 const isRequestJSONRPC = (socket: socketIo.Socket) => {
   return (
@@ -27,24 +28,20 @@ const parser = (logger: LoggerService, server: socketIo.Server) => {
 
     socket.send(Utils.response(null, { message: 'Hello world' }, null));
 
-    const methods = [
-      commandWrapper(socket, drawAPenis),
-    ];
-
-    const methodReduced = methods.reduce(
-      (prv, next) => {
-        return (data: any) => {
-          prv(data);
-          next(data);
-        };
-      },
-      // tslint:disable-next-line: no-empty
-      (data: any) => {},
-    );
+    const methods = {
+      ...commandWrapper(socket, drawAPenis),
+      ...commandWrapper(socket, alwaysFail),
+    };
 
     socket.on(
       'message',
-      (data: any) => methodReduced(data),
+      (data: any) => {
+        const commands = Object.keys(methods);
+        if (commands.includes(data.method)) {
+          methods[data.method](data);
+        }
+        socket.send(Utils.response(new MethodNotFoundError(), null, data.id || null));
+      },
     );
 
   });
