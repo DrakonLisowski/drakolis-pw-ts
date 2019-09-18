@@ -1,7 +1,7 @@
 enum Application {
   WebSocket = 'websocket',
   TelegramManager = 'telegram-manager',
-  InfoAPI = 'api-info',
+  HttpAPI = 'http-api',
   BotTGChannelManager = 'bot-tg-channelmanager',
 }
 
@@ -11,8 +11,8 @@ async function appLoader(app: Application) {
       return (await import('./websocket')).default;
     case Application.TelegramManager:
       throw new Error('Unsupported service');
-    case Application.InfoAPI:
-      return (await import('./api-info')).default;
+    case Application.HttpAPI:
+      return (await import('./http-api')).default;
     case Application.BotTGChannelManager:
       return (await import('./bot-tg-channelmanager')).default;
     default:

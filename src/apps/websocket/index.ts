@@ -4,7 +4,7 @@ import { BaseApplication } from '../BaseApplication';
 import { Service } from '../../services/eService';
 // tslint:disable-next-line: import-name
 import LoggerService from '../../services/logger';
-import messages from './methods';
+import messages from './commandLoader';
 
 export default class WSHostService extends BaseApplication {
 
