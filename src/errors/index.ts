@@ -8,7 +8,7 @@ interface IErrorDefinition {
 
 class ThrowableError extends Error implements JSONRPCError {
   constructor(public code: number, public message: string) {
-    super(message);
+    super();
   }
 }
 
@@ -19,7 +19,7 @@ export class InvalidRequestError extends ThrowableError {
 }
 
 export class BadRequestError extends ThrowableError {
-  constructor(private data: any) {
+  constructor(public data: any) {
     super(-10400, 'Bad arguments');
   }
 }
