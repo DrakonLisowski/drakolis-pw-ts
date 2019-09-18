@@ -27,7 +27,7 @@ export class Command {
   }
 
   public getFunction() {
-    let exec: CommandFunction = (data) => {
+    let exec = (data: any): any => {
       const request = this.testArguments(data);
       return exec(data);
     };

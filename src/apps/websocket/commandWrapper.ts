@@ -1,6 +1,6 @@
 import { Command } from '../../commands/Command';
 import socketIo from 'socket.io';
-import { Utils, JSONRPCRequest } from 'jayson';
+import { Utils, JSONRPCRequest, JSONRPCError } from 'jayson';
 
 export default function commandWrapper(
   socket: socketIo.Socket,
@@ -9,8 +9,8 @@ export default function commandWrapper(
   return (data: JSONRPCRequest) => {
     if (data.method === command.getName()) {
       command.getFunction()(data.params)
-        .then(result => socket.send(Utils.response(null, result, data.id)))
-        .catch(error => socket.send(Utils.response(error, null, data.id)));
+        .then((result: any) => socket.send(Utils.response(null, result, data.id)))
+        .catch((error: JSONRPCError) => socket.send(Utils.response(error, null, data.id)));
     }
   };
 }

@@ -1,5 +1,5 @@
 import { Command } from '../../commands/Command';
-import { Method, MethodHandler } from 'jayson';
+import { Method, MethodHandler, JSONRPCErrorLike } from 'jayson';
 import { reset } from 'cls-hooked';
 
 export default function commandWrapper(
@@ -8,8 +8,8 @@ export default function commandWrapper(
 
   const handler: MethodHandler = (args, callback) => {
     command.getFunction()(args)
-      .then(result => callback(null, result))
-      .catch(error => callback(error, reset));
+      .then((result: any) => callback(null, result))
+      .catch((error: JSONRPCErrorLike) => callback(error, reset));
   };
 
   return {
