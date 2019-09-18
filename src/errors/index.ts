@@ -7,7 +7,7 @@ interface IErrorDefinition {
 }
 
 class ThrowableError extends Error implements JSONRPCError {
-  constructor(public code: number, message: string) {
+  constructor(public code: number, public message: string) {
     super(message);
   }
 }
