@@ -27,16 +27,13 @@ export class Command {
   }
 
   public getFunction() {
-    let exec = async (data: any): Promise<any> => {
-      const request = this.testArguments(data);
-      return this.commandFunction(data);
-    };
-    if (this.requireAuth) {
-      exec = async (data) => {
+    const exec = async (data: any): Promise<any> => {
+      if (this.requireAuth) {
         Command.checkAuth(data);
-        return exec(data);
-      };
-    }
+      }
+      const request = this.testArguments(data);
+      return this.commandFunction(request);
+    };
     return exec;
   }
 
