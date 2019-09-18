@@ -19,7 +19,7 @@ export class InvalidRequestError extends ThrowableError {
 }
 
 export class BadRequestError extends ThrowableError {
-  constructor() {
+  constructor(private data: any) {
     super(-10400, 'Bad arguments');
   }
 }
