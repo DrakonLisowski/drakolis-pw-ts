@@ -2,7 +2,7 @@
 import TelegramBot, { InlineKeyboardButton, InlineKeyboardMarkup } from 'node-telegram-bot-api';
 import lodash from 'lodash';
 import config from '../../../config';
-import { RepostedPhoto } from '../../../entity/RepostedPhoto';
+import { RepostedPhoto } from '../../../entities/RepostedPhoto';
 
 const likeIcon = '❤️';
 const commandPost = (bot: TelegramBot) => {
