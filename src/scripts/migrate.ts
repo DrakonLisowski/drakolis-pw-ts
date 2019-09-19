@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import { createConnection } from 'typeorm';
 // tslint:disable-next-line: import-name
-import LoggerService from '../services/logger';
+import LoggerService from '../util/logger';
 import dbSettingsBuilder from '../util/dbSettingsBuilder';
 
 const log = new LoggerService('Migrations');

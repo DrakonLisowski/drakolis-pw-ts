@@ -1,9 +1,9 @@
 import { IService } from '../../services/IService';
 import { RedisClient } from 'redis';
-import { Service } from '../eService';
-// tslint:disable-next-line: import-name
+import { Service } from '../ServiceDecorator';
 import LoggerService from '../logger';
 
+@Service()
 export default class RedisService extends RedisClient implements IService {
 
   private serviceLogger: LoggerService;
@@ -15,9 +15,6 @@ export default class RedisService extends RedisClient implements IService {
     });
   }
 
-  public getDependencies(): Service[] {
-    return [];
-  }
   public async start(registry: any): Promise<boolean> {
     this.serviceLogger.silly('Starting service...');
     // Well...

@@ -3,7 +3,7 @@ import config from '../../config';
 import { BaseApplication } from '../BaseApplication';
 import { Service } from '../../services/eService';
 // tslint:disable-next-line: import-name
-import LoggerService from '../../services/logger';
+import LoggerService from '../../util/logger';
 import commandLoader from './commandLoader';
 
 export default class HttpAPIApplication extends BaseApplication {

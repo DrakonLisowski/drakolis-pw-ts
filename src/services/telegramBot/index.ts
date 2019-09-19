@@ -1,11 +1,11 @@
-// tslint:disable-next-line: import-name
 import TelegramBot from 'node-telegram-bot-api';
 import { IService } from '../IService';
-import { Service } from '../eService';
+import { Service } from '../ServiceDecorator';
 import config from '../../config';
-// tslint:disable-next-line:import-name
+import { ServiceInjector } from '../ServiceInjector';
 import LoggerService from '../logger';
 
+@Service()
 export default class TelegramBotService extends TelegramBot implements IService {
 
   private serviceLogger: LoggerService;
@@ -17,12 +17,10 @@ export default class TelegramBotService extends TelegramBot implements IService 
     );
   }
 
-  public getDependencies(): Service[] {
-    return [Service.Logger];
-  }
-
   public async start(registry: any): Promise<boolean> {
-    this.serviceLogger = registry[Service.Logger].addLabel('TGBot');
+
+    this.serviceLogger = ServiceInjector.resolve<LoggerService>(LoggerService)
+      .addLabel('TGBot');
     this.serviceLogger.info('Starting service...');
     if (this.polling) {
       await this.startPolling({

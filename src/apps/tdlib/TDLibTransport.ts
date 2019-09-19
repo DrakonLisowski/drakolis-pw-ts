@@ -1,6 +1,6 @@
 // @ts-ignore
 import { Client } from 'tglib/node';
-import logger from '../../services/logger/logger';
+import logger from '../../services/logger-scrapped!/logger';
 
 export default class TDLibTransport {
   protected tdlib: Client;

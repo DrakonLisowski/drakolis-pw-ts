@@ -1,7 +1,7 @@
 import socketIo from 'socket.io';
 import { Utils } from 'jayson';
 // tslint:disable-next-line: import-name
-import LoggerService from '../../services/logger';
+import LoggerService from '../../util/logger';
 import drawAPenis from '../../commands/test/DrawAPenis';
 import alwaysFail from '../../commands/test/AlwaysFail';
 import commandWrapper from './commandWrapper';

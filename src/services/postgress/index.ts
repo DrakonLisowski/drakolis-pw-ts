@@ -1,21 +1,19 @@
 import { createConnection, Connection } from 'typeorm';
 import { IService } from '../IService';
-import { Service } from '../eService';
-import dbSettingsBuilder from '../../util/dbSettingsBuilder';
-// tslint:disable-next-line:import-name
+import { Service } from '../ServiceDecorator';
 import LoggerService from '../logger';
+import dbSettingsBuilder from '../../util/dbSettingsBuilder';
+import { ServiceInjector } from '../ServiceInjector';
 
+@Service()
 export default class PostgressService implements IService {
 
   private serviceLogger: LoggerService;
   private dbConnection: Connection;
 
-  public getDependencies(): Service[] {
-    return [Service.Logger];
-  }
-
-  public async start(registry: any): Promise<boolean> {
-    this.serviceLogger = registry[Service.Logger].addLabel('Postgress');
+  public async start(): Promise<boolean> {
+    this.serviceLogger = ServiceInjector.resolve<LoggerService>(LoggerService)
+      .addLabel('Postgress');
     this.serviceLogger.info('Starting service...');
     return !!(
       await createConnection(dbSettingsBuilder(this.serviceLogger))

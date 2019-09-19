@@ -7,7 +7,7 @@ import winstonDailyRotateFile from 'winston-daily-rotate-file';
 
 import config, { LogLevel } from '../../config';
 import { IService } from '../IService';
-import { Service } from '../eService';
+import { Service } from '../ServiceDecorator';
 
 type SupportedSyntaxes = 'sql'|'javascript'|'typescript'|'js'|'json';
 
@@ -33,14 +33,15 @@ const myFormatNoColor = printf(({
 }) => `${timestamp} [${label}] <${level}> ${stripAnsi(message)}`);
 
 // tslint:disable-next-line: max-classes-per-file
+@Service()
 export default class LoggerService implements IService {
 
   private winston: wins.Logger;
   private labels: string[];
 
-  constructor(labels: string[]|string) {
-    this.labels = Array.isArray(labels) ? labels : [labels];
+  constructor() {
     const fileNameOverride = this.labels[0].replace(/:/g, '_');
+    // Removed logging process name...
     const transportz = [];
 
     if (config.logging.console) {
@@ -85,11 +86,7 @@ export default class LoggerService implements IService {
     this.winston = createLogger(options);
   }
 
-  public getDependencies(): Service[] {
-    return [];
-  }
   public async start(registry: any): Promise<boolean> {
-    this.winston.info('Loading application...'); // This is a dirty hack
     return true;
   }
   public isRunning(): boolean {
@@ -129,8 +126,10 @@ export default class LoggerService implements IService {
     this.error(err);
   }
 
-  public addLabel(label: string): LoggerService {
-    return new LoggerService([...this.labels, label]);
+  public addLabel(addLabel: string): LoggerService {
+    const newLogger = new LoggerService();
+    newLogger.setLabels([...this.labels, addLabel]);
+    return newLogger;
   }
 
   public syntax(
@@ -160,5 +159,9 @@ export default class LoggerService implements IService {
   }
   public sillySyntax(syntax: SupportedSyntaxes, message: string, extra?: SyntaxEntryExtra): void {
     this.syntax('silly', syntax, message, extra);
+  }
+
+  private setLabels(labels: string[]|string) {
+    this.labels = Array.isArray(labels) ? labels : [labels];
   }
 }
