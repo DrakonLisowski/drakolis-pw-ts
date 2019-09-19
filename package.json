@@ -11,7 +11,8 @@
 		"sort-packages": "sort-package-json ./package.json",
 		"start": "ts-node ./src/runner",
 		"migrate": "ts-node ./src/scripts/migrate",
-		"typeorm:cli": "ts-node ./node_modules/typeorm/cli -f ./ormconfig.json"
+		"typeorm:cli": "ts-node ./node_modules/typeorm/cli -f ./ormconfig.json",
+		"test:injector": "ts-node ./src/scripts/injectionTest"
 	},
 	"dependencies": {
 		"@types/jsonwebtoken": "^8.3.3",
