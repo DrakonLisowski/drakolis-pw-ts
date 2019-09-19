@@ -1,10 +1,12 @@
+
+import 'reflect-metadata';
+import * as dotenv from 'dotenv';
+dotenv.config();
+
 import commandLineArgs, { OptionDefinition } from 'command-line-args';
 import { Application, appLoader } from './apps';
 
 process.env.NTBA_FIX_319 = 'yes';
-
-import * as dotenv from 'dotenv';
-dotenv.config();
 
 const definitions: OptionDefinition[] = [
   {
