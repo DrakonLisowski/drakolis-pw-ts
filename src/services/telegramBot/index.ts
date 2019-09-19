@@ -10,12 +10,15 @@ export default class TelegramBotService extends TelegramBot implements IService 
 
   private serviceLogger: LoggerService;
 
-  // Wont work for now perhaps!
-  constructor(private polling: boolean) {
+  constructor() {
     super(
       config.telegramConfig.telegramBotToken,
       { polling: { autoStart: false } },
     );
+  }
+
+  public async turnOnPolling() {
+    await this.startPolling({});
   }
 
   public async start(): Promise<boolean> {
@@ -23,25 +26,16 @@ export default class TelegramBotService extends TelegramBot implements IService 
     this.serviceLogger = ServiceInjector.resolve<LoggerService>(LoggerService)
       .addLabel('TGBot');
     this.serviceLogger.info('Starting service...');
-    if (this.polling) {
-      await this.startPolling({
-
-      });
-    }
     this.serviceLogger.info('Service started!');
     return true;
   }
 
   public isRunning(): boolean {
-    return !this.polling || this.isPolling();
+    return true;
   }
 
   public async stop(): Promise <boolean> {
-    this.serviceLogger.info('Stopping service...');
-    if (this.polling) {
-      await this.stopPolling();
-    }
-    this.serviceLogger.info('Service stopped!');
+    throw new Error('Mika lalka');
     return true;
   }
 
