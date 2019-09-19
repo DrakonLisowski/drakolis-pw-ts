@@ -1,7 +1,6 @@
 import config from '../config';
 import { Logger, QueryRunner, ConnectionOptions } from 'typeorm';
-// tslint:disable-next-line:import-name
-import LoggerService from './logger';
+import LoggerService from '../services/logger';
 
 class DBLogger implements Logger {
   constructor(private logger: LoggerService) {

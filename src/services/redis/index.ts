@@ -15,7 +15,7 @@ export default class RedisService extends RedisClient implements IService {
     });
   }
 
-  public async start(registry: any): Promise<boolean> {
+  public async start(): Promise<boolean> {
     this.serviceLogger.silly('Starting service...');
     // Well...
     this.serviceLogger.info('Service started!');

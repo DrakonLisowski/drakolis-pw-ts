@@ -12,7 +12,7 @@ export default class WSService implements IService {
   private serviceLogger: LoggerService;
   private isConnected: boolean = false;
 
-  public async start(registry: any): Promise<boolean> {
+  public async start(): Promise<boolean> {
     this.serviceLogger = ServiceInjector.resolve<LoggerService>(LoggerService)
       .addLabel('Socket.IO');
 

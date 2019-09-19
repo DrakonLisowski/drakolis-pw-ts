@@ -1,9 +1,7 @@
 import http from 'http';
 import config from '../../config';
 import { BaseApplication } from '../BaseApplication';
-import { Service } from '../../services/eService';
-// tslint:disable-next-line: import-name
-import LoggerService from '../../util/logger';
+import LoggerService from '../../services/logger';
 import messages from './commandLoader';
 
 export default class WSHostService extends BaseApplication {
@@ -15,7 +13,7 @@ export default class WSHostService extends BaseApplication {
     return 'SocketAPI';
   }
 
-  public getRequiredServices(): Service[] {
+  public getRequiredServices(): Type<any>[] {
     return [Service.Logger, Service.Postgress, Service.Websocket];
   }
   public async startApplication(): Promise<boolean> {

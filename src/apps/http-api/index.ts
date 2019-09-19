@@ -1,28 +1,26 @@
 import jayson from 'jayson';
 import config from '../../config';
 import { BaseApplication } from '../BaseApplication';
-import { Service } from '../../services/eService';
-// tslint:disable-next-line: import-name
-import LoggerService from '../../util/logger';
+import { Type } from '../../services/ServiceDecorator';
+import { ServiceInjector } from '../../services/ServiceInjector';
+import LoggerService from '../../services/logger';
+import TelegramBotService from '../../services/telegramBot';
+import PostgressService from '../../services/postgress';
 import commandLoader from './commandLoader';
 
 export default class HttpAPIApplication extends BaseApplication {
 
-  private appLogger: LoggerService;
   private server: jayson.Server;
 
   public getName(): string {
     return 'InfoAPI';
   }
 
-  public getRequiredServices(): Service[] {
-    return [Service.Logger, Service.TelegramBot, Service.Postgress];
+  public getRequiredServices(): Type<any>[] {
+    return [PostgressService];
   }
 
   public async startApplication(): Promise<boolean> {
-    const registry = this.getRegistry();
-    this.appLogger = registry[Service.Logger];
-    this.appLogger.info('Starting application...');
     this.server = new jayson.Server(commandLoader());
 
     return new Promise((res) => {
@@ -30,7 +28,7 @@ export default class HttpAPIApplication extends BaseApplication {
         config.apiHost.port,
         config.apiHost.host,
         () => {
-          this.appLogger
+          this.applicationLogger
             .info(`Application started @ ${config.apiHost.host}:${config.apiHost.port}!`);
           res(true);
         },
@@ -43,10 +41,10 @@ export default class HttpAPIApplication extends BaseApplication {
   }
 
   public async stop(): Promise<boolean> {
-    this.appLogger.info('Stopping application...');
+    this.applicationLogger.info('Stopping application...');
     return new Promise((res, rej) => {
       this.server.http().close();
-      this.appLogger.info('Application stopped!');
+      this.applicationLogger.info('Application stopped!');
       res(true);
     });
   }

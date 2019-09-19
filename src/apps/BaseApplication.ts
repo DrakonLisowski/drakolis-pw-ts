@@ -1,12 +1,15 @@
-import { Service } from '../services/eService';
-import { ServiceRegistry } from '../services/ServiceRegistry';
+import bluebird from 'bluebird';
+import { IService } from '../services/IService';
+import { ServiceInjector } from '../services/ServiceInjector';
+import { Type } from '../services/ServiceDecorator';
+import LoggerService from '../services/logger';
 
 export abstract class BaseApplication {
 
-  private registry: ServiceRegistry;
+  protected applicationLogger: LoggerService;
 
   public abstract getName(): string;
-  public abstract getRequiredServices(): Service[];
+  public abstract getRequiredServices(): Type<IService>[];
   public abstract startApplication(): Promise<boolean>;
   public abstract isRunning(): boolean;
   public abstract stop(): Promise<boolean>;
@@ -15,22 +18,30 @@ export abstract class BaseApplication {
     return process.env.pm_id || '-1';
   }
 
-  public getRegistryLabel(): string {
+  public getLoggingLabel(): string {
     return `${this.getName()}:${this.getProcessId()}`;
   }
 
   public async start(): Promise<boolean> {
-    await this.initRegistry();
+    await this.initServices();
     await this.startApplication();
+    this.applicationLogger.info('Application is ready.');
     return true;
   }
 
-  protected async initRegistry() {
-    this.registry = new ServiceRegistry(this.getRegistryLabel(), this.getRequiredServices());
-    return this.registry.prepareRegistryForApplication();
+  private async initServices() {
+    // this is globally required service for now.
+    this.applicationLogger = ServiceInjector.resolve<LoggerService>(LoggerService);
+    this.applicationLogger = this.applicationLogger.addLabel(this.getLoggingLabel());
+    this.applicationLogger.info('Application is starting...');
+
+    await bluebird.map(
+      this.getRequiredServices(),
+      async (service: Type<IService>) => {
+        const resolved = ServiceInjector.resolve<IService>(service);
+        await resolved.start();
+      },
+    );
   }
 
-  protected getRegistry(): any {
-    return this.registry.registryAsObject();
-  }
 }

@@ -10,6 +10,7 @@ export default class TelegramBotService extends TelegramBot implements IService 
 
   private serviceLogger: LoggerService;
 
+  // Wont work for now perhaps!
   constructor(private polling: boolean) {
     super(
       config.telegramConfig.telegramBotToken,
@@ -17,7 +18,7 @@ export default class TelegramBotService extends TelegramBot implements IService 
     );
   }
 
-  public async start(registry: any): Promise<boolean> {
+  public async start(): Promise<boolean> {
 
     this.serviceLogger = ServiceInjector.resolve<LoggerService>(LoggerService)
       .addLabel('TGBot');

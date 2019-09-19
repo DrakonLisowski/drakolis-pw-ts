@@ -19,6 +19,7 @@
 				"ban-keywords"
 			]
 		},
-		"import-name": false
+		"import-name": false,
+		"array-type": false
 	}
 }

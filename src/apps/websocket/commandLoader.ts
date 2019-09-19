@@ -1,7 +1,5 @@
 import socketIo from 'socket.io';
 import { Utils } from 'jayson';
-// tslint:disable-next-line: import-name
-import LoggerService from '../../util/logger';
 import drawAPenis from '../../commands/test/DrawAPenis';
 import alwaysFail from '../../commands/test/AlwaysFail';
 import commandWrapper from './commandWrapper';
@@ -20,8 +18,8 @@ const isRequestJSONRPC = (socket: socketIo.Socket) => {
     return next();
   };
 };
-
-const parser = (logger: LoggerService, server: socketIo.Server) => {
+// This should be rewritten with injection. Just ignore for now
+const parser = (server: socketIo.Server) => {
   server.on('connection', (socket: socketIo.Socket) => {
     // this should be JSONRPC check middleware
     socket.use(isRequestJSONRPC(socket));

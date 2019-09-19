@@ -36,11 +36,14 @@ const myFormatNoColor = printf(({
 @Service()
 export default class LoggerService implements IService {
 
+  private fileNameOverride: string;
   private winston: wins.Logger;
-  private labels: string[];
+  private labels: string[] = [];
 
   constructor() {
-    const fileNameOverride = this.labels[0].replace(/:/g, '_');
+    this.init();
+  }
+  public init() {
     // Removed logging process name...
     const transportz = [];
 
@@ -60,7 +63,7 @@ export default class LoggerService implements IService {
     }
 
     if (config.logging.file) {
-      const fileNamePrefix = fileNameOverride || config.logging.fileNamePrefix;
+      const fileNamePrefix = this.fileNameOverride || config.logging.fileNamePrefix;
       const fileName = `${fileNamePrefix}@${config.logging.fileNamePostfix}`;
       transportz.push(
         new winstonDailyRotateFile({
@@ -86,7 +89,7 @@ export default class LoggerService implements IService {
     this.winston = createLogger(options);
   }
 
-  public async start(registry: any): Promise<boolean> {
+  public async start(): Promise<boolean> {
     return true;
   }
   public isRunning(): boolean {
@@ -163,5 +166,7 @@ export default class LoggerService implements IService {
 
   private setLabels(labels: string[]|string) {
     this.labels = Array.isArray(labels) ? labels : [labels];
+    this.fileNameOverride = this.labels[0].replace(/:/g, '_');
+    this.init();
   }
 }
