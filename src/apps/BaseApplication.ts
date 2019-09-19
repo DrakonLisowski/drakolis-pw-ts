@@ -41,6 +41,7 @@ export abstract class BaseApplication {
         const resolved = ServiceInjector.resolve<IService>(service);
         await resolved.start();
       },
+      { concurrency: 1 },
     );
   }
 

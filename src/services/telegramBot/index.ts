@@ -17,12 +17,7 @@ export default class TelegramBotService extends TelegramBot implements IService 
     );
   }
 
-  public async turnOnPolling() {
-    await this.startPolling({});
-  }
-
   public async start(): Promise<boolean> {
-
     this.serviceLogger = ServiceInjector.resolve<LoggerService>(LoggerService)
       .addLabel('TGBot');
     this.serviceLogger.info('Starting service...');
