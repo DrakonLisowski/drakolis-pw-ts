@@ -1,6 +1,5 @@
 import { Type } from './ServiceDecorator';
 
-// tslint:disable-next-line: new-parens
 export const ServiceInjector = new class {
 
   // Contains already loaded stuff
@@ -20,4 +19,4 @@ export const ServiceInjector = new class {
 
     return createdInstance;
   }
-};
+}();
