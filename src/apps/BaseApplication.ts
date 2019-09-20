@@ -3,13 +3,14 @@ import { IService } from '../services/IService';
 import { ServiceInjector } from '../services/ServiceInjector';
 import { Type } from '../services/ServiceDecorator';
 import LoggerService from '../services/logger';
+import { LoaderService } from '../services/LoaderService';
 
 export abstract class BaseApplication {
 
   protected applicationLogger: LoggerService;
 
   public abstract getName(): string;
-  public abstract getRequiredServices(): Type<IService>[];
+  public abstract getRequiredServices(): Type<any>[];
   public abstract startApplication(): Promise<boolean>;
   public abstract isRunning(): boolean;
   public abstract stop(): Promise<boolean>;
@@ -37,9 +38,13 @@ export abstract class BaseApplication {
 
     await bluebird.map(
       this.getRequiredServices(),
-      async (service: Type<IService>) => {
-        const resolved = ServiceInjector.resolve<IService>(service);
-        await resolved.start();
+      async (service: Type<any>) => {
+        const resolved = ServiceInjector.resolve<any>(service);
+        // Init services if it is possible
+        if (resolved instanceof LoaderService) {
+          return (resolved as LoaderService<any>).init;
+        }
+        return true;
       },
       { concurrency: 1 },
     );

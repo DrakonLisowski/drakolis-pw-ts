@@ -34,7 +34,7 @@ const myFormatNoColor = printf(({
 
 // tslint:disable-next-line: max-classes-per-file
 @Service()
-export default class LoggerService implements IService {
+export default class LoggerService {
 
   private fileNameOverride: string;
   private winston: wins.Logger;
@@ -87,16 +87,6 @@ export default class LoggerService implements IService {
       transports: transportz,
     };
     this.winston = createLogger(options);
-  }
-
-  public async start(): Promise<boolean> {
-    return true;
-  }
-  public isRunning(): boolean {
-    return true;
-  }
-  public async stop(): Promise<boolean> {
-    return true;
   }
 
   public log(level: LogLevel, message: string): void {

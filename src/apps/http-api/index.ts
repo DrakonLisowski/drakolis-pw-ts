@@ -2,8 +2,6 @@ import jayson from 'jayson';
 import config from '../../config';
 import { BaseApplication } from '../BaseApplication';
 import { Type } from '../../services/ServiceDecorator';
-import { ServiceInjector } from '../../services/ServiceInjector';
-import LoggerService from '../../services/logger';
 import TelegramBotService from '../../services/telegramBot';
 import PostgressService from '../../services/postgress';
 import commandLoader from './commandLoader';

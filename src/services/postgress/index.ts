@@ -1,24 +1,22 @@
 import { createConnection, Connection } from 'typeorm';
-import { IService } from '../IService';
 import { Service } from '../ServiceDecorator';
 import LoggerService from '../logger';
 import dbSettingsBuilder from '../../util/dbSettingsBuilder';
-import { ServiceInjector } from '../ServiceInjector';
+import { LoaderService } from '../LoaderService';
 
 @Service()
-export default class PostgressService implements IService {
+export default class PostgressService extends LoaderService<Connection> {
 
-  private serviceLogger: LoggerService;
-  private dbConnection: Connection;
+  constructor(private serviceLogger: LoggerService) {
+    super(LoggerService);
+  }
 
-  public async start(): Promise<boolean> {
-    this.serviceLogger = ServiceInjector.resolve<LoggerService>(LoggerService)
-      .addLabel('Postgress');
+  protected async initInstance(): Promise<boolean> {
     this.serviceLogger.info('Starting service...');
     return !!(
       await createConnection(dbSettingsBuilder(this.serviceLogger))
       .then((connection) => {
-        this.dbConnection = connection;
+        this.instance = connection;
         this.serviceLogger.info('Service started!');
         return true;
       })
@@ -27,14 +25,6 @@ export default class PostgressService implements IService {
         return false;
       })
     );
-  }
-
-  public isRunning(): boolean {
-    return this.dbConnection.isConnected || false;
-  }
-
-  public stop(): Promise<boolean> {
-    throw new Error('Method not implemented.');
   }
 
 }
