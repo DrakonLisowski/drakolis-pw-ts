@@ -42,3 +42,6 @@ dist/**/*
 yarn.lock
 
 /tdlib
+
+/converted-files
+/download-files

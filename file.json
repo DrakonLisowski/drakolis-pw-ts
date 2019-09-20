@@ -1,0 +1,66 @@
+{
+  "message_id": 475,
+  "from": {
+    "id": 210923313,
+    "is_bot": false,
+    "first_name": "Clara",
+    "username": "ClaraBlitz",
+    "language_code": "en"
+  },
+  "chat": {
+    "id": 210923313,
+    "first_name": "Clara",
+    "username": "ClaraBlitz",
+    "type": "private"
+  },
+  "date": 1568927057,
+  "reply_to_message": {
+    "message_id": 459,
+    "from": {
+      "id": 210923313,
+      "is_bot": false,
+      "first_name": "Clara",
+      "username": "ClaraBlitz",
+      "language_code": "en"
+    },
+    "chat": {
+      "id": 210923313,
+      "first_name": "Clara",
+      "username": "ClaraBlitz",
+      "type": "private"
+    },
+    "date": 1568576597,
+    "forward_from_chat": {
+      "id": -1001288431544,
+      "title": "Всё ежу",
+      "username": "vseezh",
+      "type": "channel"
+    },
+    "forward_from_message_id": 19577,
+    "forward_signature": "Clara",
+    "forward_date": 1568544041,
+    "video": {
+      "duration": 55,
+      "width": 720,
+      "height": 720,
+      "mime_type": "video/mp4",
+      "thumb": {
+        "file_id": "AAQCAANSAwACJZL4S-OVZLUvDSQu0ihKDwAEAQAHbQADEycAAhYE",
+        "file_size": 24527,
+        "width": 320,
+        "height": 320
+      },
+      "file_id": "BAADAgADUgMAAiWS-EvjlWS1Lw0kLhYE",
+      "file_size": 4600737
+    },
+    "caption": "сделала вам не битую версию видоса"
+  },
+  "text": "/ffmpeg",
+  "entities": [
+    {
+      "offset": 0,
+      "length": 7,
+      "type": "bot_command"
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 import { BaseApplication } from '../BaseApplication';
-import post from './commands/post';
+import commands from './commands';
 import { IService } from '../../services/IService';
 import { Type } from '../../services/ServiceDecorator';
 import TelegramBotService from '../../services/telegramBot';
@@ -16,10 +16,8 @@ export default class BotTGClaraApplication extends BaseApplication {
       TelegramBotService,
     ];
   }
-
   public async startApplication(): Promise<boolean> {
-    const bot = ServiceInjector.resolve<TelegramBotService>(TelegramBotService);
-    post(bot);
+    commands();
     return true;
   }
 

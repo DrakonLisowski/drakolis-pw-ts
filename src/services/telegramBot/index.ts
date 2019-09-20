@@ -13,7 +13,7 @@ export default class TelegramBotService extends TelegramBot implements IService 
   constructor() {
     super(
       config.telegramConfig.telegramBotToken,
-      { polling: { autoStart: false } },
+      { polling: { autoStart: true } },
     );
   }
 
@@ -29,9 +29,8 @@ export default class TelegramBotService extends TelegramBot implements IService 
     return true;
   }
 
-  public async stop(): Promise <boolean> {
+  public async stop(): Promise<boolean> {
     throw new Error('Mika lalka');
-    return true;
   }
 
 }
