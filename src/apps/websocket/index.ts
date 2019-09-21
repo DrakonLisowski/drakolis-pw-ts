@@ -15,9 +15,10 @@ export default class WSHostService extends BaseApplication {
 
   constructor() {
     super();
-    ServiceInjector.resolve<ContextService>(ContextService).addRootContext(this.getLoggingLabel());
+    const context = ServiceInjector.resolve<ContextService>(ContextService)
+      .addRootContext(this.getLoggingLabel());
     this.applicationLogger = ServiceInjector.resolve<LoggerService>(LoggerService)
-      .addLabel(this.getLoggingLabel());
+      .addLabels(context.getRootContext());
     this.socketService = ServiceInjector.resolve<SocketIOService>(SocketIOService);
   }
 

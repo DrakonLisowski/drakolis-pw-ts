@@ -13,9 +13,10 @@ export default class BotTGChannelManager extends BaseApplication {
 
   constructor() {
     super();
-    ServiceInjector.resolve<ContextService>(ContextService).addRootContext(this.getLoggingLabel());
+    const context = ServiceInjector.resolve<ContextService>(ContextService)
+      .addRootContext(this.getLoggingLabel());
     this.applicationLogger = ServiceInjector.resolve<LoggerService>(LoggerService)
-      .addLabel(this.getLoggingLabel());
+      .addLabels(context.getRootContext());
     this.botService = ServiceInjector.resolve<TelegramBotService>(TelegramBotService);
   }
 

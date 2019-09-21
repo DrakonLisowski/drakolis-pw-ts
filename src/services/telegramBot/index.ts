@@ -13,7 +13,7 @@ export default class TelegramBotService extends LoaderService<TelegramBot> {
     private serviceLogger: LoggerService,
   ) {
     super();
-    this.context.addContext(this, ['TGBot']);
+    this.context.addContext(this, 'TGBot');
     this.serviceLogger = this.serviceLogger.addLabels(this.context.getContext(this));
   }
 

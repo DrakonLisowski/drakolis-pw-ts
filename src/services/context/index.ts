@@ -3,13 +3,18 @@ import { Service } from '../ServiceDecorator';
 @Service()
 export default class ContextService {
 
-  // TEMP: This variable shouldnt exist
-  private rootContext: string;
   private contextMap: WeakMap<object, string[]> = new WeakMap();
 
-  // TEMP: This method shouldnt exist
-  public addRootContext(context: string) {
-    this.rootContext = context;
+  public addRootContext(context: string[]|string) {
+    this.addContext(null, context);
+    return this;
+  }
+
+  public getRootContext(): string[] {
+    if (this.contextMap.has(null)) {
+      return this.contextMap.get(null);
+    }
+    return [];
   }
 
   public addContext(obj: object, newContext: string[]|string) {
@@ -20,12 +25,13 @@ export default class ContextService {
     }
 
     this.contextMap.set(obj, context);
+    return this;
   }
 
-  public getContext(obj: object) {
+  public getContext(obj: object): string[] {
     if (!this.contextMap.has(obj)) {
-      return [this.rootContext];
+      return [...this.getRootContext()];
     }
-    return [this.rootContext, ...this.contextMap.get(obj)];
+    return [...this.getRootContext(), ...this.contextMap.get(obj)];
   }
 }
