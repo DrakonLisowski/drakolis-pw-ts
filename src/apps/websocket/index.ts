@@ -5,6 +5,7 @@ import messages from './commandLoader';
 import { ServiceInjector } from '../../services/ServiceInjector';
 import LoggerService from '../../services/logger';
 import SocketIOService from '../../services/websocket';
+import ContextService from '../../services/context';
 
 export default class WSHostService extends BaseApplication {
 
@@ -14,6 +15,7 @@ export default class WSHostService extends BaseApplication {
 
   constructor() {
     super();
+    ServiceInjector.resolve<ContextService>(ContextService).addRootContext(this.getLoggingLabel());
     this.applicationLogger = ServiceInjector.resolve<LoggerService>(LoggerService)
       .addLabel(this.getLoggingLabel());
     this.socketService = ServiceInjector.resolve<SocketIOService>(SocketIOService);

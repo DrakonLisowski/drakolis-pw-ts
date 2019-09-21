@@ -4,6 +4,7 @@ import { ServiceInjector } from '../../services/ServiceInjector';
 import LoggerService from '../../services/logger';
 import TelegramBotService from '../../services/telegramBot';
 import PostgressService from '../../services/postgress';
+import ContextService from '../../services/context';
 
 export default class BotTGChannelManager extends BaseApplication {
 
@@ -12,6 +13,7 @@ export default class BotTGChannelManager extends BaseApplication {
 
   constructor() {
     super();
+    ServiceInjector.resolve<ContextService>(ContextService).addRootContext(this.getLoggingLabel());
     this.applicationLogger = ServiceInjector.resolve<LoggerService>(LoggerService)
       .addLabel(this.getLoggingLabel());
     this.botService = ServiceInjector.resolve<TelegramBotService>(TelegramBotService);

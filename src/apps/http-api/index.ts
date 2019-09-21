@@ -4,6 +4,7 @@ import { BaseApplication } from '../BaseApplication';
 import commandLoader from './commandLoader';
 import { ServiceInjector } from '../../services/ServiceInjector';
 import LoggerService from '../../services/logger';
+import ContextService from '../../services/context';
 
 export default class HttpAPIApplication extends BaseApplication {
 
@@ -12,6 +13,7 @@ export default class HttpAPIApplication extends BaseApplication {
 
   constructor() {
     super();
+    ServiceInjector.resolve<ContextService>(ContextService).addRootContext(this.getLoggingLabel());
     this.applicationLogger = ServiceInjector.resolve<LoggerService>(LoggerService)
       .addLabel(this.getLoggingLabel());
   }
