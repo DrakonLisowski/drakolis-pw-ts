@@ -12,7 +12,13 @@ export default class ContextService {
     this.rootContext = context;
   }
 
-  public addContext(obj: object, context: string[]) {
+  public addContext(obj: object, newContext: string[]|string) {
+    let context = Array.isArray(newContext) ? newContext : [newContext];
+
+    if (!this.contextMap.has(obj)) {
+      context = [...this.contextMap.get(obj), ...context];
+    }
+
     this.contextMap.set(obj, context);
   }
 
