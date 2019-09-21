@@ -18,7 +18,7 @@ export default class ContextService {
 
   public getContext(obj: object) {
     if (!this.contextMap.has(obj)) {
-      return [];
+      return [this.rootContext];
     }
     return [this.rootContext, ...this.contextMap.get(obj)];
   }
