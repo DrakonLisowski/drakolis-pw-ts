@@ -13,7 +13,7 @@ export default class PostgressService extends LoaderService<Connection> {
     private serviceLogger: LoggerService,
   ) {
     super();
-    this.context.addContext(this, 'Postgress');
+    this.context.addSubContext(this, null, 'Postgress');
     this.serviceLogger = this.serviceLogger.addLabels(this.context.getContext(this));
   }
 

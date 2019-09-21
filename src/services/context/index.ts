@@ -22,7 +22,14 @@ export default class ContextService {
     this.addContext(obj, [...parentContext, ...newContext]);
   }
 
-  public addContext(obj: object, newContext: string[]|string) {
+  public getContext(obj: object): string[] {
+    if (!this.contextMap.has(obj)) {
+      return [...this.getRootContext()];
+    }
+    return [...this.getRootContext(), ...this.contextMap.get(obj)];
+  }
+
+  protected addContext(obj: object, newContext: string[]|string) {
     let context = Array.isArray(newContext) ? newContext : [newContext];
 
     if (!this.contextMap.has(obj)) {
@@ -31,12 +38,5 @@ export default class ContextService {
 
     this.contextMap.set(obj, context);
     return this;
-  }
-
-  public getContext(obj: object): string[] {
-    if (!this.contextMap.has(obj)) {
-      return [...this.getRootContext()];
-    }
-    return [...this.getRootContext(), ...this.contextMap.get(obj)];
   }
 }
