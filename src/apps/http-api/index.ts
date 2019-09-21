@@ -23,7 +23,6 @@ export default class HttpAPIApplication extends BaseApplication {
   }
 
   public async startApplication(): Promise<boolean> {
-    this.applicationLogger = ServiceInjector.resolve<LoggerService>(LoggerService);
     this.server = new jayson.Server(commandLoader());
 
     return new Promise((res) => {
