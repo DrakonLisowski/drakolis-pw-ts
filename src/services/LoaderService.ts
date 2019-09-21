@@ -2,25 +2,33 @@ import bluebird from 'bluebird';
 import { Type } from './ServiceDecorator';
 import { ServiceInjector } from './ServiceInjector';
 
-export abstract class LoaderService<T> {
-
-  // this thing will start working on first load.
-  public init: Promise<T>;
+export default abstract class LoaderService<T> {
 
   protected instance: T;
   private dependencies: Type<any>[];
+  private initiated: boolean = false;
 
-  constructor(...dependencies: Type<any>[]) {
+  constructor(...dependencies: Type<LoaderService<any>>[]) {
     this.dependencies = dependencies;
-    this.init = new Promise(async (res) => {
-      await this.initDependencies();
-      await this.initInstance();
-      res(this.instance);
-    });
+  }
+
+  public async init(...args: any) {
+    if (!this.initiated) {
+      await new Promise(async (res) => {
+        await this.initDependencies();
+        await this.initInstance(...args);
+        res(this.instance);
+      });
+    }
+    return this.instance;
   }
 
   public stop() {
     return true;
+  }
+
+  protected reset() {
+    this.initiated = false;
   }
 
   protected async initDependencies(): Promise<boolean> {
@@ -28,15 +36,12 @@ export abstract class LoaderService<T> {
       this.dependencies,
       (depClass) => {
         const dependency = ServiceInjector.resolve<any>(depClass);
-        if (dependency instanceof LoaderService) {
-          return (dependency as LoaderService<any>).init;
-        }
-        return true;
+        return dependency.init;
       },
     );
     return true;
   }
 
-  protected abstract initInstance(): Promise<boolean>|boolean;
+  protected abstract initInstance(...args: any): Promise<boolean>|boolean;
 
 }

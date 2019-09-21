@@ -6,7 +6,6 @@ import { createLogger, LoggerOptions, transports } from 'winston';
 import winstonDailyRotateFile from 'winston-daily-rotate-file';
 
 import config, { LogLevel } from '../../config';
-import { IService } from '../IService';
 import { Service } from '../ServiceDecorator';
 
 type SupportedSyntaxes = 'sql'|'javascript'|'typescript'|'js'|'json';
@@ -122,6 +121,12 @@ export default class LoggerService {
   public addLabel(addLabel: string): LoggerService {
     const newLogger = new LoggerService();
     newLogger.setLabels([...this.labels, addLabel]);
+    return newLogger;
+  }
+
+  public addLabels(addLabel: string[]): LoggerService {
+    const newLogger = new LoggerService();
+    newLogger.setLabels([...this.labels, ...addLabel]);
     return newLogger;
   }
 

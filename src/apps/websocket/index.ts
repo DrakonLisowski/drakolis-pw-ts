@@ -1,34 +1,38 @@
 import http from 'http';
 import config from '../../config';
 import { BaseApplication } from '../BaseApplication';
-import LoggerService from '../../services/logger';
 import messages from './commandLoader';
+import { ServiceInjector } from '../../services/ServiceInjector';
+import LoggerService from '../../services/logger';
+import SocketIOService from '../../services/websocket';
 
 export default class WSHostService extends BaseApplication {
 
-  private appLogger: LoggerService;
+  private applicationLogger: LoggerService;
   private server: http.Server = new http.Server();
+  private socketService: SocketIOService;
+
+  constructor() {
+    super();
+    this.applicationLogger = ServiceInjector.resolve<LoggerService>(LoggerService)
+      .addLabel(this.getLoggingLabel());
+    this.socketService = ServiceInjector.resolve<SocketIOService>(SocketIOService);
+  }
 
   public getName(): string {
     return 'SocketAPI';
   }
 
-  public getRequiredServices(): Type<any>[] {
-    return [Service.Logger, Service.Postgress, Service.Websocket];
-  }
   public async startApplication(): Promise<boolean> {
-    this.appLogger = this.getRegistry()[Service.Logger];
-    this.appLogger.info('Starting application...');
+    this.applicationLogger.info('Starting application...');
 
     return new Promise((res, rej) => {
       this.server.listen(
         config.wsHost.port,
         config.wsHost.host,
         () => {
-          const socketTransport = this.getRegistry()[Service.Websocket];
-          socketTransport.init(this.server);
-          messages(this.appLogger, socketTransport.getTransport());
-          this.appLogger
+          messages(this.socketService.init(this.server));
+          this.applicationLogger
             .info(`Application started @ ${config.wsHost.host}:${config.wsHost.port}!`);
           res(true);
         },
@@ -41,10 +45,10 @@ export default class WSHostService extends BaseApplication {
   }
 
   public async stop(): Promise<boolean> {
-    this.appLogger.info('Stopping application...');
+    this.applicationLogger.info('Stopping application...');
     return new Promise((res, rej) => {
       this.server.close();
-      this.appLogger.info('Application stopped!');
+      this.applicationLogger.info('Application stopped!');
       res(true);
     });
   }

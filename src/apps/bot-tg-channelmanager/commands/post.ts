@@ -1,6 +1,4 @@
-// tslint:disable-next-line: import-name
 import TelegramBot, { InlineKeyboardButton, InlineKeyboardMarkup } from 'node-telegram-bot-api';
-import lodash from 'lodash';
 import config from '../../../config';
 import { RepostedPhoto } from '../../../entities/RepostedPhoto';
 

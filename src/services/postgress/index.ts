@@ -1,14 +1,20 @@
 import { createConnection, Connection } from 'typeorm';
-import { Service } from '../ServiceDecorator';
-import LoggerService from '../logger';
 import dbSettingsBuilder from '../../util/dbSettingsBuilder';
-import { LoaderService } from '../LoaderService';
+import { Service } from '../ServiceDecorator';
+import LoaderService from '../LoaderService';
+import ContextService from '../context';
+import LoggerService from '../logger';
 
 @Service()
 export default class PostgressService extends LoaderService<Connection> {
 
-  constructor(private serviceLogger: LoggerService) {
-    super(LoggerService);
+  constructor(
+    private context: ContextService,
+    private serviceLogger: LoggerService,
+  ) {
+    super();
+    this.context.addContext(this, ['Postgress']);
+    this.serviceLogger = this.serviceLogger.addLabels(this.context.getContext(this));
   }
 
   protected async initInstance(): Promise<boolean> {

@@ -1,24 +1,27 @@
 import jayson from 'jayson';
 import config from '../../config';
 import { BaseApplication } from '../BaseApplication';
-import { Type } from '../../services/ServiceDecorator';
-import TelegramBotService from '../../services/telegramBot';
-import PostgressService from '../../services/postgress';
 import commandLoader from './commandLoader';
+import { ServiceInjector } from '../../services/ServiceInjector';
+import LoggerService from '../../services/logger';
 
 export default class HttpAPIApplication extends BaseApplication {
 
+  private applicationLogger: LoggerService;
   private server: jayson.Server;
+
+  constructor() {
+    super();
+    this.applicationLogger = ServiceInjector.resolve<LoggerService>(LoggerService)
+      .addLabel(this.getLoggingLabel());
+  }
 
   public getName(): string {
     return 'InfoAPI';
   }
 
-  public getRequiredServices(): Type<any>[] {
-    return [PostgressService];
-  }
-
   public async startApplication(): Promise<boolean> {
+    this.applicationLogger = ServiceInjector.resolve<LoggerService>(LoggerService);
     this.server = new jayson.Server(commandLoader());
 
     return new Promise((res) => {

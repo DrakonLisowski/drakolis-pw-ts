@@ -1,25 +1,33 @@
-// tslint:disable-next-line: import-name
-import TelegramBot from 'node-telegram-bot-api';
 import { BaseApplication } from '../BaseApplication';
-import { Service } from '../../services/eService';
 import post from './commands/post';
-import config from '../../config';
+import { ServiceInjector } from '../../services/ServiceInjector';
+import LoggerService from '../../services/logger';
+import TelegramBotService from '../../services/telegramBot';
+import PostgressService from '../../services/postgress';
 
 export default class BotTGChannelManager extends BaseApplication {
 
-  private bot: TelegramBot;
+  private applicationLogger: LoggerService;
+  private botService: TelegramBotService;
+
+  constructor() {
+    super();
+    this.applicationLogger = ServiceInjector.resolve<LoggerService>(LoggerService)
+      .addLabel(this.getLoggingLabel());
+    this.botService = ServiceInjector.resolve<TelegramBotService>(TelegramBotService);
+  }
 
   public getName(): string {
     return 'BotTGChannelManager';
   }
 
-  public getRequiredServices(): Service[] {
-    return [Service.Logger, Service.TelegramPoller];
-  }
-
   public async startApplication(): Promise<boolean> {
-    const bot = this.getRegistry()[Service.TelegramPoller];
+    const pg = ServiceInjector.resolve<PostgressService>(PostgressService);
+    pg.init();
+
+    const bot = await this.botService.init(true);
     post(bot);
+    this.applicationLogger.info('Application started.');
     return true;
   }
 
