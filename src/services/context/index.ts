@@ -17,6 +17,11 @@ export default class ContextService {
     return [];
   }
 
+  public addSubContext(obj: object, parent: object = null, newContext: string[]|string = []) {
+    const parentContext = this.getContext(parent);
+    this.addContext(obj, [...parentContext, ...newContext]);
+  }
+
   public addContext(obj: object, newContext: string[]|string) {
     let context = Array.isArray(newContext) ? newContext : [newContext];
 
