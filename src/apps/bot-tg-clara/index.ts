@@ -1,23 +1,27 @@
 import { BaseApplication } from '../BaseApplication';
 import commands from './commands';
-import { IService } from '../../services/IService';
-import { Type } from '../../services/ServiceDecorator';
-import TelegramBotService from '../../services/telegramBot';
 import { ServiceInjector } from '../../services/ServiceInjector';
+import LoggerService from '../../services/logger';
+import ContextService from '../../services/context';
 
 export default class BotTGClaraApplication extends BaseApplication {
+
+  private applicationLogger: LoggerService;
+
+  constructor() {
+    super();
+    const context = ServiceInjector.resolve<ContextService>(ContextService)
+    .addRootContext(this.getLoggingLabel());
+    this.applicationLogger = ServiceInjector.resolve<LoggerService>(LoggerService)
+      .addLabels(context.getRootContext());
+  }
 
   public getName(): string {
     return 'BotTGClara';
   }
 
-  public getRequiredServices(): Type<IService>[] {
-    return [
-      TelegramBotService,
-    ];
-  }
   public async startApplication(): Promise<boolean> {
-    commands();
+    await commands();
     return true;
   }
 

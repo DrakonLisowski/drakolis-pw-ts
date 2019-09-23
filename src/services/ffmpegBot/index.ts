@@ -1,29 +1,29 @@
-import { IService } from '../IService';
 import { Service } from '../ServiceDecorator';
-import { ServiceInjector } from '../ServiceInjector';
+import ContextService from '../context';
 import LoggerService from '../logger';
 import Ffmpeg from 'fluent-ffmpeg';
 
 @Service()
-export default class FFmpegService implements IService {
+export default class FFmpegService {
   public process: {
     progress: any,
     end: boolean,
     error: any,
   } = { progress: null, end: false, error: null };
 
-  private serviceLogger: LoggerService;
   private running: boolean = false;
   private status: boolean = false; // busy or no
   private ffmpeg: any;
 
-  constructor() {
-    this.serviceLogger = ServiceInjector.resolve<LoggerService>(LoggerService)
-      .addLabel('FFmpegBot');
+  constructor(
+    private context: ContextService,
+    private serviceLogger: LoggerService) {
+    this.context.addSubContext(this, null, 'Ffmpeg');
+    this.serviceLogger = this.serviceLogger.addLabels(this.context.getContext(this));
     this.init();
   }
   public init() {
-    this.serviceLogger.info('start init');
+    this.serviceLogger.info('Start Init');
     this.serviceLogger.info(this.isRunning().toString());
     if (!this.isRunning()) {
       this.ffmpeg = Ffmpeg();
@@ -37,7 +37,7 @@ export default class FFmpegService implements IService {
         this.process.end = false;
       })
       .on('end', () => {
-        this.serviceLogger.info('process end');
+        this.serviceLogger.info('Process End');
         this.process.end = true;
         this.status = false;
       })
@@ -47,7 +47,7 @@ export default class FFmpegService implements IService {
         this.process.error = err;
         this.status = false;
       });
-      this.serviceLogger.info('start completed');
+      this.serviceLogger.info('Start Completed');
       this.running = true;
     }
   }

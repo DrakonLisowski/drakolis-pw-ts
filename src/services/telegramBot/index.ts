@@ -1,36 +1,42 @@
 import TelegramBot from 'node-telegram-bot-api';
-import { IService } from '../IService';
 import { Service } from '../ServiceDecorator';
+import LoaderService from '../LoaderService';
 import config from '../../config';
-import { ServiceInjector } from '../ServiceInjector';
+import ContextService from '../context';
 import LoggerService from '../logger';
 
 @Service()
-export default class TelegramBotService extends TelegramBot implements IService {
+export default class TelegramBotService extends LoaderService<TelegramBot> {
 
-  private serviceLogger: LoggerService;
+  constructor(
+    private context: ContextService,
+    private serviceLogger: LoggerService,
+  ) {
+    super();
+    this.context.addSubContext(this, null, 'TGBot');
+    this.serviceLogger = this.serviceLogger.addLabels(this.context.getContext(this));
+  }
 
-  constructor() {
-    super(
+  // HACK:: This wraps parameter to be named
+  public async init(polling: boolean = false) {
+    return super.init(polling);
+  }
+
+  protected async initInstance(polling: boolean = false) {
+    this.instance = new TelegramBot(
       config.telegramConfig.telegramBotToken,
       { polling: { autoStart: true } },
     );
-  }
-
-  public async start(): Promise<boolean> {
-    this.serviceLogger = ServiceInjector.resolve<LoggerService>(LoggerService)
-      .addLabel('TGBot');
-    this.serviceLogger.info('Starting service...');
-    this.serviceLogger.info('Service started!');
+    this.serviceLogger.info('Bot ready.');
+    if (polling) {
+      this.serviceLogger.info('Enabling polling...');
+      this.serviceLogger.warn(
+        'This might die if there is another polling for the same bot already!',
+      );
+      await this.instance.startPolling();
+      this.serviceLogger.info('Polling enabled.');
+    }
     return true;
-  }
-
-  public isRunning(): boolean {
-    return true;
-  }
-
-  public async stop(): Promise<boolean> {
-    throw new Error('Mika lalka');
   }
 
 }

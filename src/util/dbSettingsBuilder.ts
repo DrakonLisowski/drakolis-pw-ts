@@ -78,7 +78,8 @@ class DBLogger implements Logger {
   }
 
   private postfixFormatter(parameters?: any[]) {
-    return parameters && `Parameters: ${parameters.map((p, i) => `${i + 1}=${p}`).join(', ')}`;
+    return parameters &&
+    `Parameters: ${parameters.map((p, i) => `${i + 1}=${JSON.stringify(p)}`).join(', ')}`;
   }
 }
 

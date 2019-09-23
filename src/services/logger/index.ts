@@ -6,7 +6,6 @@ import { createLogger, LoggerOptions, transports } from 'winston';
 import winstonDailyRotateFile from 'winston-daily-rotate-file';
 
 import config, { LogLevel } from '../../config';
-import { IService } from '../IService';
 import { Service } from '../ServiceDecorator';
 
 type SupportedSyntaxes = 'sql'|'javascript'|'typescript'|'js'|'json';
@@ -34,7 +33,7 @@ const myFormatNoColor = printf(({
 
 // tslint:disable-next-line: max-classes-per-file
 @Service()
-export default class LoggerService implements IService {
+export default class LoggerService {
 
   private fileNameOverride: string;
   private winston: wins.Logger;
@@ -89,16 +88,6 @@ export default class LoggerService implements IService {
     this.winston = createLogger(options);
   }
 
-  public async start(): Promise<boolean> {
-    return true;
-  }
-  public isRunning(): boolean {
-    return true;
-  }
-  public async stop(): Promise<boolean> {
-    return true;
-  }
-
   public log(level: LogLevel, message: string): void {
     this.winston.log(level, message);
   }
@@ -132,6 +121,12 @@ export default class LoggerService implements IService {
   public addLabel(addLabel: string): LoggerService {
     const newLogger = new LoggerService();
     newLogger.setLabels([...this.labels, addLabel]);
+    return newLogger;
+  }
+
+  public addLabels(addLabel: string[]): LoggerService {
+    const newLogger = new LoggerService();
+    newLogger.setLabels([...this.labels, ...addLabel]);
     return newLogger;
   }
 
