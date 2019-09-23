@@ -8,9 +8,6 @@ import LoggerService from '../../../services/logger';
 import FFmpegService from '../../../services/ffmpegBot';
 import ContextService from '../../../services/context';
 
-const botService = ServiceInjector.resolve<TelegramBotService>(TelegramBotService);
-const ffmpeg = ServiceInjector.resolve<FFmpegService>(FFmpegService);
-
 interface ITGCommand {
   name: string;
   regexp: RegExp;
@@ -19,6 +16,8 @@ interface ITGCommand {
 }
 
 const loadCommands = async () => {
+  const botService = ServiceInjector.resolve<TelegramBotService>(TelegramBotService);
+  const ffmpeg = ServiceInjector.resolve<FFmpegService>(FFmpegService);
   const context = ServiceInjector.resolve<ContextService>(ContextService)
     .addSubContext(this, null, 'Commands');
   const logger = ServiceInjector.resolve<LoggerService>(LoggerService)
