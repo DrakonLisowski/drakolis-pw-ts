@@ -1,10 +1,12 @@
 // tslint:disable-next-line: import-name
 import { Message } from 'node-telegram-bot-api';
 import path from 'path';
+import fs from 'fs';
 import TelegramBotService from '../../../services/telegramBot';
 import { ServiceInjector } from '../../../services/ServiceInjector';
 import LoggerService from '../../../services/logger';
 import FFmpegService from '../../../services/ffmpegBot';
+import { stream } from 'winston';
 
 const bot = ServiceInjector.resolve<TelegramBotService>(TelegramBotService);
 const logger = ServiceInjector.resolve<LoggerService>(LoggerService).addLabel('TGBotClara');
@@ -27,25 +29,57 @@ const commands: ITGCommand[] = [
         && (msg.reply_to_message.document || msg.reply_to_message.video);
       if (file && file.mime_type) {
         const type = file.mime_type.split('/')[0];
+        const format = file.mime_type.split('/')[1];
         if (type === 'video') {
           const fileID = file.file_id;
           logger.info(fileID);
           await bot.sendMessage(chatId, `Download start. FileID: ${fileID}`);
           try {
-            const fileName = (await bot
-              .downloadFile(fileID, path.join(process.cwd(), 'download-files'))).split('/');
+            const fileStream = await bot.getFileStream(fileID);
+            const fileName = `${fileID}.${format}`;
+            const sourceFile = path.join(process.cwd(), 'download-files', fileName);
+            const makeFile = new Promise((res, rej) => {
+              const writeStream = fs.createWriteStream(sourceFile);
+              fileStream.pipe(writeStream);
+              fileStream.on('end', res);
+              fileStream.on('error', rej);
+            });
+            await makeFile;
+            // await fs.writeFileSync(sourceFile, fileStream);
             await bot.sendMessage(chatId, `download complete.
-Local file name: ${fileName[fileName.length - 1]}`);
+Local file name: ${fileName}`);
             logger.info(JSON.stringify(fileName));
             logger.info(fileName[fileName.length - 1]);
-
+            const convertedFile = path.join(process.cwd(), 'converted-files', `${fileID}.mp4`);
             ffmpeg.run(
-              path.join(process.cwd(), 'download-files', fileName[fileName.length - 1]),
-              path.join(process.cwd(), 'converted-files', fileName[fileName.length - 1]),
+              sourceFile,
+              convertedFile,
               [],
             );
+            const awaitStatus = async () => {
+              const status = await ffmpeg.getStatus();
+              if (status.end) {
+                if (status.error === null) {
+                  await bot.sendMessage(chatId, `converte done`);
+                  logger.info(convertedFile);
+                  const streamConverted = await fs.createReadStream(convertedFile);
+                  const sendDocument = bot.sendDocument(chatId, streamConverted);
+                  await sendDocument;
+                } else {
+                  await bot.sendMessage(chatId, `converte error: ${status.error}`);
+                }
+                await ffmpeg.processDone();
+              } else {
+                if (status.progress !== null) {
+                  await bot.sendMessage(chatId, `converte in progress:
+${status.progress.percent.toString().split('.')[0]}`);
+                }
+                await setTimeout(async () => { await awaitStatus(); }, 5000);
+              }
+            };
+            await awaitStatus();
           } catch (e) {
-            await bot.sendMessage(chatId, 'download error');
+            bot.sendMessage(chatId, 'download error');
             logger.error(e);
           }
         }
