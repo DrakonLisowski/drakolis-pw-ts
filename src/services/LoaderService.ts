@@ -16,7 +16,8 @@ export default abstract class LoaderService<T> {
     if (!this.initiated) {
       await new Promise(async (res) => {
         await this.initDependencies();
-        await this.initInstance(...args);
+        this.instance = await this.initInstance(...args);
+        this.initiated = true;
         res(this.instance);
       });
     }
@@ -42,6 +43,6 @@ export default abstract class LoaderService<T> {
     return true;
   }
 
-  protected abstract initInstance(...args: any): Promise<boolean>|boolean;
+  protected abstract initInstance(...args: any): Promise<T>|T;
 
 }
