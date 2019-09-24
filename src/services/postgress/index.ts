@@ -17,20 +17,18 @@ export default class PostgressService extends LoaderService<Connection> {
     this.serviceLogger = this.serviceLogger.addLabels(this.context.getContext(this));
   }
 
-  protected async initInstance(): Promise<boolean> {
+  protected async initInstance(): Promise<Connection> {
     this.serviceLogger.info('Starting service...');
-    return !!(
-      await createConnection(dbSettingsBuilder(this.serviceLogger))
+    return createConnection(dbSettingsBuilder(this.serviceLogger))
       .then((connection) => {
         this.instance = connection;
         this.serviceLogger.info('Service started!');
-        return true;
+        return this.instance;
       })
       .catch((e) => {
         this.serviceLogger.exception('Starting failed', e);
-        return false;
-      })
-    );
+        return null;
+      });
   }
 
 }

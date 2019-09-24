@@ -36,7 +36,7 @@ export default class TelegramBotService extends LoaderService<TelegramBot> {
       await this.instance.startPolling();
       this.serviceLogger.info('Polling enabled.');
     }
-    return true;
+    return this.instance;
   }
 
 }
