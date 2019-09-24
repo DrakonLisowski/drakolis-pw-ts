@@ -14,6 +14,7 @@
 		"typeorm:cli": "ts-node ./node_modules/typeorm/cli -f ./ormconfig.json"
 	},
 	"dependencies": {
+		"@types/fluent-ffmpeg": "^2.1.10",
 		"bluebird": "^3.5.5",
 		"body-parser": "^1.19.0",
 		"cli-highlight": "^2.1.1",
@@ -24,6 +25,7 @@
 		"express-http-context": "^1.2.3",
 		"express-session": "^1.16.2",
 		"express-validator": "^6.0.1",
+		"fluent-ffmpeg": "^2.1.2",
 		"jayson": "^3.0.2",
 		"jsonwebtoken": "^8.5.1",
 		"lodash": "^4.17.13",
