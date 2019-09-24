@@ -3,6 +3,7 @@ enum Application {
   TelegramManager = 'telegram-manager',
   HttpAPI = 'http-api',
   BotTGChannelManager = 'bot-tg-channelmanager',
+  BotTGClara = 'bot-tg-clara',
 }
 
 async function appLoader(app: Application) {
@@ -15,6 +16,8 @@ async function appLoader(app: Application) {
       return (await import('./http-api')).default;
     case Application.BotTGChannelManager:
       return (await import('./bot-tg-channelmanager')).default;
+    case Application.BotTGClara:
+      return (await import('./bot-tg-clara')).default;
     default:
       throw new Error('Unknown service');
   }
