@@ -38,7 +38,7 @@ export default class ContextService {
     const context = ContextService.normalizeStringArguments(newContext);
 
     const parentContext = this.getContext(parent || this);
-    this.addContext(obj, [...parentContext, ...context]);
+    return this.addContext(obj, [...parentContext, ...context]);
   }
 
   /**
