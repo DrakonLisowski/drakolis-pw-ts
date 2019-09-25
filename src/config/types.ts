@@ -49,3 +49,8 @@ export class TelegramConfig {
 
   public superAdminIds: number[];
 }
+
+export class InstagramConfig {
+  public username: string;
+  public password: string;
+}
