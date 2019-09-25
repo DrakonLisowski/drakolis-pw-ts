@@ -11,6 +11,7 @@ export abstract class DrakolisBaseEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   public id: string;
 
+  // DELETED AT
   @Column({ nullable: false, default: true })
   public enabled: boolean;
 

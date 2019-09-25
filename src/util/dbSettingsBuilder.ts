@@ -88,9 +88,9 @@ export default (logger: LoggerService) => {
     ...config.postgress,
     type: 'postgres',
     name: 'default',
-    entities: ['src/entities/**/*.ts'],
-    migrations: ['src/migrations/**/*.ts'],
-    subscribers: ['src/subscribers/**/*.ts'],
+    entities: ['src/entities/*.ts'],
+    migrations: ['src/migrations/*.ts'],
+    subscribers: ['src/subscribers/*.ts'],
     logging: true,
     logger: new DBLogger(logger),
   } as ConnectionOptions;

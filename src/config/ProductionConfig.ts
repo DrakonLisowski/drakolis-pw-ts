@@ -7,6 +7,7 @@ import {
   HostConfig,
   RedisConfig,
   TelegramConfig,
+  MongoConfig,
 } from '.';
 
 export class ProductionConfig implements IConfig {
@@ -31,6 +32,12 @@ export class ProductionConfig implements IConfig {
     password: 'drakolis',
     database: 'drakolis-pw',
     schema: 'public',
+  };
+
+  public mongo: MongoConfig = {
+    host: '',
+    port: 0,
+    database: '',
   };
 
   public redis: RedisConfig = {

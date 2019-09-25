@@ -7,6 +7,7 @@ import {
   HostConfig,
   TelegramConfig,
 } from '.';
+import { MongoConfig } from './types';
 
 export interface IConfig {
   environment: EnvironmentConfig;
@@ -14,6 +15,7 @@ export interface IConfig {
   serviceRegistry: ServiceRegistryConfig;
 
   postgress: PostgressConfig;
+  mongo: MongoConfig;
   redis: RedisConfig;
 
   apiHost: HostConfig;

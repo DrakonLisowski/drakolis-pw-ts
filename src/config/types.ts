@@ -22,6 +22,12 @@ export class PostgressConfig {
   public schema: string;
 }
 
+export class MongoConfig {
+  public host: string;
+  public port: number;
+  public database: string;
+}
+
 export class RedisConfig {
   public host: string;
   public port: number;
