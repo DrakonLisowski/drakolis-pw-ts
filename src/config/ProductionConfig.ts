@@ -8,6 +8,7 @@ import {
   RedisConfig,
   TelegramConfig,
   MongoConfig,
+  InstagramConfig,
 } from '.';
 
 export class ProductionConfig implements IConfig {
@@ -65,5 +66,9 @@ export class ProductionConfig implements IConfig {
     channelManagerChannel: -1001315453164,
 
     superAdminIds: [779631744],
+  };
+  public instagramConfig: InstagramConfig = {
+    username:  process.env.IG_USERNAME,
+    password:  process.env.IG_PASSWORD,
   };
 }

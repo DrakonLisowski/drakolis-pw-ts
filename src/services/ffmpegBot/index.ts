@@ -24,7 +24,7 @@ export default class FFmpegService {
   }
   public init() {
     this.serviceLogger.info('Start Init');
-    this.serviceLogger.info(this.isRunning().toString());
+    this.serviceLogger.info(`Status ffmpeg: ${this.isRunning().toString()}`);
     if (!this.isRunning()) {
       this.ffmpeg = Ffmpeg();
       this.ffmpeg

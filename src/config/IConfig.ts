@@ -6,6 +6,7 @@ import {
   ServiceRegistryConfig,
   HostConfig,
   TelegramConfig,
+  InstagramConfig,
 } from '.';
 import { MongoConfig } from './types';
 
@@ -22,4 +23,5 @@ export interface IConfig {
   wsHost: HostConfig;
 
   telegramConfig: TelegramConfig;
+  instagramConfig: InstagramConfig;
 }
