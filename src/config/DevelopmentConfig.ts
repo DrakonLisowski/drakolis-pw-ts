@@ -9,7 +9,9 @@ import {
   TelegramConfig,
   MongoConfig,
   InstagramConfig,
+  SecretsConfig,
 } from '.';
+import { RTMPConfig } from './types';
 
 export class DevelopmentConfig implements IConfig {
   public environment: EnvironmentConfig = 'development';
@@ -71,5 +73,17 @@ export class DevelopmentConfig implements IConfig {
   public instagramConfig: InstagramConfig = {
     username:  process.env.IG_USERNAME,
     password:  process.env.IG_PASSWORD,
+  };
+
+  public secretsConfig: SecretsConfig = {
+    environmentSecret: 'DRAKOLIS-APP-1243087',
+  };
+
+  public rtmpConfig: RTMPConfig = {
+    port: 1935,
+    chunkSize: 60000,
+    gopCache: true,
+    ping: 60,
+    pingTimeout: 30,
   };
 }

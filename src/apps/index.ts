@@ -4,6 +4,7 @@ enum Application {
   HttpAPI = 'http-api',
   BotTGChannelManager = 'bot-tg-channelmanager',
   BotTGClara = 'bot-tg-clara',
+  RTMPServer = 'rtmp-server',
 }
 
 async function appLoader(app: Application) {
@@ -18,6 +19,8 @@ async function appLoader(app: Application) {
       return (await import('./bot-tg-channelmanager')).default;
     case Application.BotTGClara:
       return (await import('./bot-tg-clara')).default;
+    case Application.RTMPServer:
+      return (await import('./rtmp-server')).default;
     default:
       throw new Error('Unknown service');
   }

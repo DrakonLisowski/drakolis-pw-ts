@@ -54,3 +54,15 @@ export class InstagramConfig {
   public username: string;
   public password: string;
 }
+
+export class SecretsConfig {
+  public environmentSecret: string;
+}
+
+export class RTMPConfig {
+  public port: number;
+  public chunkSize: number;
+  public gopCache: boolean;
+  public ping: number;
+  public pingTimeout: number;
+}
