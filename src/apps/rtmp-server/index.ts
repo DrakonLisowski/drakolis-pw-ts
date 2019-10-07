@@ -59,6 +59,7 @@ export default class RTMPServerApplication extends BaseApplication {
       http: {
         port: config.rtmpConfig.httpPort,
         allow_origin: config.rtmpConfig.allowOrigin,
+        mediaroot: config.rtmpConfig.mediaRoot,
       },
       trans: {
         ffmpeg: '/usr/bin/ffmpeg',

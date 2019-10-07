@@ -86,5 +86,6 @@ export class ProductionConfig implements IConfig {
     pingTimeout: 30,
     httpPort: 1701,
     allowOrigin: '*',
+    mediaRoot: './media',
   };
 }
