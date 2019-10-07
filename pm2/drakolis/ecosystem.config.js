@@ -66,7 +66,24 @@ module.exports = {
         NODE_ENV: 'production'
       },
       kill_timeout : 3000
-    }
+    },
+    {
+      name: '[Drakolis.PW] RTMP Server',
+      script: 'ts-node',
+      args: './src/runner rtmp-server',
+      instances: 0,
+      exec_mode: 'cluster',
+      autorestart: true,
+      watch_delay: 5000,
+      watch: ['src'],
+      env: {
+        NODE_ENV: 'development'
+      },
+      env_production: {
+        NODE_ENV: 'production'
+      },
+      kill_timeout : 3000
+    },
   ],
 /*
   deploy : {
