@@ -73,7 +73,7 @@ export default class RTMPServerApplication extends BaseApplication {
         ],
       },
     });
-    nms.run();
+    await nms.run();
     return true;
   }
 
