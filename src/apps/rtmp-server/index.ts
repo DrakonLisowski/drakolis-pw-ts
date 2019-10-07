@@ -60,6 +60,20 @@ export default class RTMPServerApplication extends BaseApplication {
         port: config.rtmpConfig.httpPort,
         allow_origin: config.rtmpConfig.allowOrigin,
       },
+      trans: {
+        trans: {
+          ffmpeg: '/usr/bin/ffmpeg',
+          tasks: [
+            {
+              app: 'live',
+              hls: true,
+              hlsFlags: '[hls_time=2:hls_list_size=3:hls_flags=delete_segments]',
+              dash: true,
+              dashFlags: '[f=dash:window_size=3:extra_window_size=5]',
+            },
+          ],
+        },
+      },
     });
     nms.run();
     return true;
@@ -69,7 +83,7 @@ export default class RTMPServerApplication extends BaseApplication {
     return true;
   }
 
-  public async stop(): Promise<boolean> {
+  public async stop(): Promise <boolean> {
     return true;
   }
 
