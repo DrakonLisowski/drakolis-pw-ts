@@ -85,5 +85,6 @@ export class ProductionConfig implements IConfig {
     ping: 60,
     pingTimeout: 30,
     httpPort: 1701,
+    allowOrigin: '*',
   };
 }
