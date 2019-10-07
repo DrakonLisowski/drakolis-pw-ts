@@ -49,9 +49,16 @@ export default class RTMPServerApplication extends BaseApplication {
     this.applicationLogger.info('Ffmpeg\'s version is good.');
 
     const nms = new NodeMediaServer({
-      rtmp: config.rtmpConfig,
+      rtmp: {
+        port: config.rtmpConfig.port,
+        chunk_size: config.rtmpConfig.chunkSize,
+        gop_cache: config.rtmpConfig.gopCache,
+        ping: config.rtmpConfig.ping,
+        ping_timeout: config.rtmpConfig.pingTimeout,
+      },
       http: {
-        port: 1701,
+        port: config.rtmpConfig.httpPort,
+        allow_origin: config.rtmpConfig.allowOrigin,
       },
     });
     nms.run();

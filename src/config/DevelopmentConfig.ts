@@ -85,5 +85,6 @@ export class DevelopmentConfig implements IConfig {
     gopCache: true,
     ping: 60,
     pingTimeout: 30,
+    httpPort: 1701,
   };
 }

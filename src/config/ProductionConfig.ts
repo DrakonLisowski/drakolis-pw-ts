@@ -84,5 +84,6 @@ export class ProductionConfig implements IConfig {
     gopCache: true,
     ping: 60,
     pingTimeout: 30,
+    httpPort: 1701,
   };
 }
