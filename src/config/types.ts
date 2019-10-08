@@ -48,6 +48,8 @@ export class TelegramConfig {
   public channelManagerChannel: number;
 
   public superAdminIds: number[];
+
+  public socket5: string;
 }
 
 export class InstagramConfig {

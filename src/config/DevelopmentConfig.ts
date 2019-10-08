@@ -37,8 +37,8 @@ export class DevelopmentConfig implements IConfig {
 
   public mongo: MongoConfig = {
     host: 'localhost',
-    port: 27017,
-    database: 'test',
+    port: 1701,
+    database: 'instaService',
   };
 
   public redis: RedisConfig = {
@@ -64,7 +64,7 @@ export class DevelopmentConfig implements IConfig {
 
     telegramBotToken: process.env.TELEGRAM_CHANNEL_MANAGER_TOKEN,
     channelManagerChannel: -1001138267654,
-
+    socket5: process.env.TELEGRAM_SOKET5,
     superAdminIds: [779631744],
   };
 
