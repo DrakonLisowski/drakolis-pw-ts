@@ -9,6 +9,8 @@ import {
   TelegramConfig,
   MongoConfig,
   InstagramConfig,
+  SecretsConfig,
+  RTMPConfig,
 } from '.';
 
 export class ProductionConfig implements IConfig {
@@ -71,5 +73,20 @@ export class ProductionConfig implements IConfig {
   public instagramConfig: InstagramConfig = {
     username:  process.env.IG_USERNAME,
     password:  process.env.IG_PASSWORD,
+  };
+
+  public secretsConfig: SecretsConfig = {
+    environmentSecret: process.env.SECRETS_CONFIG_ENV,
+  };
+
+  public rtmpConfig: RTMPConfig = {
+    port: 1935,
+    chunkSize: 60000,
+    gopCache: true,
+    ping: 60,
+    pingTimeout: 30,
+    httpPort: 1701,
+    allowOrigin: '*',
+    mediaRoot: './media',
   };
 }

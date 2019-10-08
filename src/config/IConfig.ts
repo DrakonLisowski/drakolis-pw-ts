@@ -7,8 +7,9 @@ import {
   HostConfig,
   TelegramConfig,
   InstagramConfig,
+  SecretsConfig,
 } from '.';
-import { MongoConfig } from './types';
+import { MongoConfig, RTMPConfig } from './types';
 
 export interface IConfig {
   environment: EnvironmentConfig;
@@ -24,4 +25,8 @@ export interface IConfig {
 
   telegramConfig: TelegramConfig;
   instagramConfig: InstagramConfig;
+
+  secretsConfig: SecretsConfig;
+
+  rtmpConfig: RTMPConfig;
 }
