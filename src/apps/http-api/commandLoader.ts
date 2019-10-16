@@ -1,10 +1,8 @@
-import drawAPenis from '../../commands/test/DrawAPenis';
+import commands from '../../commands/httpApiCommands';
 import commandWrapper from './commandWrapper';
 
 const loader = () => {
-  return {
-    ...commandWrapper(drawAPenis),
-  };
+  return commands.reduce((prv, com) => ({ ...prv, ...commandWrapper(com) }), {});
 };
 
 export default loader;
