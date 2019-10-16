@@ -73,6 +73,7 @@ export class DevelopmentConfig implements IConfig {
   public instagramConfig: InstagramConfig = {
     username:  process.env.IG_USERNAME,
     password:  process.env.IG_PASSWORD,
+    cookies: './IGcookies',
   };
 
   public secretsConfig: SecretsConfig = {

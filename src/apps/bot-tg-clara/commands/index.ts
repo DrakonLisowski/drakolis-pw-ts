@@ -8,7 +8,8 @@ import { ServiceInjector } from '../../../services/ServiceInjector';
 import LoggerService from '../../../services/logger';
 import FFmpegService from '../../../services/ffmpegBot';
 import ContextService from '../../../services/context';
-import { IgApiClient } from 'instagram-private-api';
+import MongoService from '../../../services/mongo';
+import IGUserFollower from '../../../entities/mongo/IGUserFollower';
 
 interface ITGCommand {
   name: string;
@@ -22,13 +23,18 @@ const loadCommands = async () => {
   .addSubContext(this, null, 'Commands');
   const logger = ServiceInjector.resolve<LoggerService>(LoggerService)
     .addLabels(context.getContext(this));
+  const mongoService = ServiceInjector.resolve<MongoService>(MongoService);
   logger.info('Start load commands');
 
   const botService = ServiceInjector.resolve<TelegramBotService>(TelegramBotService);
   const ffmpeg = ServiceInjector.resolve<FFmpegService>(FFmpegService);
   const insta = ServiceInjector.resolve<InstaService>(InstaService);
-  const bot = await botService.init(true);
-  const IgApi = await insta.init();
+  const [bot, IgApi, mongo] = await Promise.all([
+    botService.init(true),
+    insta.init(),
+    mongoService.init(),
+  ]);
+  logger.info('Service inited!');
 
   const commands: ITGCommand[] = [
     {
@@ -52,6 +58,71 @@ const loadCommands = async () => {
         return;
       },
       description: `Get user info`,
+    },
+    {
+      name:  '/IGuserfeed <userID>',
+      regexp: /\/IGuserfeed (.+)/,
+      command: async (msg, match) => {
+        const chatId = msg.chat.id;
+        const feed = await insta.getUserFeed(match[1]);
+        const lenta = await insta.loadUserFeed(feed);
+        logger.info(`feed length: ${lenta.length}`);
+        await bot.sendMessage(chatId, `feed length: ${lenta.length}`);
+        logger.info(`feed: `);
+        await bot.sendMessage(chatId, `Feed: `);
+        await lenta.forEach(async (i, id) => {
+          logger.info(`${JSON.stringify(i)}`);
+          await bot.sendMessage(chatId, `id: ${id}:\n${JSON.stringify(i)}`);
+        });
+
+        return;
+      },
+      description: `Get user feed`,
+    },
+    {
+      name:  '/IGuserfolowers <userID>',
+      regexp: /\/IGuserfolowers (.+)/,
+      command: async (msg, match) => {
+        const chatId = msg.chat.id;
+        const feed = await insta.getUserFolowersFeed(match[1]);
+        const folowers = await insta.getUserFolowers(feed, +match[1]);
+        logger.info(`load folowers count: ${folowers.length}`);
+        await bot.sendMessage(chatId, `load folowers count: ${folowers.length}`);
+        const folowersRep = mongo.getMongoRepository(IGUserFollower);
+        await Promise.all(folowers.map((folower) => {
+          folowersRep.updateOne(
+            { owner: folower.owner, pk: folower.pk },
+            { $set: folower },
+            { upsert: true },
+            );
+        }));
+        await bot.sendMessage(chatId, `load folowers done`);
+        return;
+      },
+      description: `Get user feed`,
+    },
+    {
+      name:  '/IGloadUsersBetween <userID1> <userID2>',
+      regexp: /\/IGloadUsersBetween (.+) (.+)/,
+      command: async (msg, match) => {
+        const chatId = msg.chat.id;
+        const folowersRep = mongo.getMongoRepository(IGUserFollower);
+        const [followers1, followers2] = await Promise.all([
+          folowersRep.find({ where:{ owner: +match[1] } }),
+          folowersRep.find({ where:{ owner: +match[2] } }),
+        ]);
+        const folowers1ID = followers1.map(item => item.pk);
+        const folowers2ID = followers2.map(item => item.pk);
+        logger.info(`folowers1ID: ${folowers1ID.length}`);
+        logger.info(`folowers2ID: ${folowers2ID.length}`);
+        const users = folowers1ID.filter(
+          value => -1 !== folowers2ID.indexOf(value),
+        );
+        await bot.sendMessage(chatId, `users count: ${users.length}`);
+        await bot.sendMessage(chatId, `users ID: ${JSON.stringify(users)}`);
+        return;
+      },
+      description: `Get user feed`,
     },
     {
       name: '/ffmpeg',

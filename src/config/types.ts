@@ -55,6 +55,7 @@ export class TelegramConfig {
 export class InstagramConfig {
   public username: string;
   public password: string;
+  public cookies?: string = './IGcookies';
 }
 
 export class SecretsConfig {
