@@ -1,7 +1,7 @@
 import { BaseRequest } from './BaseRequest';
+import { UnathorizedError } from '../errors';
 
 export class AuthorizationTokenRequest implements BaseRequest {
-
   public token: string;
 
   constructor({ token }: any) {
@@ -15,6 +15,11 @@ export class AuthorizationTokenRequest implements BaseRequest {
     } else if (typeof this.token !== 'string') {
       errors.token = 'must be a string';
     }
+    // Plain token test is shitty!
+    if (this.token !== 'DRAKOLIS-RULZ-OK') {
+      throw new UnathorizedError();
+    }
+
     return Object.keys(errors).length > 0 && errors;
   }
 }
