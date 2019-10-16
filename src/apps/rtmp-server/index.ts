@@ -49,12 +49,32 @@ export default class RTMPServerApplication extends BaseApplication {
     this.applicationLogger.info('Ffmpeg\'s version is good.');
 
     const nms = new NodeMediaServer({
-      rtmp: config.rtmpConfig,
+      rtmp: {
+        port: config.rtmpConfig.port,
+        chunk_size: config.rtmpConfig.chunkSize,
+        gop_cache: config.rtmpConfig.gopCache,
+        ping: config.rtmpConfig.ping,
+        ping_timeout: config.rtmpConfig.pingTimeout,
+      },
       http: {
-        port: 1701,
+        port: config.rtmpConfig.httpPort,
+        allow_origin: config.rtmpConfig.allowOrigin,
+        mediaroot: config.rtmpConfig.mediaRoot,
+      },
+      trans: {
+        ffmpeg: '/usr/bin/ffmpeg',
+        tasks: [
+          {
+            app: 'live',
+            hls: true,
+            hlsFlags: '[hls_time=2:hls_list_size=3:hls_flags=delete_segments]',
+            dash: true,
+            dashFlags: '[f=dash:window_size=3:extra_window_size=5]',
+          },
+        ],
       },
     });
-    nms.run();
+    await nms.run();
     return true;
   }
 
@@ -62,7 +82,7 @@ export default class RTMPServerApplication extends BaseApplication {
     return true;
   }
 
-  public async stop(): Promise<boolean> {
+  public async stop(): Promise <boolean> {
     return true;
   }
 

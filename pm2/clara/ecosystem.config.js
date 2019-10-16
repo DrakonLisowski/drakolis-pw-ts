@@ -1,9 +1,9 @@
 module.exports = {
   apps : [
     {
-      name: 'Ohuennij Bot Clary',
+      name: 'OhuennijBotClary',
       script: 'ts-node',
-      args: './src/runner bot-tg-channelmanager',
+      args: './src/runner bot-tg-clara',
       instances: 1,
       autorestart: true,
       watch_delay: 5000,
@@ -17,7 +17,7 @@ module.exports = {
       kill_timeout : 3000
     },
     {
-      name: 'Ohuennaya Mongo Clary',
+      name: 'OhuennayaMongoClary',
       script: 'mongod',
       args: '--dbpath=./mongoData --port 1701',
       instances: 1,

@@ -1,9 +1,11 @@
-import TelegramBot from 'node-telegram-bot-api';
+import TelegramBot, { ConstructorOptions } from 'node-telegram-bot-api';
 import { Service } from '../ServiceDecorator';
 import LoaderService from '../LoaderService';
 import config from '../../config';
 import ContextService from '../context';
 import LoggerService from '../logger';
+// @ts-ignore
+import socksAgent from 'socks-proxy-agent';
 
 @Service()
 export default class TelegramBotService extends LoaderService<TelegramBot> {
@@ -23,9 +25,17 @@ export default class TelegramBotService extends LoaderService<TelegramBot> {
   }
 
   protected async initInstance(polling: boolean = false) {
+    const params = {
+      polling: { autoStart: false },
+      request: {},
+    };
+    if (config.telegramConfig.socket5) {
+      // @ts-ignore
+      params.request.agent = new socksAgent(config.telegramConfig.socket5);
+    }
     this.instance = new TelegramBot(
       config.telegramConfig.telegramBotToken,
-      { polling: { autoStart: false } },
+      params as ConstructorOptions,
     );
     this.serviceLogger.info('Bot ready.');
     if (polling) {

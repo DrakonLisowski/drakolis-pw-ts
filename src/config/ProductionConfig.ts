@@ -38,9 +38,9 @@ export class ProductionConfig implements IConfig {
   };
 
   public mongo: MongoConfig = {
-    host: '',
-    port: 0,
-    database: '',
+    host: 'localhost',
+    port: 1701,
+    database: 'instaService',
   };
 
   public redis: RedisConfig = {
@@ -66,9 +66,10 @@ export class ProductionConfig implements IConfig {
 
     telegramBotToken: process.env.TELEGRAM_CHANNEL_MANAGER_TOKEN,
     channelManagerChannel: -1001315453164,
-
     superAdminIds: [779631744],
+    socket5: process.env.TELEGRAM_SOKET5,
   };
+
   public instagramConfig: InstagramConfig = {
     username:  process.env.IG_USERNAME,
     password:  process.env.IG_PASSWORD,
@@ -84,5 +85,8 @@ export class ProductionConfig implements IConfig {
     gopCache: true,
     ping: 60,
     pingTimeout: 30,
+    httpPort: 1701,
+    allowOrigin: '*',
+    mediaRoot: './media',
   };
 }

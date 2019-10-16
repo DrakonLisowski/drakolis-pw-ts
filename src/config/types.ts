@@ -48,6 +48,8 @@ export class TelegramConfig {
   public channelManagerChannel: number;
 
   public superAdminIds: number[];
+
+  public socket5: string;
 }
 
 export class InstagramConfig {
@@ -65,4 +67,21 @@ export class RTMPConfig {
   public gopCache: boolean;
   public ping: number;
   public pingTimeout: number;
+  public httpPort: number;
+  public mediaRoot?: string = './media';
+  public allowOrigin?: string = '*';
+  public ffmpeg?: string = '/usr/bin/ffmpeg';
 }
+
+// trans: {
+//   ffmpeg: '/usr/bin/ffmpeg',
+//   tasks: [
+//       {
+//           app: 'live',
+//           hls: true,
+//           hlsFlags: '[hls_time=2:hls_list_size=3:hls_flags=delete_segments]',
+//           dash: true,
+//           dashFlags: '[f=dash:window_size=3:extra_window_size=5]'
+//       }
+//   ]
+// }
