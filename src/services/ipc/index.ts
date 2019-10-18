@@ -10,7 +10,7 @@ const BASE_PATH = '/var/ipc/drakolis';
 export default class IPCService {
 
   private server: Server;
-  private clients: ClientSocket[];
+  private clients: ClientSocket[] = [];
 
   constructor(
     private context: ContextService,
