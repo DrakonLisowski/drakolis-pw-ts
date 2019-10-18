@@ -22,7 +22,7 @@ export default class IPCService {
 
   public async connectTo(name: string) {
     const cl: ClientSocket = await new Promise((res, rej) => {
-      new Client(name + 'hack')
+      const cli = new Client(name)
         .on('error', (error, client) =>
           this.serviceLogger.exception(`Error from ${client.name}:`, error),
         )
@@ -31,9 +31,8 @@ export default class IPCService {
           this.serviceLogger.info(`Connected to: ${client.name}`);
           res(client);
         });
+      cli.connectTo(path.join(BASE_PATH, name));
     });
-
-    cl.client.connectTo(path.join(BASE_PATH, name));
 
     this.clients.push(cl);
   }
