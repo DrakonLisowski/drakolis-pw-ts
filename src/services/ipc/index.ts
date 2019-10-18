@@ -57,7 +57,8 @@ export default class IPCService extends LoaderService<Server> {
     return super.init(name);
   }
 
-  protected initInstance(name: string = ''): Promise<Server> {
+  protected async initInstance(name: string = ''): Promise<Server> {
+    this.serviceLogger.info('Starting service...');
     if (!name) {
       throw new Error(`Server needs a name`);
     }
@@ -69,6 +70,10 @@ export default class IPCService extends LoaderService<Server> {
         this.serviceLogger.exception(`Error from ${client.name}`, error),
       );
 
-    return this.server.listen(path.join(BASE_PATH, nameA));
+    const srv = await this.server.listen(path.join(BASE_PATH, nameA));
+
+    this.server = srv;
+    this.serviceLogger.info('Service started!');
+    return srv;
   }
 }
