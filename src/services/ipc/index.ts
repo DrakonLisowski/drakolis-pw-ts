@@ -5,7 +5,7 @@ import LoaderService from '../LoaderService';
 import ContextService from '../context';
 import LoggerService from '../logger';
 
-const BASE_PATH = '/tmp/var/';
+const BASE_PATH = '/var/ipc/drakolis';
 
 @Service()
 export default class IPCService extends LoaderService<Server> {
