@@ -1,5 +1,5 @@
 import path from 'path';
-import { Server, Client, ClientSocket } from 'veza';
+import { Server, Client, ClientSocket, ServerSocket, NodeMessage } from 'veza';
 import LoaderService from '../LoaderService';
 import ContextService from '../context';
 import LoggerService from '../logger';
@@ -44,6 +44,10 @@ export default class IPCService extends LoaderService<Server> {
       throw new Error(`Socket ${name} was not connected`);
     }
     client.send(message);
+  }
+
+  public async onMessage(listener: (message: NodeMessage, client: ServerSocket) => void) {
+    this.server.on('message', listener);
   }
 
   // HACK:: This wraps parameter to be named
