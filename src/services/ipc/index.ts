@@ -70,10 +70,9 @@ export default class IPCService extends LoaderService<Server> {
         this.serviceLogger.exception(`Error from ${client.name}`, error),
       );
 
-    const srv = await this.server.listen(path.join(BASE_PATH, nameA));
+    this.server.listen(path.join(BASE_PATH, nameA));
 
-    this.server = srv;
     this.serviceLogger.info('Service started!');
-    return srv;
+    return this.server;
   }
 }
