@@ -1,11 +1,13 @@
 import path from 'path';
 import { Server, Client, ClientSocket, ServerSocket, NodeMessage } from 'veza';
+import { Service } from '../ServiceDecorator';
 import LoaderService from '../LoaderService';
 import ContextService from '../context';
 import LoggerService from '../logger';
 
 const BASE_PATH = '/tmp/var/';
 
+@Service()
 export default class IPCService extends LoaderService<Server> {
 
   private server: Server;
@@ -59,14 +61,14 @@ export default class IPCService extends LoaderService<Server> {
     if (!name) {
       throw new Error(`Server needs a name`);
     }
-
-    this.server = new Server(name)
+    const nameA = `${name.toLowerCase()}`;
+    this.server = new Server(nameA)
       .on('connect', client => this.serviceLogger.info(`Client Connected: ${client.name}`))
       .on('disconnect', client => this.serviceLogger.info(`Client Disconnected: ${client.name}`))
       .on('error', (error, client) =>
         this.serviceLogger.exception(`Error from ${client.name}`, error),
       );
 
-    return this.server.listen(path.join(BASE_PATH, name));
+    return this.server.listen(path.join(BASE_PATH, nameA));
   }
 }
