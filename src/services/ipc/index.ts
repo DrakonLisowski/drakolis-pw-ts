@@ -1,14 +1,13 @@
 import path from 'path';
 import { Server, Client, ClientSocket, ServerSocket, NodeMessage } from 'veza';
 import { Service } from '../ServiceDecorator';
-import LoaderService from '../LoaderService';
 import ContextService from '../context';
 import LoggerService from '../logger';
 
 const BASE_PATH = '/var/ipc/drakolis';
 
 @Service()
-export default class IPCService extends LoaderService<Server> {
+export default class IPCService {
 
   private server: Server;
   private clients: ClientSocket[];
@@ -17,7 +16,6 @@ export default class IPCService extends LoaderService<Server> {
     private context: ContextService,
     private serviceLogger: LoggerService,
   ) {
-    super();
     this.context.addSubContext(this, null, 'IPC');
     this.serviceLogger = this.serviceLogger.addLabels(this.context.getContext(this));
   }
@@ -52,12 +50,7 @@ export default class IPCService extends LoaderService<Server> {
     this.server.on('message', listener);
   }
 
-  // HACK:: This wraps parameter to be named
-  public async init(name: string = '') {
-    return super.init(name);
-  }
-
-  protected async initInstance(name: string = ''): Promise<Server> {
+  public startServer(name: string = '') {
     this.serviceLogger.info('Starting service...');
     if (!name) {
       throw new Error(`Server needs a name`);
@@ -73,6 +66,5 @@ export default class IPCService extends LoaderService<Server> {
     this.server.listen(path.join(BASE_PATH, nameA));
 
     this.serviceLogger.info('Service started!');
-    return this.server;
   }
 }
