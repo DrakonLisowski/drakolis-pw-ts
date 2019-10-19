@@ -14,8 +14,11 @@ export enum AllowedSocket {
 };
 
 export class SocketIdentifier {
-  public name: AllowedSocket;
-  public id?: number;
+
+  constructor(
+    public name: AllowedSocket,
+    public id?: number,
+  ) {}
 
   public buildName(): string {
     if (this.id) {
