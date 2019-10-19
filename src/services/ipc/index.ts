@@ -146,7 +146,7 @@ export default class IPCService {
   public async sendMessage(identifier: SocketIdentifier, message: any) {
     const client = this.clients.find(cl => cl.client.name === this.makeClientName(identifier));
     if (!client) {
-      throw new Error(`Socket for ${identifier.buildName} was not connected`);
+      throw new Error(`Socket for ${identifier.buildName()} was not connected`);
     }
     client.send(message);
   }

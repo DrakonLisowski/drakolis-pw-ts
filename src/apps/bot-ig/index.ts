@@ -9,6 +9,7 @@ import MongoService from '../../services/mongo';
 import IGUserFollower from '../../entities/mongo/IGUserFollower';
 import InstaService from '../../services/instaService';
 import IpcService from '../../services/ipc';
+import { AllowedSocket, SocketIdentifier } from '../../services/ipc';
 
 export default class BotIGApplication extends BaseApplication {
   private applicationLogger: LoggerService;
@@ -43,23 +44,21 @@ export default class BotIGApplication extends BaseApplication {
   }
 
   public async startApplication(): Promise<boolean> {
-    const nameIPC = 'igbot';
+    const identifier = new SocketIdentifier(AllowedSocket.IGBot);
     const [mongo, ipcServer] = await Promise.all([
       // this.instaService.init(),
       this.mongoService.init(),
-      this.ipcService.startServer(nameIPC),
+      this.ipcService.startServer(identifier),
     ]);
+    this.ipcService.onMessage((message)=>{
+      this.applicationLogger.info(`${JSON.stringify(message)}`);
+    });
     this.applicationLogger.info(`Aplication botIG run`);
     this.mongo = mongo;
     // this.IgApi = IgApi;
     this.enabledApplication = true;
     // await this.ipcService.connectTo(nameIPC);
-    await this.ipcService.onMessage((message, client) => {
-      this.applicationLogger.info(`Message from ${client.name}: ${JSON.stringify(message)}`);
-    });
-    setInterval(async () => {
-      this.ipcService.sendMessage(`from server kekekekekke`);
-    }, 1000);
+    // this.ipcService.sendMessage(identifier, `from server kekekekekke`)
     return true;
   }
 

@@ -6,6 +6,7 @@ import { ServiceInjector } from '../../services/ServiceInjector';
 import LoggerService from '../../services/logger';
 import ContextService from '../../services/context';
 import IpcService from '../../services/ipc';
+import { AllowedSocket, SocketIdentifier } from '../../services/ipc';
 
 export default class HttpAPIApplication extends BaseApplication {
   private applicationLogger: LoggerService;
@@ -19,6 +20,7 @@ export default class HttpAPIApplication extends BaseApplication {
     const context = ServiceInjector.resolve<ContextService>(ContextService).addRootContext(
       this.getLoggingLabel(),
     );
+    this.ipcService = ServiceInjector.resolve<IpcService>(IpcService);
     this.applicationLogger = ServiceInjector.resolve<LoggerService>(LoggerService).addLabels(
       context.getRootContext(),
     );
@@ -29,19 +31,11 @@ export default class HttpAPIApplication extends BaseApplication {
   }
 
   public async startApplication(): Promise<boolean> {
-    const nameIPC = 'igbot';
-    const namePID = `${nameIPC}-${process.pid}`;
+    const identifier = new SocketIdentifier(AllowedSocket.HTTPApi, this.getProcessId());
     this.server = new jayson.Server(commandLoader());
-    await this.ipcService.getConnect(nameIPC);
-    await setTimeout(async () => {
-      await this.ipcService.connectTo(namePID);
-      await this.ipcService.onMessageClient(namePID, (message, client) => {
-        this.applicationLogger.info(`Message: ${JSON.stringify(message)}`);
-      });
-    }, 5000);
-    setInterval(() => {
-      this.ipcService.sendMessageClient(namePID, `from client tessdadasdasczczx`);
-    }, 1000);
+    this.ipcService.setIdentifier(identifier);
+    await this.ipcService.connectTo(new SocketIdentifier(AllowedSocket.IGBot), true);
+    this.ipcService.sendMessage(new SocketIdentifier(AllowedSocket.IGBot), `test`)
 
     return new Promise(res => {
       this.server.http().listen(config.apiHost.port, config.apiHost.host, () => {
