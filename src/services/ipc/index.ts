@@ -21,10 +21,10 @@ export class SocketIdentifier {
   ) {}
 
   public buildName(): string {
-    if (!this.id) {
-      return `${this.name}`;
-    } else {
+    if (this.id) {
       return `${this.name}-${this.id}`;
+    } else {
+      return `${this.name}`;
     }
   }
 }
