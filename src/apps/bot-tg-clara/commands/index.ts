@@ -136,23 +136,34 @@ const loadCommands = async () => {
           const format = file.mime_type.split('/')[1];
           if (type === 'video') {
             const fileID = file.file_id;
-            logger.info(fileID);
+            logger.info(`file ID: ${fileID}`);
             await bot.sendMessage(chatId, `Download start. FileID: ${fileID}`);
             try {
               const fileStream = await bot.getFileStream(fileID);
               const fileName = `${fileID}.${format}`;
               const sourceFile = path.join(process.cwd(), 'download-files', fileName);
+              const writeStream = await fs.createWriteStream(sourceFile);
               const makeFile = new Promise((res, rej) => {
-                const writeStream = fs.createWriteStream(sourceFile);
                 fileStream.pipe(writeStream);
                 fileStream.on('end', res);
-                fileStream.on('error', rej);
+                fileStream.on('error', (e) => {
+                  logger.error(e);
+                  rej();
+                });
+                fileStream.on('close', (e: any) => {
+                  logger.info(`close: ${e}`);
+                  rej();
+                });
+                fileStream.on('data', (chunk) => {
+                  logger.info(`Received ${chunk.length} bytes of data.`);
+                });
               });
               await makeFile;
               // await fs.writeFileSync(sourceFile, fileStream);
+
               await bot.sendMessage(chatId, `download complete.
   Local file name: ${fileName}`);
-              logger.info(JSON.stringify(fileName));
+              logger.info(`file name: ${fileName}`);
               const convertedFile = path.join(process.cwd(), 'converted-files', `${fileID}.mp4`);
               ffmpeg.run(
                 sourceFile,
