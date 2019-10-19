@@ -8,12 +8,12 @@ import LoggerService from '../logger';
 
 const BASE_PATH = 'ipc';
 
-enum AllowedSocket {
+export enum AllowedSocket {
   HTTPApi = 'http-api',
   IGBot = 'bot-ig'
 };
 
-class SocketIdentifier {
+export class SocketIdentifier {
   public name: AllowedSocket;
   public id?: number;
 
