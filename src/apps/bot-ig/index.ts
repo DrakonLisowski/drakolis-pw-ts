@@ -1,7 +1,7 @@
 import { Connection } from 'typeorm';
 import { IgApiClient } from 'instagram-private-api';
 import { json } from 'body-parser';
-import { BaseApplication } from '../BaseApplication';
+import BaseApplication from '../BaseApplication';
 import { ServiceInjector } from '../../services/ServiceInjector';
 import LoggerService from '../../services/logger';
 import ContextService from '../../services/context';

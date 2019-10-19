@@ -3,7 +3,7 @@ import { exec } from 'child_process';
 import bluebird from 'bluebird';
 
 import NodeMediaServer from 'node-media-server';
-import { BaseApplication } from '../BaseApplication';
+import BaseApplication from '../BaseApplication';
 import { ServiceInjector } from '../../services/ServiceInjector';
 import LoggerService from '../../services/logger';
 import ContextService from '../../services/context';

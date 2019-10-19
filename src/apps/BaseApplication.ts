@@ -1,4 +1,4 @@
-export abstract class BaseApplication {
+export default abstract class BaseApplication {
   public abstract getName(): string;
 
   public abstract startApplication(): Promise<boolean>;
@@ -8,11 +8,15 @@ export abstract class BaseApplication {
   public abstract stop(): Promise<boolean>;
 
   public getProcessId(): string {
-    return process.env.pm_id || '-1';
+    return process.env.pm_id || 'man';
   }
 
   public getLoggingLabel(): string {
     return `${this.getName()}:${this.getProcessId()}`;
+  }
+
+  public getProcessName(): string {
+    return `${this.getName().toLowerCase()}`;
   }
 
   public async start(): Promise<boolean> {

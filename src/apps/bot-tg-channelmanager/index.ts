@@ -1,4 +1,4 @@
-import { BaseApplication } from '../BaseApplication';
+import BaseApplication from '../BaseApplication';
 import post from './commands/post';
 import { ServiceInjector } from '../../services/ServiceInjector';
 import LoggerService from '../../services/logger';
