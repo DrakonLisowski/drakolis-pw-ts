@@ -71,7 +71,7 @@ export default class IPCService {
     return `${this.identifier.buildName()}->${identifier.buildName()}`
   }
 
-  private setIdentifier(identifier: SocketIdentifier) {
+  public setIdentifier(identifier: SocketIdentifier) {
     if (!this.identifier) {
       this.identifier = identifier;
     } else {
