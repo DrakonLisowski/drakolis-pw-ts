@@ -8,7 +8,7 @@ export class AuthorizationTokenRequest implements BaseRequest {
     this.token = token;
   }
 
-  public test(): object|boolean {
+  public test(): object | boolean {
     const errors: any = {};
     if (!this.token) {
       errors.token = 'parameter missing';

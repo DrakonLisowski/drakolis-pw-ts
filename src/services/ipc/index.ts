@@ -11,26 +11,30 @@ interface ServerPid {
   name: string;
   server: Server;
 }
-type LicenerServer = (message: NodeMessage|Uint8Array, client: ServerSocket)  => void;
-type LicenerClient = (message: NodeMessage|Uint8Array, client: ClientSocket)  => void;
+type LicenerServer = (message: NodeMessage | Uint8Array, client: ServerSocket) => void;
+type LicenerClient = (message: NodeMessage | Uint8Array, client: ClientSocket) => void;
 
 @Service()
 export default class IPCService {
   private server: Server;
+
   private serversPID: ServerPid[] = [];
+
   private clients: ClientSocket[] = [];
+
   private licenersServer: LicenerServer[] = [];
 
   constructor(private context: ContextService, private serviceLogger: LoggerService) {
     this.context.addSubContext(this, null, 'IPC');
     this.serviceLogger = this.serviceLogger.addLabels(this.context.getContext(this));
   }
+
   public async getConnect(name: string) {
     this.serviceLogger.info(`Process pid: ${JSON.stringify(process.pid)}`);
     const cl: ClientSocket = await new Promise((res, rej) => {
       const cli = new Client(name)
         .on('error', (error, client) =>
-          this.serviceLogger.exception(`Error from ${client.name}:`, error)
+          this.serviceLogger.exception(`Error from ${client.name}:`, error),
         )
         .on('disconnect', client => this.serviceLogger.info(`Disconnected from ${client.name}`))
         .on('ready', client => {
@@ -43,6 +47,7 @@ export default class IPCService {
     cl.socket.removeAllListeners();
     cl.disconnect();
   }
+
   public async connectTo(name: string, autoReconect = false) {
     this.serviceLogger.info(`Process pid: ${JSON.stringify(process.pid)}`);
     const cl: ClientSocket = await new Promise((res, rej) => {
@@ -50,13 +55,13 @@ export default class IPCService {
         .on('error', (error, client) =>
           this.serviceLogger.exception(`Error from ${client.name}:`, error),
         )
-        .on('disconnect', (client) => {
+        .on('disconnect', client => {
           this.serviceLogger.info(`Client disconnected from ${client.name}`);
           if (autoReconect) {
             cli.connectTo(path.join(BASE_PATH, name));
           }
         })
-        .on('ready', (client) => {
+        .on('ready', client => {
           this.serviceLogger.info(`Connected to: ${client.name}`);
           res(client);
         });
@@ -68,7 +73,7 @@ export default class IPCService {
 
   public async sendMessage(message: any, name: string = '') {
     if (!name) {
-      await this.serversPID.map(async (server) => {
+      await this.serversPID.map(async server => {
         await server.server.broadcast(message);
       });
     } else {
@@ -76,6 +81,7 @@ export default class IPCService {
       await server.server.broadcast(message);
     }
   }
+
   public async sendMessageClient(name: string, message: any) {
     const client = this.clients.find(cl => cl.name === name);
     if (!client) {
@@ -83,9 +89,11 @@ export default class IPCService {
     }
     client.send(message);
   }
+
   public onMessage(listener: LicenerServer) {
     this.licenersServer.push(listener);
   }
+
   public async onMessageClient(
     name: string,
     listener: (message: NodeMessage, client: ClientSocket) => void,
@@ -115,11 +123,11 @@ export default class IPCService {
       .on('connect', client => this.serviceLogger.info(`Client Connected: ${client.name}`))
       .on('disconnect', client => this.serviceLogger.info(`Client Disconnected: ${client.name}`))
       .on('error', (error, client) =>
-        this.serviceLogger.exception(`Error from ${client.name}`, error)
+        this.serviceLogger.exception(`Error from ${client.name}`, error),
       );
     this.server.setMaxListeners(Infinity);
     this.server.listen(filePath);
-    this.server.on('message', (message) => {
+    this.server.on('message', message => {
       if (message.data.pid) {
         const nameServer = `${name}-${message.data.pid}`;
         this.serviceLogger.info(`Make pid-server: ${nameServer}`);
@@ -129,6 +137,7 @@ export default class IPCService {
     this.serviceLogger.info('Service started!');
     return this.server;
   }
+
   public async startPidServer(name: string = '') {
     this.serviceLogger.info('Starting PID server ...');
     if (!name) {
@@ -142,12 +151,12 @@ export default class IPCService {
       this.serviceLogger.info(`ICP file not found`);
     }
     const server = new Server(nameA)
-    .on('connect', client => this.serviceLogger.info(`Client Connected: ${client.name}`))
-    .on('disconnect', client => this.serviceLogger.info(`Client Disconnected: ${client.name}`))
-    .on('error', (error, client) =>
-      this.serviceLogger.exception(`Error from ${client.name}`, error),
-    );
-    this.licenersServer.map((licener) => {
+      .on('connect', client => this.serviceLogger.info(`Client Connected: ${client.name}`))
+      .on('disconnect', client => this.serviceLogger.info(`Client Disconnected: ${client.name}`))
+      .on('error', (error, client) =>
+        this.serviceLogger.exception(`Error from ${client.name}`, error),
+      );
+    this.licenersServer.map(licener => {
       server.on('message', licener);
     });
     this.serversPID.push({ name, server });

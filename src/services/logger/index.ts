@@ -26,7 +26,7 @@ const myFormat = printf(
     message,
     label,
     timestamp,
-  }) => `${timestamp} [${label}] <${level}> ${message}`
+  }) => `${timestamp} [${label}] <${level}> ${message}`,
 );
 
 const myFormatNoColor = printf(
@@ -37,7 +37,7 @@ const myFormatNoColor = printf(
     message,
     label,
     timestamp,
-  }) => `${timestamp} [${label}] <${level}> ${stripAnsi(message)}`
+  }) => `${timestamp} [${label}] <${level}> ${stripAnsi(message)}`,
 );
 
 // tslint:disable-next-line: max-classes-per-file
@@ -66,9 +66,9 @@ export default class LoggerService {
             colorize(),
             timestamp(),
             json(),
-            myFormat
+            myFormat,
           ),
-        })
+        }),
       );
     }
 
@@ -86,9 +86,9 @@ export default class LoggerService {
             label({ label: this.labels.join(' ') }),
             timestamp(),
             json(),
-            myFormatNoColor
+            myFormatNoColor,
           ),
-        })
+        }),
       );
     }
 
@@ -149,7 +149,7 @@ export default class LoggerService {
     level: LogLevel,
     syntax: SupportedSyntaxes,
     message: string,
-    extra?: SyntaxEntryExtra
+    extra?: SyntaxEntryExtra,
   ): void {
     const messageHighlighted = highlight(message, { language: syntax, ignoreIllegals: true });
     this.log(level, `${extra.prefix || ''} ${messageHighlighted} ${extra.postfix || ''}`.trim());

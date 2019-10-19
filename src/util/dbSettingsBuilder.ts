@@ -17,7 +17,7 @@ class DBLogger implements Logger {
     error: string,
     query: string,
     parameters?: any[],
-    queryRunner?: QueryRunner
+    queryRunner?: QueryRunner,
   ) {
     this.logger.errorSyntax('sql', query, {
       prefix: 'Querry failed:',

@@ -17,10 +17,10 @@ export default class HttpAPIApplication extends BaseApplication {
   constructor() {
     super();
     const context = ServiceInjector.resolve<ContextService>(ContextService).addRootContext(
-      this.getLoggingLabel()
+      this.getLoggingLabel(),
     );
     this.applicationLogger = ServiceInjector.resolve<LoggerService>(LoggerService).addLabels(
-      context.getRootContext()
+      context.getRootContext(),
     );
   }
 
@@ -46,7 +46,7 @@ export default class HttpAPIApplication extends BaseApplication {
     return new Promise(res => {
       this.server.http().listen(config.apiHost.port, config.apiHost.host, () => {
         this.applicationLogger.info(
-          `Application started @ ${config.apiHost.host}:${config.apiHost.port}!`
+          `Application started @ ${config.apiHost.host}:${config.apiHost.port}!`,
         );
         res(true);
       });

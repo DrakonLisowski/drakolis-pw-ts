@@ -6,7 +6,8 @@ export class GetUserID implements BaseRequest {
   constructor({ userName }: any) {
     this.userName = userName;
   }
-  public test(): object|boolean {
+
+  public test(): object | boolean {
     return false;
   }
 }

@@ -1,3 +1,6 @@
+import { Connection } from 'typeorm';
+import { IgApiClient } from 'instagram-private-api';
+import { json } from 'body-parser';
 import { BaseApplication } from '../BaseApplication';
 import { ServiceInjector } from '../../services/ServiceInjector';
 import LoggerService from '../../services/logger';
@@ -6,28 +9,30 @@ import MongoService from '../../services/mongo';
 import IGUserFollower from '../../entities/mongo/IGUserFollower';
 import InstaService from '../../services/instaService';
 import IpcService from '../../services/ipc';
-import { Connection } from 'typeorm';
-import { IgApiClient } from 'instagram-private-api';
-import { json } from 'body-parser';
 
 export default class BotIGApplication extends BaseApplication {
-
   private applicationLogger: LoggerService;
+
   private mongoService: MongoService;
+
   private instaService: InstaService;
+
   private ipcService: IpcService;
 
   private mongo: Connection;
+
   private IgApi: IgApiClient;
 
   private enabledApplication: boolean;
 
   constructor() {
     super();
-    const context = ServiceInjector.resolve<ContextService>(ContextService)
-    .addRootContext(this.getLoggingLabel());
-    this.applicationLogger = ServiceInjector.resolve<LoggerService>(LoggerService)
-      .addLabels(context.getRootContext());
+    const context = ServiceInjector.resolve<ContextService>(ContextService).addRootContext(
+      this.getLoggingLabel(),
+    );
+    this.applicationLogger = ServiceInjector.resolve<LoggerService>(LoggerService).addLabels(
+      context.getRootContext(),
+    );
     this.mongoService = ServiceInjector.resolve<MongoService>(MongoService);
     // this.instaService = ServiceInjector.resolve<InstaService>(InstaService);
     this.ipcService = ServiceInjector.resolve<IpcService>(IpcService);
@@ -54,7 +59,7 @@ export default class BotIGApplication extends BaseApplication {
     });
     setInterval(async () => {
       this.ipcService.sendMessage(`from server kekekekekke`);
-    },          1000);
+    }, 1000);
     return true;
   }
 
@@ -68,5 +73,4 @@ export default class BotIGApplication extends BaseApplication {
     this.enabledApplication = false;
     return true;
   }
-
 }

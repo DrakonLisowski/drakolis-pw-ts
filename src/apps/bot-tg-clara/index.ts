@@ -10,10 +10,10 @@ export default class BotTGClaraApplication extends BaseApplication {
   constructor() {
     super();
     const context = ServiceInjector.resolve<ContextService>(ContextService).addRootContext(
-      this.getLoggingLabel()
+      this.getLoggingLabel(),
     );
     this.applicationLogger = ServiceInjector.resolve<LoggerService>(LoggerService).addLabels(
-      context.getRootContext()
+      context.getRootContext(),
     );
   }
 

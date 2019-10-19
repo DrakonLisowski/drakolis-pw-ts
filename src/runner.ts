@@ -26,7 +26,7 @@ const run = async () => {
     throw new Error(`Application '${applicationName}' was not found`);
   }
   const application = Object.keys(Application).find(
-    k => Application[k as keyof typeof Application] === applicationName
+    k => Application[k as keyof typeof Application] === applicationName,
   ) as keyof typeof Application;
 
   const appClass = await appLoader(Application[application]);

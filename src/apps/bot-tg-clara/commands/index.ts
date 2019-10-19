@@ -22,10 +22,10 @@ const loadCommands = async () => {
   const context = ServiceInjector.resolve<ContextService>(ContextService).addSubContext(
     this,
     null,
-    'Commands'
+    'Commands',
   );
   const logger = ServiceInjector.resolve<LoggerService>(LoggerService).addLabels(
-    context.getContext(this)
+    context.getContext(this),
   );
   const mongoService = ServiceInjector.resolve<MongoService>(MongoService);
   logger.info('Start load commands');
@@ -94,9 +94,9 @@ const loadCommands = async () => {
             folowersRep.updateOne(
               { owner: folower.owner, pk: folower.pk },
               { $set: folower },
-              { upsert: true }
+              { upsert: true },
             );
-          })
+          }),
         );
         await bot.sendMessage(chatId, `load folowers done`);
       },
@@ -161,7 +161,7 @@ const loadCommands = async () => {
               await bot.sendMessage(
                 chatId,
                 `download complete.
-  Local file name: ${fileName}`
+  Local file name: ${fileName}`,
               );
               logger.info(JSON.stringify(fileName));
               const convertedFile = path.join(process.cwd(), 'converted-files', `${fileID}.mp4`);
@@ -184,7 +184,7 @@ const loadCommands = async () => {
                     await bot.sendMessage(
                       chatId,
                       `converte in progress:
-  ${status.progress.percent.toString().split('.')[0]}`
+  ${status.progress.percent.toString().split('.')[0]}`,
                     );
                   }
                   await setTimeout(async () => {

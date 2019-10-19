@@ -31,13 +31,13 @@ export default class TelegramBotService extends LoaderService<TelegramBot> {
     }
     this.instance = new TelegramBot(
       config.telegramConfig.telegramBotToken,
-      params as ConstructorOptions
+      params as ConstructorOptions,
     );
     this.serviceLogger.info('Bot ready.');
     if (polling) {
       this.serviceLogger.info('Enabling polling...');
       this.serviceLogger.warn(
-        'This might die if there is another polling for the same bot already!'
+        'This might die if there is another polling for the same bot already!',
       );
       await this.instance.startPolling();
       this.serviceLogger.info('Polling enabled.');

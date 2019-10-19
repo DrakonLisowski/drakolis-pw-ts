@@ -18,10 +18,10 @@ export default class RTMPServerApplication extends BaseApplication {
   constructor() {
     super();
     const context = ServiceInjector.resolve<ContextService>(ContextService).addRootContext(
-      this.getLoggingLabel()
+      this.getLoggingLabel(),
     );
     this.applicationLogger = ServiceInjector.resolve<LoggerService>(LoggerService).addLabels(
-      context.getRootContext()
+      context.getRootContext(),
     );
   }
 
@@ -41,7 +41,7 @@ export default class RTMPServerApplication extends BaseApplication {
           if (stderr || !/ffmpeg version.*4/.test(stdout)) {
             throw new Error(stderr || stdout);
           }
-        })
+        }),
       );
     } catch (e) {
       this.applicationLogger.exception('Ffmpeg does not exist or below version 4', e);

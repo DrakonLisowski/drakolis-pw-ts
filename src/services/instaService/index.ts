@@ -84,7 +84,7 @@ export default class InstaService extends LoaderService<IgApiClient> {
 
   public async getUserFolowers(
     feed: AccountFollowersFeed,
-    owner: number
+    owner: number,
   ): Promise<IGUserFollower[]> {
     return new Promise(async (res, rej) => {
       const listFolowers: any = [];
@@ -115,7 +115,7 @@ export default class InstaService extends LoaderService<IgApiClient> {
         () => {
           this.serviceLogger.info('Complete! Users loaded!');
           res(listFolowers);
-        }
+        },
       );
     });
   }
