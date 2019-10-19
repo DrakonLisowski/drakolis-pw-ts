@@ -21,7 +21,7 @@ export class SocketIdentifier {
   ) {}
 
   public buildName(): string {
-    if (this.id) {
+    if (!this.id) {
       return `${this.name}`;
     } else {
       return `${this.name}-${this.id}`;
