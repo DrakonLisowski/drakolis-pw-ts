@@ -1,7 +1,6 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class RepostedPhoto1568366363532 implements MigrationInterface {
-
   public async up(queryRunner: QueryRunner): Promise<any> {
     await queryRunner.query(`
 CREATE TABLE "public"."reposted_photo" (
@@ -19,5 +18,4 @@ CREATE TABLE "public"."reposted_photo" (
   public async down(queryRunner: QueryRunner): Promise<any> {
     await queryRunner.query(`DROP TABLE "public"."reposted_photo"`);
   }
-
 }

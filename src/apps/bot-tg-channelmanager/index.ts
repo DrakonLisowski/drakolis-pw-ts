@@ -7,16 +7,18 @@ import PostgressService from '../../services/postgress';
 import ContextService from '../../services/context';
 
 export default class BotTGChannelManager extends BaseApplication {
-
   private applicationLogger: LoggerService;
+
   private botService: TelegramBotService;
 
   constructor() {
     super();
-    const context = ServiceInjector.resolve<ContextService>(ContextService)
-      .addRootContext(this.getLoggingLabel());
-    this.applicationLogger = ServiceInjector.resolve<LoggerService>(LoggerService)
-      .addLabels(context.getRootContext());
+    const context = ServiceInjector.resolve<ContextService>(ContextService).addRootContext(
+      this.getLoggingLabel()
+    );
+    this.applicationLogger = ServiceInjector.resolve<LoggerService>(LoggerService).addLabels(
+      context.getRootContext()
+    );
     this.botService = ServiceInjector.resolve<TelegramBotService>(TelegramBotService);
   }
 
@@ -41,5 +43,4 @@ export default class BotTGChannelManager extends BaseApplication {
   public async stop(): Promise<boolean> {
     return true;
   }
-
 }

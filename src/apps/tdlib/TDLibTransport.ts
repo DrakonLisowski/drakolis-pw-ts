@@ -4,7 +4,9 @@ import logger from '../../services/logger-scrapped!/logger';
 
 export default class TDLibTransport {
   protected tdlib: Client;
+
   protected clients: Client[];
+
   private transportLogger = logger('TDLib');
 
   protected async init() {

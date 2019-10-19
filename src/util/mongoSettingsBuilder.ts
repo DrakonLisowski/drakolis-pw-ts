@@ -1,5 +1,5 @@
-import config from '../config';
 import { ConnectionOptions } from 'typeorm';
+import config from '../config';
 import LoggerService from '../services/logger';
 
 export default (logger: LoggerService) => {

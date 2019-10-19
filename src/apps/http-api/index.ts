@@ -8,23 +8,26 @@ import ContextService from '../../services/context';
 import IpcService from '../../services/ipc';
 
 export default class HttpAPIApplication extends BaseApplication {
-
   private applicationLogger: LoggerService;
+
   private server: jayson.Server;
+
   private ipcService: IpcService;
 
   constructor() {
     super();
-    const context = ServiceInjector.resolve<ContextService>(ContextService)
-    .addRootContext(this.getLoggingLabel());
-    this.applicationLogger = ServiceInjector.resolve<LoggerService>(LoggerService)
-      .addLabels(context.getRootContext());
-    this.ipcService = ServiceInjector.resolve<IpcService>(IpcService);
+    const context = ServiceInjector.resolve<ContextService>(ContextService).addRootContext(
+      this.getLoggingLabel()
+    );
+    this.applicationLogger = ServiceInjector.resolve<LoggerService>(LoggerService).addLabels(
+      context.getRootContext()
+    );
   }
 
   public getName(): string {
     return 'InfoAPI';
   }
+
   public async startApplication(): Promise<boolean> {
     const nameIPC = 'igbot';
     const namePID = `${nameIPC}-${process.pid}`;
@@ -35,23 +38,18 @@ export default class HttpAPIApplication extends BaseApplication {
       await this.ipcService.onMessageClient(namePID, (message, client) => {
         this.applicationLogger.info(`Message: ${JSON.stringify(message)}`);
       });
-    },               5000);
-    setInterval(
-      () => {
-        this.ipcService.sendMessageClient(namePID, `from client tessdadasdasczczx`);
-      },
-      1000);
+    }, 5000);
+    setInterval(() => {
+      this.ipcService.sendMessageClient(namePID, `from client tessdadasdasczczx`);
+    }, 1000);
 
-    return new Promise((res) => {
-      this.server.http().listen(
-        config.apiHost.port,
-        config.apiHost.host,
-        () => {
-          this.applicationLogger
-            .info(`Application started @ ${config.apiHost.host}:${config.apiHost.port}!`);
-          res(true);
-        },
-      );
+    return new Promise(res => {
+      this.server.http().listen(config.apiHost.port, config.apiHost.host, () => {
+        this.applicationLogger.info(
+          `Application started @ ${config.apiHost.host}:${config.apiHost.port}!`
+        );
+        res(true);
+      });
     });
   }
 
@@ -67,5 +65,4 @@ export default class HttpAPIApplication extends BaseApplication {
       res(true);
     });
   }
-
 }

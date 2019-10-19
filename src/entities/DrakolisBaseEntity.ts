@@ -7,7 +7,6 @@ import {
 } from 'typeorm';
 
 export abstract class DrakolisBaseEntity extends BaseEntity {
-
   @PrimaryGeneratedColumn()
   public id: string;
 
@@ -20,5 +19,4 @@ export abstract class DrakolisBaseEntity extends BaseEntity {
 
   @UpdateDateColumn()
   public updatedAt: Date;
-
 }

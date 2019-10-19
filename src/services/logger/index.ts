@@ -8,40 +8,51 @@ import winstonDailyRotateFile from 'winston-daily-rotate-file';
 import config, { LogLevel } from '../../config';
 import { Service } from '../ServiceDecorator';
 
-type SupportedSyntaxes = 'sql'|'javascript'|'typescript'|'js'|'json';
+type SupportedSyntaxes = 'sql' | 'javascript' | 'typescript' | 'js' | 'json';
 
 class SyntaxEntryExtra {
   public prefix?: string;
+
   public postfix?: string;
 }
 
-const {
-  combine, timestamp, printf, colorize, label, json,
-} = wins.format;
+const { combine, timestamp, printf, colorize, label, json } = wins.format;
 
-const myFormat = printf(({
-  // @ts-ignore
-  // tslint:disable-next-line: no-shadowed-variable
-  level, message, label, timestamp,
-}) => `${timestamp} [${label}] <${level}> ${message}`);
+const myFormat = printf(
+  ({
+    // @ts-ignore
+    // tslint:disable-next-line: no-shadowed-variable
+    level,
+    message,
+    label,
+    timestamp,
+  }) => `${timestamp} [${label}] <${level}> ${message}`
+);
 
-const myFormatNoColor = printf(({
-  // @ts-ignore
-  // tslint:disable-next-line: no-shadowed-variable
-  level, message, label, timestamp,
-}) => `${timestamp} [${label}] <${level}> ${stripAnsi(message)}`);
+const myFormatNoColor = printf(
+  ({
+    // @ts-ignore
+    // tslint:disable-next-line: no-shadowed-variable
+    level,
+    message,
+    label,
+    timestamp,
+  }) => `${timestamp} [${label}] <${level}> ${stripAnsi(message)}`
+);
 
 // tslint:disable-next-line: max-classes-per-file
 @Service()
 export default class LoggerService {
-
   private fileNameOverride: string;
+
   private winston: wins.Logger;
+
   private labels: string[] = [];
 
   constructor() {
     this.init();
   }
+
   public init() {
     // Removed logging process name...
     const transportz = [];
@@ -55,9 +66,9 @@ export default class LoggerService {
             colorize(),
             timestamp(),
             json(),
-            myFormat,
+            myFormat
           ),
-        }),
+        })
       );
     }
 
@@ -75,9 +86,9 @@ export default class LoggerService {
             label({ label: this.labels.join(' ') }),
             timestamp(),
             json(),
-            myFormatNoColor,
+            myFormatNoColor
           ),
-        }),
+        })
       );
     }
 
@@ -92,7 +103,7 @@ export default class LoggerService {
     this.winston.log(level, message);
   }
 
-  public error(message: string|Error): void {
+  public error(message: string | Error): void {
     // @ts-ignore
     this.log('error', message.stack || message.message || message || 'We are doomed...');
   }
@@ -100,15 +111,19 @@ export default class LoggerService {
   public warn(message: string): void {
     this.log('warn', message);
   }
+
   public info(message: string): void {
     this.log('info', message);
   }
+
   public verbose(message: string): void {
     this.log('verbose', message);
   }
+
   public debug(message: string): void {
     this.log('debug', message);
   }
+
   public silly(message: string): void {
     this.log('silly', message);
   }
@@ -134,7 +149,7 @@ export default class LoggerService {
     level: LogLevel,
     syntax: SupportedSyntaxes,
     message: string,
-    extra?: SyntaxEntryExtra,
+    extra?: SyntaxEntryExtra
   ): void {
     const messageHighlighted = highlight(message, { language: syntax, ignoreIllegals: true });
     this.log(level, `${extra.prefix || ''} ${messageHighlighted} ${extra.postfix || ''}`.trim());
@@ -143,23 +158,28 @@ export default class LoggerService {
   public errorSyntax(syntax: SupportedSyntaxes, message: string, extra?: SyntaxEntryExtra): void {
     this.syntax('error', syntax, message, extra);
   }
+
   public warnSyntax(syntax: SupportedSyntaxes, message: string, extra?: SyntaxEntryExtra): void {
     this.syntax('warn', syntax, message, extra);
   }
+
   public infoSyntax(syntax: SupportedSyntaxes, message: string, extra?: SyntaxEntryExtra): void {
     this.syntax('info', syntax, message, extra);
   }
+
   public verboseSyntax(syntax: SupportedSyntaxes, message: string, extra?: SyntaxEntryExtra): void {
     this.syntax('verbose', syntax, message, extra);
   }
+
   public debugSyntax(syntax: SupportedSyntaxes, message: string, extra?: SyntaxEntryExtra): void {
     this.syntax('debug', syntax, message, extra);
   }
+
   public sillySyntax(syntax: SupportedSyntaxes, message: string, extra?: SyntaxEntryExtra): void {
     this.syntax('silly', syntax, message, extra);
   }
 
-  private setLabels(labels: string[]|string) {
+  private setLabels(labels: string[] | string) {
     this.labels = Array.isArray(labels) ? labels : [labels];
     this.fileNameOverride = this.labels[0].replace(/:/g, '_');
     this.init();

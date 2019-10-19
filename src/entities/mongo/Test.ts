@@ -5,7 +5,6 @@ import { MongoBaseEntity } from './MongoBaseEntity';
 class Test extends MongoBaseEntity {
   @Column()
   public hui: string;
-
 }
 
 export { Test };

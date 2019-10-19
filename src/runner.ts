@@ -1,10 +1,10 @@
-
 import 'reflect-metadata';
 import * as dotenv from 'dotenv';
-dotenv.config();
 
 import commandLineArgs, { OptionDefinition } from 'command-line-args';
 import { Application, appLoader } from './apps';
+
+dotenv.config();
 
 process.env.NTBA_FIX_319 = 'yes';
 
@@ -25,21 +25,19 @@ const run = async () => {
   if (!Object.values(Application).includes(applicationName)) {
     throw new Error(`Application '${applicationName}' was not found`);
   }
-  const application =
-    Object.keys(Application)
-      .find(
-        k => Application[k as keyof typeof Application] === applicationName,
-      ) as keyof typeof Application;
+  const application = Object.keys(Application).find(
+    k => Application[k as keyof typeof Application] === applicationName
+  ) as keyof typeof Application;
 
   const appClass = await appLoader(Application[application]);
   if (appClass) {
     const APP = new appClass();
-    await APP.start().catch(
-      (e) => {
-        throw e;
-      },
-    );
+    await APP.start().catch(e => {
+      throw e;
+    });
   }
 };
 
-run().then().catch();
+run()
+  .then()
+  .catch();

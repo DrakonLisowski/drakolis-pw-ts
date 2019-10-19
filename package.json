@@ -6,7 +6,8 @@
 	"license": "GNU",
 	"author": "Mika Drakolis",
 	"scripts": {
-		"lint": "tsc --noEmit && tslint --project ./tsconfig.json --quiet --fix",
+		"lint": "eslint . --ext .js,.ts",
+		"lint-fix": "eslint . --ext .js,.ts --fix",
 		"namespaces": "barrelsby -c barrelsby.config.json",
 		"sort-packages": "sort-package-json ./package.json",
 		"start": "ts-node ./src/runner",
@@ -36,7 +37,6 @@
 		"node-telegram-bot-api": "^0.30.0",
 		"node-uuid": "^1.4.8",
 		"pg": "^7.12.0",
-		"react-router": "^5.0.1",
 		"redis": "^2.8.0",
 		"reflect-metadata": "^0.1.13",
 		"request": "^2.88.0",
@@ -77,10 +77,15 @@
 		"@typescript-eslint/eslint-plugin": "^1.12.0",
 		"@typescript-eslint/parser": "^1.12.0",
 		"barrelsby": "^2.1.1",
+		"eslint": "^6.5.1",
+		"eslint-config-airbnb-typescript": "^5.0.0",
+		"eslint-config-prettier": "^6.4.0",
+		"eslint-plugin-import": "^2.18.2",
+		"eslint-plugin-jsx-a11y": "^6.2.3",
+		"eslint-plugin-prettier": "^3.1.1",
+		"eslint-plugin-react": "^7.16.0",
+		"prettier": "^1.18.2",
 		"ts-node": "^8.3.0",
-		"tslint": "^5.18.0",
-		"tslint-config-airbnb": "^5.11.1",
-		"tslint-config-prettier": "^1.18.0",
 		"typescript": "^3.5.2"
 	}
 }

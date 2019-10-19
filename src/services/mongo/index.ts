@@ -8,11 +8,7 @@ import { Test } from '../../entities/mongo/Test';
 
 @Service()
 export default class MongoService extends LoaderService<Connection> {
-
-  constructor(
-    private context: ContextService,
-    private serviceLogger: LoggerService,
-  ) {
+  constructor(private context: ContextService, private serviceLogger: LoggerService) {
     super();
     this.context.addSubContext(this, null, 'Mongo');
     this.serviceLogger = this.serviceLogger.addLabels(this.context.getContext(this));
@@ -21,7 +17,7 @@ export default class MongoService extends LoaderService<Connection> {
   protected async initInstance(): Promise<Connection> {
     this.serviceLogger.info('Starting service...');
     return createConnection(mongoSettingsBuilder(this.serviceLogger))
-      .then((connection) => {
+      .then(connection => {
         this.instance = connection;
         this.serviceLogger.info('Service started!');
 
@@ -29,10 +25,9 @@ export default class MongoService extends LoaderService<Connection> {
 
         return this.instance;
       })
-      .catch((e) => {
+      .catch(e => {
         this.serviceLogger.exception('Starting failed', e);
         return null;
       });
   }
-
 }

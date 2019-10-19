@@ -1,12 +1,8 @@
-import {
-  Entity,
-  Column,
-} from 'typeorm';
+import { Entity, Column } from 'typeorm';
 import { DrakolisBaseEntity } from './DrakolisBaseEntity';
 
 @Entity()
 export class Config extends DrakolisBaseEntity {
-
   @Column({ unique: true })
   public key: string;
 
@@ -27,5 +23,4 @@ export class Config extends DrakolisBaseEntity {
 
   @Column({ nullable: false, default: false })
   public private: boolean;
-
 }

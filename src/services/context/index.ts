@@ -2,8 +2,7 @@ import { Service } from '../ServiceDecorator';
 
 @Service()
 export default class ContextService {
-
-  private static normalizeStringArguments(args: string[]|string) {
+  private static normalizeStringArguments(args: string[] | string) {
     return Array.isArray(args) ? args : [args];
   }
 
@@ -13,7 +12,7 @@ export default class ContextService {
    * Adds context to root element
    * @param context context to add
    */
-  public addRootContext(context: string[]|string) {
+  public addRootContext(context: string[] | string) {
     this.addContext(this, context);
     return this;
   }
@@ -34,7 +33,7 @@ export default class ContextService {
    * @param parent parent to extend, null for root element
    * @param newContext new values added to parent's context
    */
-  public addSubContext(obj: object, parent: object = null, newContext: string[]|string = []) {
+  public addSubContext(obj: object, parent: object = null, newContext: string[] | string = []) {
     const context = ContextService.normalizeStringArguments(newContext);
 
     const parentContext = this.getContext(parent || this);
@@ -59,7 +58,7 @@ export default class ContextService {
    * @param obj object to create/add context for
    * @param newContext context values
    */
-  public addContext(obj: object, newContext: string[]|string) {
+  public addContext(obj: object, newContext: string[] | string) {
     let context = ContextService.normalizeStringArguments(newContext);
 
     if (this.contextMap.has(obj)) {

@@ -5,7 +5,7 @@ import dbSettingsBuilder from '../util/dbSettingsBuilder';
 
 const log = new LoggerService().addLabel('Migrations');
 
-const runScript = async() => {
+const runScript = async () => {
   log.info('Connecting to DB...');
   let typeorm;
   try {
@@ -20,10 +20,12 @@ const runScript = async() => {
   }
 };
 
-runScript().catch((e) => {
-  log.exception('Migrations failed!', e);
-  process.exit(1);
-}).then((r) => {
-  log.info('Success!');
-  process.exit(0);
-});
+runScript()
+  .catch(e => {
+    log.exception('Migrations failed!', e);
+    process.exit(1);
+  })
+  .then(r => {
+    log.info('Success!');
+    process.exit(0);
+  });
