@@ -7,7 +7,7 @@ export default class Command {
   constructor(
     private RequestType: new (data: any) => BaseRequest,
     private name: string,
-    private commandFunction: CommandFunction,
+    private commandFunction: CommandFunction
   ) {}
 
   public getName() {

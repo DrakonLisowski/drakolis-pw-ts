@@ -4,13 +4,14 @@ import config from '../../config';
 import TDLibTransport from './TDLibTransport';
 
 export default class TDLibService extends TDLibTransport implements IService {
-
   private serviceLogger = logger('TDLib');
+
   private isConnected: boolean = false;
 
   public getDependencies(): string[] {
     return [];
   }
+
   public async startService(registry: any): Promise<boolean> {
     this.serviceLogger.info('Starting service...');
     await this.init();
@@ -29,5 +30,4 @@ export default class TDLibService extends TDLibTransport implements IService {
       res(true);
     });
   }
-
 }

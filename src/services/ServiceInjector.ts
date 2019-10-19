@@ -1,7 +1,6 @@
 import { Type } from './ServiceDecorator';
 
-export const ServiceInjector = new class {
-
+export const ServiceInjector = new (class {
   // Contains already loaded stuff
   private injected: any[] = [];
 
@@ -19,4 +18,4 @@ export const ServiceInjector = new class {
 
     return createdInstance;
   }
-}();
+})();

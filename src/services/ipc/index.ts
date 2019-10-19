@@ -8,14 +8,11 @@ const BASE_PATH = '/var/ipc/drakolis';
 
 @Service()
 export default class IPCService {
-
   private server: Server;
+
   private clients: ClientSocket[] = [];
 
-  constructor(
-    private context: ContextService,
-    private serviceLogger: LoggerService,
-  ) {
+  constructor(private context: ContextService, private serviceLogger: LoggerService) {
     this.context.addSubContext(this, null, 'IPC');
     this.serviceLogger = this.serviceLogger.addLabels(this.context.getContext(this));
   }
@@ -24,10 +21,10 @@ export default class IPCService {
     const cl: ClientSocket = await new Promise((res, rej) => {
       const cli = new Client(name)
         .on('error', (error, client) =>
-          this.serviceLogger.exception(`Error from ${client.name}:`, error),
+          this.serviceLogger.exception(`Error from ${client.name}:`, error)
         )
         .on('disconnect', client => this.serviceLogger.info(`Disconnected from ${client.name}`))
-        .on('ready', (client) => {
+        .on('ready', client => {
           this.serviceLogger.info(`Connected to: ${client.name}`);
           res(client);
         });
@@ -59,7 +56,7 @@ export default class IPCService {
       .on('connect', client => this.serviceLogger.info(`Client Connected: ${client.name}`))
       .on('disconnect', client => this.serviceLogger.info(`Client Disconnected: ${client.name}`))
       .on('error', (error, client) =>
-        this.serviceLogger.exception(`Error from ${client.name}`, error),
+        this.serviceLogger.exception(`Error from ${client.name}`, error)
       );
 
     this.server.listen(path.join(BASE_PATH, nameA));

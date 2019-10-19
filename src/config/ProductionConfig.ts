@@ -15,6 +15,7 @@ import {
 
 export class ProductionConfig implements IConfig {
   public environment: EnvironmentConfig = 'production';
+
   public logging: LogConfig = {
     console: true,
     file: true,
@@ -71,8 +72,8 @@ export class ProductionConfig implements IConfig {
   };
 
   public instagramConfig: InstagramConfig = {
-    username:  process.env.IG_USERNAME,
-    password:  process.env.IG_PASSWORD,
+    username: process.env.IG_USERNAME,
+    password: process.env.IG_PASSWORD,
     cookies: './IGcookies',
   };
 

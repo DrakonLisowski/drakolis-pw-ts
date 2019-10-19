@@ -5,15 +5,16 @@ import LoggerService from '../../services/logger';
 import ContextService from '../../services/context';
 
 export default class BotTGClaraApplication extends BaseApplication {
-
   private applicationLogger: LoggerService;
 
   constructor() {
     super();
-    const context = ServiceInjector.resolve<ContextService>(ContextService)
-    .addRootContext(this.getLoggingLabel());
-    this.applicationLogger = ServiceInjector.resolve<LoggerService>(LoggerService)
-      .addLabels(context.getRootContext());
+    const context = ServiceInjector.resolve<ContextService>(ContextService).addRootContext(
+      this.getLoggingLabel()
+    );
+    this.applicationLogger = ServiceInjector.resolve<LoggerService>(LoggerService).addLabels(
+      context.getRootContext()
+    );
   }
 
   public getName(): string {
@@ -32,5 +33,4 @@ export default class BotTGClaraApplication extends BaseApplication {
   public async stop(): Promise<boolean> {
     return true;
   }
-
 }

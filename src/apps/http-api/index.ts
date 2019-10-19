@@ -7,16 +7,18 @@ import LoggerService from '../../services/logger';
 import ContextService from '../../services/context';
 
 export default class HttpAPIApplication extends BaseApplication {
-
   private applicationLogger: LoggerService;
+
   private server: jayson.Server;
 
   constructor() {
     super();
-    const context = ServiceInjector.resolve<ContextService>(ContextService)
-    .addRootContext(this.getLoggingLabel());
-    this.applicationLogger = ServiceInjector.resolve<LoggerService>(LoggerService)
-      .addLabels(context.getRootContext());
+    const context = ServiceInjector.resolve<ContextService>(ContextService).addRootContext(
+      this.getLoggingLabel()
+    );
+    this.applicationLogger = ServiceInjector.resolve<LoggerService>(LoggerService).addLabels(
+      context.getRootContext()
+    );
   }
 
   public getName(): string {
@@ -26,16 +28,13 @@ export default class HttpAPIApplication extends BaseApplication {
   public async startApplication(): Promise<boolean> {
     this.server = new jayson.Server(commandLoader());
 
-    return new Promise((res) => {
-      this.server.http().listen(
-        config.apiHost.port,
-        config.apiHost.host,
-        () => {
-          this.applicationLogger
-            .info(`Application started @ ${config.apiHost.host}:${config.apiHost.port}!`);
-          res(true);
-        },
-      );
+    return new Promise(res => {
+      this.server.http().listen(config.apiHost.port, config.apiHost.host, () => {
+        this.applicationLogger.info(
+          `Application started @ ${config.apiHost.host}:${config.apiHost.port}!`
+        );
+        res(true);
+      });
     });
   }
 
@@ -51,5 +50,4 @@ export default class HttpAPIApplication extends BaseApplication {
       res(true);
     });
   }
-
 }

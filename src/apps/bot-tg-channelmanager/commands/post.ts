@@ -4,8 +4,7 @@ import { RepostedPhoto } from '../../../entities/RepostedPhoto';
 
 const likeIcon = '❤️';
 const commandPost = (bot: TelegramBot) => {
-
-  bot.on('photo', (msg) => {
+  bot.on('photo', msg => {
     if (
       msg.caption &&
       msg.caption.startsWith('/post') &&
@@ -22,66 +21,73 @@ const commandPost = (bot: TelegramBot) => {
       photo.voted = [];
 
       photo.save().then(savedPhoto => {
-        const keyboard: InlineKeyboardButton[][] = [[{
-          text: `${likeIcon} 0`,
-          callback_data: JSON.stringify({
-            type: 'likeButtonClick',
-            pwId: savedPhoto.id,
-            voted: [],
-          }),
-        }]];
+        const keyboard: InlineKeyboardButton[][] = [
+          [
+            {
+              text: `${likeIcon} 0`,
+              callback_data: JSON.stringify({
+                type: 'likeButtonClick',
+                pwId: savedPhoto.id,
+                voted: [],
+              }),
+            },
+          ],
+        ];
         const markup: InlineKeyboardMarkup = {
           inline_keyboard: keyboard,
         };
 
-        bot.sendPhoto(
-          config.telegramConfig.channelManagerChannel,
-          fileId,
-          { reply_markup: markup, caption: msg.caption.replace('/post', '').trim() },
-        );
+        bot.sendPhoto(config.telegramConfig.channelManagerChannel, fileId, {
+          reply_markup: markup,
+          caption: msg.caption.replace('/post', '').trim(),
+        });
       });
     }
   });
-  bot.on('callback_query', (q) => {
+  bot.on('callback_query', q => {
     const data = JSON.parse(q.data);
     if (data.type === 'likeButtonClick') {
-      const pwId = data.pwId;
+      const { pwId } = data;
 
-      RepostedPhoto.findOne(pwId).then(
-        (photoFromDB) => {
-          if (!photoFromDB) {
-            throw new Error('Wat?');
-          }
-          let voted = photoFromDB.voted;
-          if (voted.includes(q.from.id)) {
-            voted = voted.filter((e: number) => e !== q.from.id);
-          } else {
-            voted = [...voted, q.from.id];
-          }
-          photoFromDB.likes = voted.length;
-          photoFromDB.voted = voted;
+      RepostedPhoto.findOne(pwId).then(photoFromDB => {
+        if (!photoFromDB) {
+          throw new Error('Wat?');
+        }
+        let { voted } = photoFromDB;
+        if (voted.includes(q.from.id)) {
+          voted = voted.filter((e: number) => e !== q.from.id);
+        } else {
+          voted = [...voted, q.from.id];
+        }
+        photoFromDB.likes = voted.length;
+        photoFromDB.voted = voted;
 
-          photoFromDB.save().then(() => {
-            const newMarkup = {
-              inline_keyboard: [[{
-                text: `${likeIcon} ${voted.length}`,
-                callback_data: JSON.stringify({
-                  voted, // TODO: It should be moved from here
-                  type: 'likeButtonClick',
-                  pwId: photoFromDB.id,
-                }),
-              }]],
-            };
+        photoFromDB.save().then(() => {
+          const newMarkup = {
+            inline_keyboard: [
+              [
+                {
+                  text: `${likeIcon} ${voted.length}`,
+                  callback_data: JSON.stringify({
+                    voted, // TODO: It should be moved from here
+                    type: 'likeButtonClick',
+                    pwId: photoFromDB.id,
+                  }),
+                },
+              ],
+            ],
+          };
 
-            bot.editMessageReplyMarkup(newMarkup, {
+          bot
+            .editMessageReplyMarkup(newMarkup, {
               chat_id: q.message.chat.id,
               message_id: q.message.message_id,
-            }).then(() => {
+            })
+            .then(() => {
               bot.answerCallbackQuery(q.id, { text: 'Your vote was processed!' });
             });
-          });
-        },
-      );
+        });
+      });
     }
   });
 
@@ -89,7 +95,7 @@ const commandPost = (bot: TelegramBot) => {
     const chatId = msg.chat.id;
     const resp = match[1];
 
-    bot.getChat(resp).then(chat =>  bot.sendMessage(chatId, JSON.stringify(chat)));
+    bot.getChat(resp).then(chat => bot.sendMessage(chatId, JSON.stringify(chat)));
   });
 
   bot.onText(/\/getPhoto (.+)/, (msg, match) => {

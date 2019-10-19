@@ -1,8 +1,10 @@
 export abstract class BaseApplication {
-
   public abstract getName(): string;
+
   public abstract startApplication(): Promise<boolean>;
+
   public abstract isRunning(): boolean;
+
   public abstract stop(): Promise<boolean>;
 
   public getProcessId(): string {

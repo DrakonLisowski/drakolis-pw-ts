@@ -3,9 +3,10 @@ import { Type } from './ServiceDecorator';
 import { ServiceInjector } from './ServiceInjector';
 
 export default abstract class LoaderService<T> {
-
   protected instance: T;
+
   private dependencies: Type<any>[];
+
   private initiated: boolean = false;
 
   constructor(...dependencies: Type<LoaderService<any>>[]) {
@@ -14,7 +15,7 @@ export default abstract class LoaderService<T> {
 
   public async init(...args: any) {
     if (!this.initiated) {
-      await new Promise(async (res) => {
+      await new Promise(async res => {
         await this.initDependencies();
         this.instance = await this.initInstance(...args);
         this.initiated = true;
@@ -33,16 +34,12 @@ export default abstract class LoaderService<T> {
   }
 
   protected async initDependencies(): Promise<boolean> {
-    await bluebird.map(
-      this.dependencies,
-      (depClass) => {
-        const dependency = ServiceInjector.resolve<any>(depClass);
-        return dependency.init;
-      },
-    );
+    await bluebird.map(this.dependencies, depClass => {
+      const dependency = ServiceInjector.resolve<any>(depClass);
+      return dependency.init;
+    });
     return true;
   }
 
-  protected abstract initInstance(...args: any): Promise<T>|T;
-
+  protected abstract initInstance(...args: any): Promise<T> | T;
 }

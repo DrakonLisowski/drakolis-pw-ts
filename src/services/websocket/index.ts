@@ -6,14 +6,11 @@ import LoggerService from '../logger';
 
 @Service()
 export default class SocketIOService {
-
   private socket: socketIo.Server;
+
   private isConnected: boolean = false;
 
-  constructor(
-    private context: ContextService,
-    private serviceLogger: LoggerService,
-  ) {
+  constructor(private context: ContextService, private serviceLogger: LoggerService) {
     this.context.addSubContext(this, null, ['SocketIO']);
     this.serviceLogger = this.serviceLogger.addLabels(this.context.getContext(this));
     this.socket = socketIo();

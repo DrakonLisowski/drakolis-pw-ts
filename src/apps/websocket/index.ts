@@ -8,17 +8,20 @@ import SocketIOService from '../../services/websocket';
 import ContextService from '../../services/context';
 
 export default class WSHostService extends BaseApplication {
-
   private applicationLogger: LoggerService;
+
   private server: http.Server = new http.Server();
+
   private socketService: SocketIOService;
 
   constructor() {
     super();
-    const context = ServiceInjector.resolve<ContextService>(ContextService)
-      .addRootContext(this.getLoggingLabel());
-    this.applicationLogger = ServiceInjector.resolve<LoggerService>(LoggerService)
-      .addLabels(context.getRootContext());
+    const context = ServiceInjector.resolve<ContextService>(ContextService).addRootContext(
+      this.getLoggingLabel()
+    );
+    this.applicationLogger = ServiceInjector.resolve<LoggerService>(LoggerService).addLabels(
+      context.getRootContext()
+    );
     this.socketService = ServiceInjector.resolve<SocketIOService>(SocketIOService);
   }
 
@@ -30,16 +33,13 @@ export default class WSHostService extends BaseApplication {
     this.applicationLogger.info('Starting application...');
 
     return new Promise((res, rej) => {
-      this.server.listen(
-        config.wsHost.port,
-        config.wsHost.host,
-        () => {
-          messages(this.socketService.init(this.server));
-          this.applicationLogger
-            .info(`Application started @ ${config.wsHost.host}:${config.wsHost.port}!`);
-          res(true);
-        },
-      );
+      this.server.listen(config.wsHost.port, config.wsHost.host, () => {
+        messages(this.socketService.init(this.server));
+        this.applicationLogger.info(
+          `Application started @ ${config.wsHost.host}:${config.wsHost.port}!`
+        );
+        res(true);
+      });
     });
   }
 
@@ -55,5 +55,4 @@ export default class WSHostService extends BaseApplication {
       res(true);
     });
   }
-
 }

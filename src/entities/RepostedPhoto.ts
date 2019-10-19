@@ -3,7 +3,6 @@ import { DrakolisBaseEntity } from './DrakolisBaseEntity';
 
 @Entity()
 export class RepostedPhoto extends DrakolisBaseEntity {
-
   @Column()
   public fileId: string;
 

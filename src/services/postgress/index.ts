@@ -7,11 +7,7 @@ import LoggerService from '../logger';
 
 @Service()
 export default class PostgressService extends LoaderService<Connection> {
-
-  constructor(
-    private context: ContextService,
-    private serviceLogger: LoggerService,
-  ) {
+  constructor(private context: ContextService, private serviceLogger: LoggerService) {
     super();
     this.context.addSubContext(this, null, 'Postgress');
     this.serviceLogger = this.serviceLogger.addLabels(this.context.getContext(this));
@@ -20,15 +16,14 @@ export default class PostgressService extends LoaderService<Connection> {
   protected async initInstance(): Promise<Connection> {
     this.serviceLogger.info('Starting service...');
     return createConnection(dbSettingsBuilder(this.serviceLogger))
-      .then((connection) => {
+      .then(connection => {
         this.instance = connection;
         this.serviceLogger.info('Service started!');
         return this.instance;
       })
-      .catch((e) => {
+      .catch(e => {
         this.serviceLogger.exception('Starting failed', e);
         return null;
       });
   }
-
 }

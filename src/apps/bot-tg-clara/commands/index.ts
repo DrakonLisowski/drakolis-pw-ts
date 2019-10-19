@@ -19,10 +19,14 @@ interface ITGCommand {
 }
 
 const loadCommands = async () => {
-  const context = ServiceInjector.resolve<ContextService>(ContextService)
-  .addSubContext(this, null, 'Commands');
-  const logger = ServiceInjector.resolve<LoggerService>(LoggerService)
-    .addLabels(context.getContext(this));
+  const context = ServiceInjector.resolve<ContextService>(ContextService).addSubContext(
+    this,
+    null,
+    'Commands'
+  );
+  const logger = ServiceInjector.resolve<LoggerService>(LoggerService).addLabels(
+    context.getContext(this)
+  );
   const mongoService = ServiceInjector.resolve<MongoService>(MongoService);
   logger.info('Start load commands');
 
@@ -38,29 +42,27 @@ const loadCommands = async () => {
 
   const commands: ITGCommand[] = [
     {
-      name:  '/IGuserid <username>',
+      name: '/IGuserid <username>',
       regexp: /\/IGuserid (.+)/,
       command: async (msg, match) => {
         const chatId = msg.chat.id;
         const userID = await insta.getUserID(match[1]);
         await bot.sendMessage(chatId, `User ID: ${userID}`);
-        return;
       },
       description: `Get user ID by username.`,
     },
     {
-      name:  '/IGuserinfo <userID>',
+      name: '/IGuserinfo <userID>',
       regexp: /\/IGuserinfo (.+)/,
       command: async (msg, match) => {
         const chatId = msg.chat.id;
         const userInfo = await insta.loadUser(match[1]);
         await bot.sendMessage(chatId, `User info: \n${JSON.stringify(userInfo)}`);
-        return;
       },
       description: `Get user info`,
     },
     {
-      name:  '/IGuserfeed <userID>',
+      name: '/IGuserfeed <userID>',
       regexp: /\/IGuserfeed (.+)/,
       command: async (msg, match) => {
         const chatId = msg.chat.id;
@@ -74,13 +76,11 @@ const loadCommands = async () => {
           logger.info(`${JSON.stringify(i)}`);
           await bot.sendMessage(chatId, `id: ${id}:\n${JSON.stringify(i)}`);
         });
-
-        return;
       },
       description: `Get user feed`,
     },
     {
-      name:  '/IGuserfolowers <userID>',
+      name: '/IGuserfolowers <userID>',
       regexp: /\/IGuserfolowers (.+)/,
       command: async (msg, match) => {
         const chatId = msg.chat.id;
@@ -89,38 +89,36 @@ const loadCommands = async () => {
         logger.info(`load folowers count: ${folowers.length}`);
         await bot.sendMessage(chatId, `load folowers count: ${folowers.length}`);
         const folowersRep = mongo.getMongoRepository(IGUserFollower);
-        await Promise.all(folowers.map((folower) => {
-          folowersRep.updateOne(
-            { owner: folower.owner, pk: folower.pk },
-            { $set: folower },
-            { upsert: true },
+        await Promise.all(
+          folowers.map(folower => {
+            folowersRep.updateOne(
+              { owner: folower.owner, pk: folower.pk },
+              { $set: folower },
+              { upsert: true }
             );
-        }));
+          })
+        );
         await bot.sendMessage(chatId, `load folowers done`);
-        return;
       },
       description: `Get user feed`,
     },
     {
-      name:  '/IGloadUsersBetween <userID1> <userID2>',
+      name: '/IGloadUsersBetween <userID1> <userID2>',
       regexp: /\/IGloadUsersBetween (.+) (.+)/,
       command: async (msg, match) => {
         const chatId = msg.chat.id;
         const folowersRep = mongo.getMongoRepository(IGUserFollower);
         const [followers1, followers2] = await Promise.all([
-          folowersRep.find({ where:{ owner: +match[1] } }),
-          folowersRep.find({ where:{ owner: +match[2] } }),
+          folowersRep.find({ where: { owner: +match[1] } }),
+          folowersRep.find({ where: { owner: +match[2] } }),
         ]);
         const folowers1ID = followers1.map(item => item.pk);
         const folowers2ID = followers2.map(item => item.pk);
         logger.info(`folowers1ID: ${folowers1ID.length}`);
         logger.info(`folowers2ID: ${folowers2ID.length}`);
-        const users = folowers1ID.filter(
-          value => -1 !== folowers2ID.indexOf(value),
-        );
+        const users = folowers1ID.filter(value => folowers2ID.indexOf(value) !== -1);
         await bot.sendMessage(chatId, `users count: ${users.length}`);
         await bot.sendMessage(chatId, `users ID: ${JSON.stringify(users)}`);
-        return;
       },
       description: `Get user feed`,
     },
@@ -129,8 +127,8 @@ const loadCommands = async () => {
       regexp: /\/ffmpeg/,
       command: async (msg, match) => {
         const chatId = msg.chat.id;
-        const file = msg.reply_to_message
-          && (msg.reply_to_message.document || msg.reply_to_message.video);
+        const file =
+          msg.reply_to_message && (msg.reply_to_message.document || msg.reply_to_message.video);
         if (file && file.mime_type) {
           const type = file.mime_type.split('/')[0];
           const format = file.mime_type.split('/')[1];
@@ -150,15 +148,14 @@ const loadCommands = async () => {
               });
               await makeFile;
               // await fs.writeFileSync(sourceFile, fileStream);
-              await bot.sendMessage(chatId, `download complete.
-  Local file name: ${fileName}`);
+              await bot.sendMessage(
+                chatId,
+                `download complete.
+  Local file name: ${fileName}`
+              );
               logger.info(JSON.stringify(fileName));
               const convertedFile = path.join(process.cwd(), 'converted-files', `${fileID}.mp4`);
-              ffmpeg.run(
-                sourceFile,
-                convertedFile,
-                [],
-              );
+              ffmpeg.run(sourceFile, convertedFile, []);
               const awaitStatus = async () => {
                 const status = await ffmpeg.getStatus();
                 if (status.end) {
@@ -174,10 +171,15 @@ const loadCommands = async () => {
                   await ffmpeg.processDone();
                 } else {
                   if (status.progress !== null) {
-                    await bot.sendMessage(chatId, `converte in progress:
-  ${status.progress.percent.toString().split('.')[0]}`);
+                    await bot.sendMessage(
+                      chatId,
+                      `converte in progress:
+  ${status.progress.percent.toString().split('.')[0]}`
+                    );
                   }
-                  await setTimeout(async () => { await awaitStatus(); }, 5000);
+                  await setTimeout(async () => {
+                    await awaitStatus();
+                  }, 5000);
                 }
               };
               await awaitStatus();
@@ -189,7 +191,6 @@ const loadCommands = async () => {
         } else {
           bot.sendMessage(chatId, `please reply video message!`);
         }
-
       },
       description: `ffmpeg converter`,
     },
@@ -216,7 +217,7 @@ const loadCommands = async () => {
     },
   ];
 
-  commands.forEach((item) => {
+  commands.forEach(item => {
     bot.onText(item.regexp, item.command);
   });
 };

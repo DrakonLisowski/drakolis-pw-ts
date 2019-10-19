@@ -15,6 +15,7 @@ import { RTMPConfig } from './types';
 
 export class DevelopmentConfig implements IConfig {
   public environment: EnvironmentConfig = 'development';
+
   public logging: LogConfig = {
     console: true,
     file: true,
@@ -71,8 +72,8 @@ export class DevelopmentConfig implements IConfig {
   };
 
   public instagramConfig: InstagramConfig = {
-    username:  process.env.IG_USERNAME,
-    password:  process.env.IG_PASSWORD,
+    username: process.env.IG_USERNAME,
+    password: process.env.IG_PASSWORD,
     cookies: './IGcookies',
   };
 

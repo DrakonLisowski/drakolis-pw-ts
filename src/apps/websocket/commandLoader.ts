@@ -6,10 +6,7 @@ import commandWrapper from './commandWrapper';
 import { InvalidRequestError, MethodNotFoundError } from '../../errors';
 
 const isRequestJSONRPC = (socket: socketIo.Socket) => {
-  return (
-    packet: socketIo.Packet,
-    next: (err?: any) => void,
-  ): any  => {
+  return (packet: socketIo.Packet, next: (err?: any) => void): any => {
     const name = packet[0];
     const data = packet[1];
     if (name === 'jsonrpc' && !Utils.Request.isValidRequest(data)) {
@@ -31,17 +28,13 @@ const parser = (server: socketIo.Server) => {
       ...commandWrapper(socket, alwaysFail),
     };
 
-    socket.on(
-      'message',
-      (data: any) => {
-        const commands = Object.keys(methods);
-        if (commands.includes(data.method)) {
-          methods[data.method](data);
-        }
-        socket.send(Utils.response(new MethodNotFoundError(), null, data.id || null));
-      },
-    );
-
+    socket.on('message', (data: any) => {
+      const commands = Object.keys(methods);
+      if (commands.includes(data.method)) {
+        methods[data.method](data);
+      }
+      socket.send(Utils.response(new MethodNotFoundError(), null, data.id || null));
+    });
   });
 };
 
