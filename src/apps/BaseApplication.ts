@@ -7,8 +7,8 @@ export default abstract class BaseApplication {
 
   public abstract stop(): Promise<boolean>;
 
-  public getProcessId(): string {
-    return process.env.pm_id || 'man';
+  public getProcessId(): number {
+    return parseInt(process.env.pm_id, 10) || -1;
   }
 
   public getLoggingLabel(): string {
