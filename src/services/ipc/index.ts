@@ -45,7 +45,7 @@ export default class IPCService {
   }
 
   private chooseSocketPath(sockets: string[]): string {
-    return sockets[Math.round(Math.random()*sockets.length)];
+    return sockets[0];
   }
 
   private findSocketPath(identifier: SocketIdentifier): string {

@@ -5,8 +5,7 @@ import commandLoader from './commandLoader';
 import { ServiceInjector } from '../../services/ServiceInjector';
 import LoggerService from '../../services/logger';
 import ContextService from '../../services/context';
-import IpcService from '../../services/ipc';
-import { AllowedSocket, SocketIdentifier } from '../../services/ipc';
+import IpcService, { AllowedSocket, SocketIdentifier } from '../../services/ipc';
 
 export default class HttpAPIApplication extends BaseApplication {
   private applicationLogger: LoggerService;
@@ -35,7 +34,7 @@ export default class HttpAPIApplication extends BaseApplication {
     this.server = new jayson.Server(commandLoader());
     this.ipcService.setIdentifier(identifier);
     await this.ipcService.connectTo(new SocketIdentifier(AllowedSocket.IGBot), true);
-    this.ipcService.sendMessage(new SocketIdentifier(AllowedSocket.IGBot), `test`)
+    this.ipcService.sendMessage(new SocketIdentifier(AllowedSocket.IGBot), `test`);
 
     return new Promise(res => {
       this.server.http().listen(config.apiHost.port, config.apiHost.host, () => {
