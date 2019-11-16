@@ -1,5 +1,5 @@
 import { BadRequestError } from '../errors';
-import { BaseRequest } from '../requests/BaseRequest';
+import BaseRequest from '../requests/BaseRequest';
 
 export type CommandFunction = (data: BaseRequest) => Promise<any>;
 

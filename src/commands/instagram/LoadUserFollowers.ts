@@ -1,5 +1,5 @@
 import Command from '../Command';
-import { LoadUserFollowers } from '../../requests/LoadUserFollowers';
+import LoadUserFollowers from '../../requests/LoadUserFollowers';
 import { ServiceInjector } from '../../services/ServiceInjector';
 import InstaService from '../../services/instaService';
 import LoggerService from '../../services/logger';

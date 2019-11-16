@@ -29,9 +29,9 @@ const run = async () => {
     k => Application[k as keyof typeof Application] === applicationName,
   ) as keyof typeof Application;
 
-  const appClass = await appLoader(Application[application]);
-  if (appClass) {
-    const APP = new appClass();
+  const AppClass = await appLoader(Application[application]);
+  if (AppClass) {
+    const APP = new AppClass();
     await APP.start().catch(e => {
       throw e;
     });

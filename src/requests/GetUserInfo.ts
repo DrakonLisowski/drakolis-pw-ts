@@ -1,6 +1,6 @@
-import { BaseRequest } from './BaseRequest';
+import BaseRequest from './BaseRequest';
 
-export class GetUserInfo implements BaseRequest {
+export default class GetUserInfo implements BaseRequest {
   public userID: number;
 
   constructor({ userID }: any) {

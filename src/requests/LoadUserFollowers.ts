@@ -1,6 +1,6 @@
-import { BaseRequest } from './BaseRequest';
+import BaseRequest from './BaseRequest';
 
-export class LoadUserFollowers implements BaseRequest {
+export default class LoadUserFollowers implements BaseRequest {
   public userID: number;
 
   constructor({ userID }: any) {

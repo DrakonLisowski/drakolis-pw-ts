@@ -5,21 +5,21 @@ import commandLoader from './commandLoader';
 import { ServiceInjector } from '../../services/ServiceInjector';
 import LoggerService from '../../services/logger';
 import ContextService from '../../services/context';
-import IpcService, { AllowedSocket, SocketIdentifier } from '../../services/ipc';
+import IPCService, { AllowedSocket, SocketIdentifier } from '../../services/ipc';
 
 export default class HttpAPIApplication extends BaseApplication {
   private applicationLogger: LoggerService;
 
   private server: jayson.Server;
 
-  private ipcService: IpcService;
+  private ipcService: IPCService;
 
   constructor() {
     super();
     const context = ServiceInjector.resolve<ContextService>(ContextService).addRootContext(
       this.getLoggingLabel(),
     );
-    this.ipcService = ServiceInjector.resolve<IpcService>(IpcService);
+    this.ipcService = ServiceInjector.resolve<IPCService>(IPCService);
     this.applicationLogger = ServiceInjector.resolve<LoggerService>(LoggerService).addLabels(
       context.getRootContext(),
     );

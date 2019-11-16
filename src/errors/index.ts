@@ -1,4 +1,4 @@
-// tslint:disable: max-classes-per-file
+// eslint-disable-next-line max-classes-per-file
 import { Server, JSONRPCError } from 'jayson';
 
 interface IErrorDefinition {

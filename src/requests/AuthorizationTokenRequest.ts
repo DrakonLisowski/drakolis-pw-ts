@@ -1,7 +1,7 @@
-import { BaseRequest } from './BaseRequest';
+import BaseRequest from './BaseRequest';
 import { UnathorizedError } from '../errors';
 
-export class AuthorizationTokenRequest implements BaseRequest {
+export default class AuthorizationTokenRequest implements BaseRequest {
   public token: string;
 
   constructor({ token }: any) {

@@ -6,6 +6,7 @@ export default function commandWrapper(command: Command) {
   const handler: MethodHandler = (args, callback) => {
     command
       .getFunction()(args)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .then((result: any) => callback(null, result))
       .catch((error: JSONRPCErrorLike) => callback(error, reset));
   };

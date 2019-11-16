@@ -1,7 +1,7 @@
 export type TestingFunction = () => any;
 
-export abstract class BaseRequest {
-  // tslint:disable-next-line: no-empty
+export default abstract class BaseRequest {
+  // eslint-disable-next-line
   constructor(data: any) {}
 
   public abstract test(): object | boolean;
