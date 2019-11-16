@@ -8,7 +8,7 @@ import SocketIdentifier from './SocketIdentifier';
 
 const BASE_PATH = 'ipc';
 
-type EventListener = (message: NodeMessage | Uint8Array, client: ServerSocket) => void;
+type EventListener = (message: NodeMessage, client: ServerSocket) => void;
 // type ListenerClient = (message: NodeMessage | Uint8Array, client: ClientSocket) => void;
 
 @Service()
@@ -124,11 +124,23 @@ export default class IPCService {
     this.server.on('message', listener);
   }
 
-  public async sendMessage(identifier: SocketIdentifier, message: any) {
+  public registerCommand(execute: (data: object) => Promise<any>) {
+    const listener: EventListener = msg => {
+      execute(msg.data).then(res => {
+        msg.reply(res);
+      });
+    };
+    this.onMessage(listener);
+  }
+
+  public async sendMessage(identifier: SocketIdentifier, message: any, callback: any) {
     const client = this.clients.find(cl => cl.client.name === this.makeClientName(identifier));
     if (!client) {
       throw new Error(`Socket for ${identifier.buildName()} was not connected`);
     }
     client.send(message);
+
+    if (callback) {
+    }
   }
 }
