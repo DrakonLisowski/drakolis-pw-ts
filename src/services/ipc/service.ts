@@ -5,10 +5,11 @@ import { Service } from '../ServiceDecorator';
 import ContextService from '../context';
 import LoggerService from '../logger';
 import SocketIdentifier from './SocketIdentifier';
+import IPCMessage from './IPCMessage';
 
 const BASE_PATH = 'ipc';
 
-type EventListener = (message: NodeMessage, client: ServerSocket) => void;
+type EventListener = (message: IPCMessage, client: ServerSocket) => void;
 // type ListenerClient = (message: NodeMessage | Uint8Array, client: ClientSocket) => void;
 
 @Service()
@@ -124,11 +125,13 @@ export default class IPCService {
     this.server.on('message', listener);
   }
 
-  public registerCommand(execute: (data: object) => Promise<any>) {
+  public registerCommand(name: string, execute: (data: object) => Promise<any>) {
     const listener: EventListener = msg => {
-      execute(msg.data).then(res => {
-        msg.reply(res);
-      });
+      if (msg.data.name === name) {
+        execute(msg.data).then(res => {
+          msg.reply(res);
+        });
+      }
     };
     this.onMessage(listener);
   }
