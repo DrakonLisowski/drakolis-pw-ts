@@ -1,42 +1,22 @@
 import { join } from 'path';
-import process from 'process';
 import * as fs from 'fs';
 import { Server, Client, ClientSocket, ServerSocket, NodeMessage } from 'veza';
 import { Service } from '../ServiceDecorator';
 import ContextService from '../context';
 import LoggerService from '../logger';
+import SocketIdentifier from './SocketIdentifier';
 
 const BASE_PATH = 'ipc';
-
-export enum AllowedSocket {
-  HTTPApi = 'http-api',
-  IGBot = 'bot-ig'
-};
-
-export class SocketIdentifier {
-
-  constructor(
-    public name: AllowedSocket,
-    public id?: number,
-  ) {}
-
-  public buildName(): string {
-    if (this.id) {
-      return `${this.name}-${this.id}`;
-    } else {
-      return `${this.name}`;
-    }
-  }
-}
 
 type EventListener = (message: NodeMessage | Uint8Array, client: ServerSocket) => void;
 // type ListenerClient = (message: NodeMessage | Uint8Array, client: ClientSocket) => void;
 
 @Service()
 export default class IPCService {
-
   private identifier: SocketIdentifier;
+
   private server: Server;
+
   private clients: ClientSocket[] = [];
 
   constructor(private context: ContextService, private serviceLogger: LoggerService) {
@@ -54,7 +34,8 @@ export default class IPCService {
     if (identifier.id) {
       path = join(path, identifier.buildName());
     } else {
-      const paths = fs.readdirSync(BASE_PATH)
+      const paths = fs
+        .readdirSync(BASE_PATH)
         .map(file => join(BASE_PATH, file))
         .filter(file => file.startsWith(join(BASE_PATH, identifier.buildName())));
       if (!paths || !paths.length) {
@@ -71,7 +52,7 @@ export default class IPCService {
   }
 
   private makeClientName(identifier: SocketIdentifier): string {
-    return `${this.identifier.buildName()}->${identifier.buildName()}`
+    return `${this.identifier.buildName()}->${identifier.buildName()}`;
   }
 
   public setIdentifier(identifier: SocketIdentifier) {
@@ -86,7 +67,7 @@ export default class IPCService {
     this.serviceLogger.info('Starting IPC server...');
 
     if (!identifier.id) {
-      this.serviceLogger.warn('No id was set! This process can\'t fork\\cluster!');
+      this.serviceLogger.warn("No id was set! This process can't fork\\cluster!");
     }
 
     this.setIdentifier(identifier);
@@ -150,5 +131,4 @@ export default class IPCService {
     }
     client.send(message);
   }
-
 }
